@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-class view_user extends Authenticatable
+
+class tbl_year_strategic extends Model
 {
     use HasFactory;
 
-    protected $table = 'view_user';
+    protected $table = 'tbl_year_strategic';
 }

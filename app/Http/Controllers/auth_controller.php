@@ -26,8 +26,8 @@ class auth_controller extends Controller
             return redirect()->intended('dashboard');
         }
 
-        return back()->withErrors([
-            'username' => 'The provided credentials do not match our records.',
+        return redirect()->route('auth.index')->with([
+            'message' => __('msg.msg_login_false'),
         ]);
     }
 

@@ -1,18 +1,20 @@
 @extends('layouts.layout')
-@section('title', __('msg.menu_setting_user'))
+@section('title', __('msg.menu_setting_year'))
 @push('css')
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="{{ url('resources/assets') }}/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
 @endpush
 
 @push('script')
     <script>
         var lang = {
-            title_add: '{{ __('msg.title_add_user') }}',
-            title_edit: '{{ __('msg.title_edit_user') }}',
-            msg_username_used: '{{ __('msg.msg_username_used') }}',
-            msg_password_minlength: '{{ __('msg.msg_password_minlength') }}',
+            title_add: '{{ __('msg.title_add_year') }}',
+            title_edit: '{{ __('msg.title_edit_year') }}',
         };
     </script>
-    <script src="{{ url('resources/assets') }}/app/user.js?q={{ time() }}"></script>
+    <!-- Bootstrap4 Duallistbox -->
+    <script src="{{ url('resources/assets') }}/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+    <script src="{{ url('resources/assets') }}/app/year.js?q={{ time() }}"></script>
 @endpush
 
 @section('content')
@@ -21,13 +23,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>{{ __('msg.menu_setting_user') }}</h1>
+                        <h1>{{ __('msg.menu_setting_year') }}</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a
                                     href="{{ route('dashboard.index') }}">{{ __('msg.menu_dashboard') }}</a></li>
-                            <li class="breadcrumb-item active">{{ __('msg.menu_setting_user') }}</li>
+                            <li class="breadcrumb-item active">{{ __('msg.menu_setting_year') }}</li>
                         </ol>
                     </div>
                 </div>
@@ -42,7 +44,7 @@
                         <div class="card card-info">
                             <div class="card-header">
                                 <h3 class="card-title"><i class="fas fa-list"></i>
-                                    {{ __('msg.msg_list') . __('msg.menu_setting_user') }}</h3>
+                                    {{ __('msg.msg_list') . __('msg.menu_setting_year') }}</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -50,8 +52,8 @@
                                     <div class="row mb-2">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <input type="search" class="form-control" name="filter_user_name"
-                                                    id="filter_user_name" placeholder="{{ __('msg.filter_user_name') }}"
+                                                <input type="search" class="form-control" name="filter_year_name"
+                                                    id="filter_year_name" placeholder="{{ __('msg.filter_year_name') }}"
                                                     autocomplete="off">
                                             </div>
                                         </div>
@@ -73,9 +75,8 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th width="5%">#</th>
-                                            <th width="25%">{{ __('msg.full_name') }}</th>
-                                            <th width="25%">{{ __('msg.user_role') }}</th>
-                                            <th width="20%">{{ __('msg.faculty_name') }}</th>
+                                            <th width="35%">{{ __('msg.year_name') }}</th>
+                                            <th width="35%">{{ __('msg.year_status') }}</th>
                                             <th width="25%">{{ __('msg.action') }}</th>
                                         </tr>
                                     </thead>
@@ -101,7 +102,7 @@
     <!-- Modal -->
     <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
         aria-hidden="true" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <form action="" method="post" id="form">
                     @csrf
@@ -113,49 +114,22 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="user_prefix">{{ __('msg.user_prefix') }}</label>
+                            <label for="year_name">{{ __('msg.year_name') }}</label>
                             <input type="hidden" name="id" id="id">
-                            <input type="text" class="form-control" name="user_prefix" id="user_prefix"
+                            <input type="text" class="form-control" name="year_name" id="year_name"
                                 placeholder="{{ __('msg.placeholder') }}" autocomplete="off">
                         </div>
                         <div class="form-group">
-                            <label for="user_name">{{ __('msg.user_name') }}</label>
-                            <input type="text" class="form-control" name="user_name" id="user_name"
-                                placeholder="{{ __('msg.placeholder') }}" autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label for="user_last">{{ __('msg.user_last') }}</label>
-                            <input type="text" class="form-control" name="user_last" id="user_last"
-                                placeholder="{{ __('msg.placeholder') }}" autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label for="username">{{ __('msg.username') }}</label>
-                            <input type="text" class="form-control" name="username" id="username"
-                                placeholder="{{ __('msg.placeholder') }}" autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label for="password">{{ __('msg.password') }}</label>
-                            <input type="password" class="form-control" name="password" id="password"
-                                placeholder="{{ __('msg.placeholder') }}" autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label for="user_role">{{ __('msg.user_role') }}</label>
-                            <select class="custom-select" name="user_role" id="user_role">
+                            <label for="year_status">{{ __('msg.year_status') }}</label>
+                            <select class="custom-select" name="year_status" id="year_status">
                                 <option value="">{{ __('msg.select') }}</option>
-                                <option value="admin">{{ __('msg.user_role_admin') }}</option>
-                                <option value="user">{{ __('msg.user_role_user') }}</option>
+                                <option value="active">{{ __('msg.year_status_active') }}</option>
+                                <option value="inactive">{{ __('msg.year_status_inactive') }}</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="faculty_id">{{ __('msg.faculty_name') }}</label>
-                            <select class="custom-select" name="faculty_id" id="faculty_id">
-                                <option value="">{{ __('msg.select') }}</option>
-                                @if (count($faculty) > 0)
-                                    @foreach ($faculty as $item)
-                                        <option value="{{ $item->id }}">{{ $item->faculty_name }}</option>
-                                    @endforeach
-                                @endif
-                                <option value="99">{{ __('msg.admin_university') }}</option>
+                            <label for="strategic_id">{{ __('msg.strategic_name') }}</label>
+                            <select class="duallistbox" multiple="multiple" id="strategic_id" name="strategic_id[]">
                             </select>
                         </div>
                     </div>

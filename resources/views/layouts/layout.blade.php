@@ -55,12 +55,6 @@
         <!-- /.content-wrapper -->
 
         @livewire('footer')
-
-        <!-- Control Sidebar -->
-        {{-- <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside> --}}
-        <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
 
@@ -119,7 +113,6 @@
     </script>
     <!-- Page specific script -->
     @stack('script')
-    <script src="{{ url('resources/assets') }}/app/reservation_all.js?q={{ time() }}"></script>
     <script src="{{ url('resources/assets') }}/app/change_password.js?q={{ time() }}"></script>
 </body>
 

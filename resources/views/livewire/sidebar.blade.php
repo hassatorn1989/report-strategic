@@ -14,8 +14,8 @@
                     alt="User Image">
             </div>
             <div class="info">
-                {{-- <a href="#" class="d-block">{{ Str::ucfirst(auth()->user()->full_name) }}</a>
-                <a href="#" class="d-block"><small>{{ Str::ucfirst(auth()->user()->user_role) }}</small></a> --}}
+                <a href="#" class="d-block">{{ Str::ucfirst(auth()->user()->full_name) }}</a>
+                <a href="#" class="d-block"><small>{{ Str::ucfirst(auth()->user()->user_role) }}</small></a>
             </div>
         </div>
         <!-- Sidebar Menu -->
@@ -33,7 +33,6 @@
                         </p>
                     </a>
                 </li>
-
                 <li class="nav-item {{ Request::segment(1) == 'setting' ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ Request::segment(1) == 'setting' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-cogs"></i>
@@ -49,6 +48,15 @@
                                     class="nav-link {{ Request::segment(1) == 'setting' && Request::segment(2) == 'strategic' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>{{ __('msg.menu_setting_strategic') }}</p>
+                                </a>
+                            </small>
+                        </li>
+                        <li class="nav-item">
+                            <small>
+                                <a href="{{ route('setting.year.index') }}"
+                                    class="nav-link {{ Request::segment(1) == 'setting' && Request::segment(2) == 'year' ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>{{ __('msg.menu_setting_year') }}</p>
                                 </a>
                             </small>
                         </li>
@@ -79,207 +87,17 @@
                                 </a>
                             </small>
                         </li>
-                        {{-- <li class="nav-item">
-                            <small>
-                                <a href="{{ route('setting.bank.index') }}"
-                                    class="nav-link {{ Request::segment(1) == 'setting' && Request::segment(2) == 'bank' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_setting_bank') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('setting.contact.index') }}"
-                                    class="nav-link {{ Request::segment(1) == 'setting' && Request::segment(2) == 'contact' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_setting_contact') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('setting.facilities.index') }}"
-                                    class="nav-link {{ Request::segment(1) == 'setting' && Request::segment(2) == 'facilities' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_setting_facilities') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('setting.user.index') }}"
-                                    class="nav-link {{ Request::segment(1) == 'setting' && Request::segment(2) == 'user' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_setting_user') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('setting.room.index') }}"
-                                    class="nav-link {{ Request::segment(1) == 'setting' && Request::segment(2) == 'room' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_setting_room') }}</p>
-                                </a>
-                            </small>
-                        </li> --}}
-                    </ul>
-                </li>
-                {{-- <li class="nav-item {{ Request::segment(1) == 'booking' ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ Request::segment(1) == 'booking' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-home"></i>
-                        <p>
-                            {{ __('msg.menu_booking') }}
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('booking.reservation.index') }}"
-                                    class="nav-link {{ Request::segment(1) == 'booking' && Request::segment(2) == 'reservation' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_booking_reservation') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('booking.checkin.index') }}"
-                                    class="nav-link {{ Request::segment(1) == 'booking' && Request::segment(2) == 'checkin' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_booking_checkin') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('booking.checkout.index') }}"
-                                    class="nav-link {{ Request::segment(1) == 'booking' && Request::segment(2) == 'checkout' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_booking_checkout') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('booking.check.index') }}"
-                                    class="nav-link {{ Request::segment(1) == 'booking' && Request::segment(2) == 'check' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_booking_check') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item {{ Request::segment(1) == 'account-owner' ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-money-check"></i>
-                        <p>
-                            {{ __('msg.menu_account_owner') }}
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('account-owner.expenses.index') }}"
-                                    class="nav-link {{ Request::segment(1) == 'account-owner' && Request::segment(2) == 'expenses' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_account_owner_expenses') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item {{ Request::segment(1) == 'account-agent' ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-money-check"></i>
-                        <p>
-                            {{ __('msg.menu_account_agent') }}
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('account-agent.expenses.index') }}"
-                                    class="nav-link {{ Request::segment(1) == 'account-agent' && Request::segment(2) == 'expenses' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_account_agent_expenses') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item {{ Request::segment(1) == 'report' ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-copy"></i>
-                        <p>
-                            {{ __('msg.menu_report') }}
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('report.income-owner.index') }}" class="nav-link {{ Request::segment(1) == 'report' && Request::segment(2) == 'income-owner' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_report_income_owner') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('report.income-agent.index') }}" class="nav-link {{ Request::segment(1) == 'report' && Request::segment(2) == 'income-agent' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_report_income_agent') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('report.analyze.index') }}" class="nav-link {{ Request::segment(1) == 'report' && Request::segment(2) == 'analyze' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_report_analyze') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('report.province.index') }}" class="nav-link {{ Request::segment(1) == 'report' && Request::segment(2) == 'province' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_report_province') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('report.room.index') }}" class="nav-link {{ Request::segment(1) == 'report' && Request::segment(2) == 'room' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_report_room') }}</p>
-                                </a>
-                            </small>
-                        </li>
-                        <li class="nav-item">
-                            <small>
-                                <a href="{{ route('report.expenses-agent.index') }}" class="nav-link {{ Request::segment(1) == 'report' && Request::segment(2) == 'expenses-agent' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ __('msg.menu_report_expenses_agent') }}</p>
-                                </a>
-                            </small>
-                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('print.index') }}" class="nav-link {{ Request::segment(1) == 'print' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-print"></i>
+                    <a href="{{ route('result-analysis.index') }}"
+                        class="nav-link {{ Request::segment(1) == 'result-analysis' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            {{ __('msg.menu_print') }}
+                            {{ __('msg.menu_result_analysis') }}
                         </p>
                     </a>
-                </li>--}}
+                </li>
                 <li class="nav-item">
                     <a href="#!" class="nav-link" data-toggle="modal" data-target="#modal-chang-password">
                         <i class="nav-icon fas fa-lock"></i>

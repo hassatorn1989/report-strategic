@@ -84,8 +84,8 @@ class user_controller extends Controller
             'user_prefix' => 'required',
             'user_name' => 'required',
             'user_last' => 'required',
-            'username' => 'required',
-            'password' => 'required',
+            // 'username' => 'required',
+            // 'password' => 'required',
             'user_role' => 'required',
             'faculty_id' => 'required'
         ]);
@@ -96,7 +96,7 @@ class user_controller extends Controller
             $q->user_prefix = $request->user_prefix;
             $q->user_name = $request->user_name;
             $q->user_last = $request->user_last;
-            $q->username = $request->username;
+            // $q->username = $request->username;
             if ($request->password != '') {
                 $q->password = Hash::make($request->password);
             }

@@ -9,11 +9,15 @@ return [
     'menu_dashboard' => 'แดชบอร์ด',
     'menu_setting' => 'ตั้งค่า',
     'menu_setting_strategic' => 'ยุทธศาสตร์',
+    'menu_setting_year' => 'ปีงบประมาณ',
     'menu_setting_faculty' => 'หน่วยงาน',
     'menu_setting_budget' => 'งบประมาณ',
     'menu_setting_user' => 'ผู้ใช้งาน',
-
     'menu_change_password' => 'เปลี่ยนรหัสผ่าน',
+    'menu_result_analysis' => 'บันทึกผลการวิเคราะห์',
+    'menu_logout' => 'ออกจากระบบ',
+
+
 
     'btn_login' => 'เข้าสู่ระบบ',
     'btn_logining' => 'กำลังเข้าสู่ระบบ...',
@@ -43,6 +47,14 @@ return [
     'filter_strategic_name' =>  'ค้นหาชื่อยุทธศาสตร์',
     'strategic_name' => 'ชื่อยุทธศาสตร์',
 
+    'title_add_year' => 'เพิ่มปีงบประมาณ',
+    'title_edit_year' => 'แก้ไขปีงบประมาณ',
+    'filter_year_name' => 'ค้นหาชื่อปีงบประมาณ',
+    'year_name' => 'ชื่อปีงบประมาณ',
+    'year_status' => 'สถานะ',
+    'year_status_active' => 'ใช้งาน',
+    'year_status_inactive' => 'ไม่ใช้งาน',
+
     'title_add_faculty' => 'เพิ่มหน่วยงาน',
     'title_edit_faculty' => 'แก้ไขหน่วยงาน',
     'filter_faculty_name' =>  'ค้นหาชื่อหน่วยงาน',
@@ -70,8 +82,22 @@ return [
     'user_role_user' => 'User',
     'faculty_id' => 'คณะ',
 
+    'swot_title' => 'SWOT Analysis',
+    'swot_strength' => 'จุดแข็ง (Strength)',
+    'swot_weakness' => 'จุดอ่อน (Weakness)',
+    'swot_opportunity' => 'โอกาส (Opportunity)',
+    'swot_threat' => 'อุปสรรค (Threat)',
+    'tow_title' => 'TOWS Matrix',
+    'tow_so' => 'กลยุทธ์เชิงรุก (SO)',
+    'tow_wo' => 'กลยุทธ์เชิงรับ (WO)',
+    'tow_st' => 'กลยุทธ์เชิงป้องกัน (ST)',
+    'tow_wt' => 'กลยุทธ์เชิงแก้ไข (WT)',
+
     'msg_list' => 'รายการ',
     'msg_username_used' => 'ชื่อผู้ใช้งานนี้ถูกใช้งานแล้ว',
     'msg_password_minlength' => 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร',
+    'admin_university' => 'ผู้ดูแลระบบมหาวิทยาลัย',
+    'msg_login_false' => 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง',
+
 ];
 ?>

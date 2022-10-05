@@ -1,20 +1,16 @@
 @extends('layouts.layout')
-@section('title', __('msg.menu_setting_year'))
+@section('title', __('msg.menu_setting_project_type'))
 @push('css')
-    <!-- Bootstrap4 Duallistbox -->
-    <link rel="stylesheet" href="{{ url('resources/assets') }}/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
 @endpush
 
 @push('script')
     <script>
         var lang = {
-            title_add: '{{ __('msg.title_add_year') }}',
-            title_edit: '{{ __('msg.title_edit_year') }}',
+            title_add : '{{ __('msg.title_add_project_type') }}',
+            title_edit : '{{ __('msg.title_edit_project_type') }}',
         };
     </script>
-    <!-- Bootstrap4 Duallistbox -->
-    <script src="{{ url('resources/assets') }}/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
-    <script src="{{ url('resources/assets') }}/app/year.js?q={{ time() }}"></script>
+    <script src="{{ url('resources/assets') }}/app/project_type.js?q={{ time() }}"></script>
 @endpush
 
 @section('content')
@@ -23,13 +19,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>{{ __('msg.menu_setting_year') }}</h1>
+                        <h1>{{ __('msg.menu_setting_project_type') }}</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a
                                     href="{{ route('dashboard.index') }}">{{ __('msg.menu_dashboard') }}</a></li>
-                            <li class="breadcrumb-item active">{{ __('msg.menu_setting_year') }}</li>
+                            <li class="breadcrumb-item active">{{ __('msg.menu_setting_project_type') }}</li>
                         </ol>
                     </div>
                 </div>
@@ -44,7 +40,7 @@
                         <div class="card card-info">
                             <div class="card-header">
                                 <h3 class="card-title"><i class="fas fa-list"></i>
-                                    {{ __('msg.msg_list') . __('msg.menu_setting_year') }}</h3>
+                                    {{ __('msg.msg_list') . __('msg.menu_setting_project_type') }}</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -52,8 +48,8 @@
                                     <div class="row mb-2">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <input type="search" class="form-control" name="filter_year_name"
-                                                    id="filter_year_name" placeholder="{{ __('msg.filter_year_name') }}"
+                                                <input type="search" class="form-control" name="filter_project_type_name"
+                                                    id="filter_project_type_name" placeholder="{{ __('msg.filter_project_type_name') }}"
                                                     autocomplete="off">
                                             </div>
                                         </div>
@@ -75,8 +71,7 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th width="5%">#</th>
-                                            <th width="35%">{{ __('msg.year_name') }}</th>
-                                            <th width="35%">{{ __('msg.year_status') }}</th>
+                                            <th width="70%">{{ __('msg.project_type_name') }}</th>
                                             <th width="25%">{{ __('msg.action') }}</th>
                                         </tr>
                                     </thead>
@@ -101,8 +96,8 @@
 @section('modal')
     <!-- Modal -->
     <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-        aria-hidden="true" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-sm" role="document">
+        aria-hidden="true"  data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <form action="" method="post" id="form">
                     @csrf
@@ -114,24 +109,11 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="year_name">{{ __('msg.year_name') }}</label>
+                            <label for="project_type_name">{{ __('msg.project_type_name') }}</label>
                             <input type="hidden" name="id" id="id">
-                            <input type="text" class="form-control" name="year_name" id="year_name"
+                            <input type="text" class="form-control" name="project_type_name" id="project_type_name"
                                 placeholder="{{ __('msg.placeholder') }}" autocomplete="off">
                         </div>
-                        <div class="form-group">
-                            <label for="year_status">{{ __('msg.year_status') }}</label>
-                            <select class="custom-select" name="year_status" id="year_status">
-                                <option value="">{{ __('msg.select') }}</option>
-                                <option value="active">{{ __('msg.year_status_active') }}</option>
-                                <option value="inactive">{{ __('msg.year_status_inactive') }}</option>
-                            </select>
-                        </div>
-                        {{-- <div class="form-group">
-                            <label for="strategic_id">{{ __('msg.strategic_name') }}</label>
-                            <select class="duallistbox" multiple="multiple" id="strategic_id" name="strategic_id[]">
-                            </select>
-                        </div> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="btn_save"><i class="fas fa-save"></i>

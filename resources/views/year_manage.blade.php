@@ -1,20 +1,16 @@
 @extends('layouts.layout')
-@section('title', __('msg.menu_setting_year'))
+@section('title', __('msg.subject_year_manage') . ' ' . $year->year_name)
 @push('css')
-    <!-- Bootstrap4 Duallistbox -->
-    <link rel="stylesheet" href="{{ url('resources/assets') }}/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
 @endpush
 
 @push('script')
     <script>
         var lang = {
-            title_add: '{{ __('msg.title_add_year') }}',
-            title_edit: '{{ __('msg.title_edit_year') }}',
+            title_add: '{{ __('msg.title_add_strategic_of_year') . ' ' . $year->year_name }}',
+            title_edit: '{{ __('msg.title_edit_strategic_of_year') . ' ' . $year->year_name }}',
         };
     </script>
-    <!-- Bootstrap4 Duallistbox -->
-    <script src="{{ url('resources/assets') }}/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
-    <script src="{{ url('resources/assets') }}/app/year.js?q={{ time() }}"></script>
+    <script src="{{ url('resources/assets') }}/app/year_manage.js?q={{ time() }}"></script>
 @endpush
 
 @section('content')
@@ -23,13 +19,16 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>{{ __('msg.menu_setting_year') }}</h1>
+                        <h1>{{ __('msg.subject_year_manage') . ' ' . $year->year_name }}</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a
                                     href="{{ route('dashboard.index') }}">{{ __('msg.menu_dashboard') }}</a></li>
-                            <li class="breadcrumb-item active">{{ __('msg.menu_setting_year') }}</li>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('setting.year.index') }}">{{ __('msg.menu_setting_year') }}</a></li>
+                            <li class="breadcrumb-item active">{{ __('msg.subject_year_manage') . ' ' . $year->year_name }}
+                            </li>
                         </ol>
                     </div>
                 </div>
@@ -44,7 +43,7 @@
                         <div class="card card-info">
                             <div class="card-header">
                                 <h3 class="card-title"><i class="fas fa-list"></i>
-                                    {{ __('msg.msg_list') . __('msg.menu_setting_year') }}</h3>
+                                    {{ __('msg.msg_list') . __('msg.subject_year_manage') . ' ' . $year->year_name }}</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -102,7 +101,7 @@
     <!-- Modal -->
     <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
         aria-hidden="true" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <form action="" method="post" id="form">
                     @csrf
@@ -114,24 +113,44 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="year_name">{{ __('msg.year_name') }}</label>
-                            <input type="hidden" name="id" id="id">
-                            <input type="text" class="form-control" name="year_name" id="year_name"
-                                placeholder="{{ __('msg.placeholder') }}" autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label for="year_status">{{ __('msg.year_status') }}</label>
-                            <select class="custom-select" name="year_status" id="year_status">
-                                <option value="">{{ __('msg.select') }}</option>
-                                <option value="active">{{ __('msg.year_status_active') }}</option>
-                                <option value="inactive">{{ __('msg.year_status_inactive') }}</option>
-                            </select>
-                        </div>
-                        {{-- <div class="form-group">
                             <label for="strategic_id">{{ __('msg.strategic_name') }}</label>
-                            <select class="duallistbox" multiple="multiple" id="strategic_id" name="strategic_id[]">
+                            <input type="hidden" name="id" id="id">
+                            <input type="hidden" name="year_id" id="year_id"
+                                value="{{ Request::segment(4) }}">
+                            <select class="custom-select" name="strategic_id" id="strategic_id">
+                                <option value="">{{ __('msg.select') }}</option>
+                                @if (!empty($strategic))
+                                    @foreach ($strategic as $item)
+                                        <option value="{{ $item->id }}">{{ $item->strategic_name }}</option>
+                                    @endforeach
+                                @endif
                             </select>
-                        </div> --}}
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" id="flag_sub" name="flag_sub"
+                                value="1">
+                            <label for="flag_sub" class="custom-control-label">{{ __('msg.flag_sub') }}</label>
+                        </div>
+                        <div class="row mt-2 sub_show" style="display: none;">
+                            <div class="col-md-12">
+                                <table class="table table-sm" id="tb_sub">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>{{ __('msg.sub_strategic') }}</th>
+                                            <th>
+                                                <div style="text-align: center;">
+                                                    <a href="#" class="text-primary" onclick="add_row();"><i class="fa fa-plus-circle"
+                                                            aria-hidden="true"></i></a>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="btn_save"><i class="fas fa-save"></i>

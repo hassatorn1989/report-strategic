@@ -5,6 +5,7 @@ use App\Http\Controllers\budget_controller;
 use App\Http\Controllers\change_password_controller;
 use App\Http\Controllers\dashboard_controller;
 use App\Http\Controllers\faculty_controller;
+use App\Http\Controllers\project_type_controller;
 use App\Http\Controllers\result_analysis_controller;
 use App\Http\Controllers\strategic_controller;
 use App\Http\Controllers\user_controller;
@@ -52,6 +53,9 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/setting/year/update', [year_controller::class, 'update'])->name('setting.year.update');
         Route::post('/setting/year/destroy', [year_controller::class, 'destroy'])->name('setting.year.destroy');
         Route::post('/setting/year/get-strategic', [year_controller::class, 'get_strategic'])->name('setting.year.get-strategic');
+        Route::get('/setting/year/manage-strategic/{id}', [year_controller::class, 'manage_strategic'])->name('setting.year.manage-strategic');
+        Route::post('/setting/year/manage-strategic/lists', [year_controller::class, 'manage_strategic_lists'])->name('setting.year.manage-strategic-lists');
+        Route::post('/setting/year/manage-strategic/store', [year_controller::class, 'manage_strategic_store'])->name('setting.year.manage-strategic-store');
 
 
         Route::get('/setting/user', [user_controller::class, 'index'])->name('setting.user.index');
@@ -69,6 +73,13 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/setting/budget/edit', [budget_controller::class, 'edit'])->name('setting.budget.edit');
         Route::post('/setting/budget/update', [budget_controller::class, 'update'])->name('setting.budget.update');
         Route::post('/setting/budget/destroy', [budget_controller::class, 'destroy'])->name('setting.budget.destroy');
+
+        Route::get('/setting/project-type', [project_type_controller::class, 'index'])->name('setting.project-type.index');
+        Route::post('/setting/project-type/lists', [project_type_controller::class, 'lists'])->name('setting.project-type.lists');
+        Route::post('/setting/project-type/store', [project_type_controller::class, 'store'])->name('setting.project-type.store');
+        Route::post('/setting/project-type/edit', [project_type_controller::class, 'edit'])->name('setting.project-type.edit');
+        Route::post('/setting/project-type/update', [project_type_controller::class, 'update'])->name('setting.project-type.update');
+        Route::post('/setting/project-type/destroy', [project_type_controller::class, 'destroy'])->name('setting.project-type.destroy');
 
 
         Route::get('/result-analysis', [result_analysis_controller::class, 'index'])->name('result-analysis.index');

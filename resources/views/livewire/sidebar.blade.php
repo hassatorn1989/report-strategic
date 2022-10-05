@@ -80,6 +80,15 @@
                         </li>
                         <li class="nav-item">
                             <small>
+                                <a href="{{ route('setting.project-type.index') }}"
+                                    class="nav-link {{ Request::segment(1) == 'setting' && Request::segment(2) == 'project-type' ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>{{ __('msg.menu_setting_project_type') }}</p>
+                                </a>
+                            </small>
+                        </li>
+                        <li class="nav-item">
+                            <small>
                                 <a href="{{ route('setting.user.index') }}"
                                     class="nav-link {{ Request::segment(1) == 'setting' && Request::segment(2) == 'user' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>

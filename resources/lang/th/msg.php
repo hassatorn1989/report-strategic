@@ -13,6 +13,7 @@ return [
     'menu_setting_faculty' => 'หน่วยงาน',
     'menu_setting_budget' => 'งบประมาณ',
     'menu_setting_user' => 'ผู้ใช้งาน',
+    'menu_setting_project_type' => 'ประเภทโครงการ',
     'menu_change_password' => 'เปลี่ยนรหัสผ่าน',
     'menu_result_analysis' => 'บันทึกผลการวิเคราะห์',
     'menu_logout' => 'ออกจากระบบ',
@@ -54,6 +55,11 @@ return [
     'year_status' => 'สถานะ',
     'year_status_active' => 'ใช้งาน',
     'year_status_inactive' => 'ไม่ใช้งาน',
+    'subject_year_manage' => 'กำหนดยุทธศาสตร์ปีงบประมาณ',
+    'title_add_strategic_of_year' => 'เพิ่มยุทธศาสตร์ปีงบประมาณ',
+    'title_edit_strategic_of_year' => 'แก้ไขยุทธศาสตร์ปีงบประมาณ',
+    'flag_sub' => 'กำหนดกลุ่มย่อยยุทธศาสตร์',
+    'sub_strategic' => 'กลุ่มย่อยยุทธศาสตร์',
 
     'title_add_faculty' => 'เพิ่มหน่วยงาน',
     'title_edit_faculty' => 'แก้ไขหน่วยงาน',
@@ -64,6 +70,11 @@ return [
     'title_edit_budget' => 'แก้ไขงบประมาณ',
     'filter_budget_name' => 'ค้นหาชื่องบประมาณ',
     'budget_name' => 'ชื่องบประมาณ',
+
+    'title_add_project_type' => 'เพิ่มประเภทโครงการ',
+    'title_edit_project_type' => 'แก้ไขประเภทโครงการ',
+    'filter_project_type_name' =>  'ค้นหาชื่อประเภทโครงการ',
+    'project_type_name' => 'ชื่อประเภทโครงการ',
 
     'title_add_user' => 'เพิ่มผู้ใช้งาน',
     'title_edit_user' => 'แก้ไขผู้ใช้งาน',

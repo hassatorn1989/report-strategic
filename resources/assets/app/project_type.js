@@ -1,4 +1,3 @@
-// $('.duallistbox').bootstrapDualListbox()
 var table = $("#example1").DataTable({
     processing: true,
     serverSide: true,
@@ -8,16 +7,15 @@ var table = $("#example1").DataTable({
     ],
     dom: '<"float-left"><"float-right"f>rt<"row"<"col-sm-4"l><"col-sm-4"i><"col-sm-4"p>>',
     ajax: {
-        url: myurl + "/setting/year/lists",
+        url: myurl + "/setting/project-type/lists",
         type: "POST",
         data: function (d) {
-            d.filter_year_name = $('input[name="filter_year_name"]').val();
+            d.filter_project_type_name = $('input[name="filter_project_type_name"]').val();
         }
     },
     columns: [
         { data: null, sortable: false, searchable: false, className: "text-center" },
-        { data: "year_name", name: "year_name" },
-        { data: "year_status", name: "year_status" },
+        { data: "project_type_name", name: "project_type_name" },
         { data: "action", name: "action", orderable: false, searchable: false, className: "text-center" }
     ],
     fnRowCallback: function (nRow, aData, iDisplayIndex) {
@@ -32,10 +30,7 @@ var table = $("#example1").DataTable({
 $('#form').validate({
     ignore: ".ignore",
     rules: {
-        year_name: {
-            required: true,
-        },
-        year_status: {
+        project_type_name: {
             required: true,
         },
     },
@@ -59,49 +54,26 @@ $('#form').validate({
 
 function add_data() {
     $("#modal-default .modal-title").text(lang.title_add);
-    $('#modal-default #form').attr('action', myurl + '/setting/year/store');
+    $('#modal-default #form').attr('action', myurl + '/setting/project-type/store');
     $('#modal-default #form input[type="text"]').removeClass('is-invalid');
     $('#modal-default #form input[type="text"]').val('');
-
-    // $.ajax({
-    //     type: "POST",
-    //     url: myurl + "/setting/year/get-strategic",
-    //     dataType: "json",
-    //     success: function (response) {
-    //         var option = '';
-    //         $.each(response, function (index, item) {
-    //             option += '<option value="' + item.id + '">' + item.strategic_name + '</option>';
-    //         });
-    //         $('#strategic_id').empty().append(option).bootstrapDualListbox('refresh', true);
-    //     }
-    // });
 }
 
 function edit_data(id) {
     $('#modal-default .modal-title').text(lang.title_edit);
-    $('#modal-default #form').attr('action', myurl + '/setting/year/update');
+    $('#modal-default #form').attr('action', myurl + '/setting/project-type/update');
     $('#modal-default #form input[type="text"]').removeClass('is-invalid');
     $.ajax({
         type: "POST",
-        url: myurl + '/setting/year/edit',
+        url: myurl + '/setting/project-type/edit',
         data: {
             id: id
         },
         dataType: "json",
         success: function (response) {
-            // console.log(response);
-            $('input[name="id"]').val(response.year.id);
-            $('input[name="year_name"]').val(response.year.year_name);
-            $('select[name="year_status"]').val(response.year.year_status);
-
-            // var option = '';
-            // var selected = ''
-            // $.each(response.strategic, function (i, item) {
-            //     selected = item.count_strategic == 0 ? '' : 'selected';
-            //     option += '<option value="' + item.id + '" ' + selected + '>' + item.strategic_name + '</option>';
-            // });
-
-            // $('#strategic_id').empty().append(option).bootstrapDualListbox('refresh', true);
+            console.log(response);
+            $('input[name="id"]').val(response.id);
+            $('input[name="project_type_name"]').val(response.project_type_name);
         }
     });
 }
@@ -124,7 +96,7 @@ function destroy(id) {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                url: myurl + "/setting/year/destroy",
+                url: myurl + "/setting/project-type/destroy",
                 data: {
                     id: id
                 },

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\tbl_strategic;
 use App\Models\tbl_year;
 use App\Models\tbl_year_strategic;
+use App\Models\tbl_year_strategic_detail;
+use App\Models\view_year_strategic;
 use Illuminate\Http\Request;
 use DataTables;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -55,17 +57,19 @@ class year_controller extends Controller
             $q->year_status = $request->year_status;
             $q->save();
 
-            if (!empty($request->strategic_id)) {
-                foreach ($request->strategic_id as $value) {
-                    $q1 = new tbl_year_strategic();
-                    $q1->year_id = $q->id;
-                    $q1->strategic_id = $value;
-                    $q1->save();
-                }
-            }
+            // if (!empty($request->strategic_id)) {
+            //     foreach ($request->strategic_id as $value) {
+            //         $q1 = new tbl_year_strategic();
+            //         $q1->year_id = $q->id;
+            //         $q1->strategic_id = $value;
+            //         $q1->save();
+            //     }
+            // }
 
             DB::commit();
-            return redirect()->back()->with(['message' => __('msg.msg_create_success')]);
+            return redirect()->route('setting.year.manage-strategic', [
+                'id' => $q->id
+            ])->with(['message' => __('msg.msg_create_success')]);
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
             return back()->withError($e->getMessage())->withInput();
@@ -75,11 +79,9 @@ class year_controller extends Controller
     public function edit(Request $request)
     {
         $year = tbl_year::find($request->id);
-        $strategic = tbl_strategic::selectRaw(
-            "*, (select count(id) from tbl_year_strategic where year_id = '{$request->id}' and strategic_id = tbl_strategic.id) as count_strategic"
-        )->get();
-        return response()->json(compact('year', 'strategic'));
+        return response()->json(compact('year'));
     }
+
 
     public function update(Request $request)
     {
@@ -99,15 +101,15 @@ class year_controller extends Controller
             $q->year_status = $request->year_status;
             $q->save();
 
-            tbl_year_strategic::where('year_id', $request->id)->delete();
-            if (!empty($request->strategic_id)) {
-                foreach ($request->strategic_id as $value) {
-                    $q1 = new tbl_year_strategic();
-                    $q1->year_id = $q->id;
-                    $q1->strategic_id = $value;
-                    $q1->save();
-                }
-            }
+            // tbl_year_strategic::where('year_id', $request->id)->delete();
+            // if (!empty($request->strategic_id)) {
+            //     foreach ($request->strategic_id as $value) {
+            //         $q1 = new tbl_year_strategic();
+            //         $q1->year_id = $q->id;
+            //         $q1->strategic_id = $value;
+            //         $q1->save();
+            //     }
+            // }
 
             DB::commit();
             return redirect()->back()->with(['message' => __('msg.msg_update_success')]);
@@ -141,5 +143,62 @@ class year_controller extends Controller
     {
         $q = tbl_strategic::all();
         return response()->json($q);
+    }
+
+
+    public function manage_strategic(Request $request)
+    {
+        $year = tbl_year::find($request->id);
+        $strategic = tbl_strategic::all();
+        return view('year_manage', compact('year', 'strategic'));
+    }
+
+    public function manage_strategic_lists(Request $request)
+    {
+        $q = view_year_strategic::query();
+        return DataTables::eloquent($q)
+            ->filter(function ($q) use ($request) {
+                if ($request->filter_year_name != '') {
+                    $q->whereRaw("year_name like '%{$request->filter_year_name}%'");
+                }
+            })
+            ->addColumn('action', function ($q) {
+                $action = '<button class="btn btn-warning btn-sm waves-effect waves-light" data-toggle="modal" data-target="#modal-default"onclick="edit_data(\'' . $q->id . '\')"> <i class="fas fa-edit"></i> ' . __('msg.btn_edit') . '</button> ';
+                $action .= '<button class="btn btn-danger btn-sm waves-effect waves-light" data-toggle="modal" data-target="#modal-default-detail" onclick="destroy(\'' . $q->id . '\')"> <i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</button> ';
+                return $action;
+            })
+            ->rawColumns(['action'])
+            ->make();
+    }
+
+    public function manage_strategic_store(Request $request)
+    {
+        $request->validate([
+            'strategic_id' => 'required',
+            'year_strategic_detail_detail' => 'required'
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $q = new tbl_year_strategic();
+            $q->year_id = $request->year_id;
+            $q->strategic_id = $request->strategic_id;
+            $q->save();
+
+            if (!empty($request->year_strategic_detail_detail)) {
+                foreach ($request->year_strategic_detail_detail as $value) {
+                    $q1 = new tbl_year_strategic_detail();
+                    $q1->year_strategic_id = $q->id;
+                    $q1->year_strategic_detail_detail = $value;
+                    $q1->save();
+                }
+            }
+
+            DB::commit();
+            return redirect()->back()->with(['message' => __('msg.msg_create_success')]);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return back()->withError($e->getMessage())->withInput();
+        }
     }
 }

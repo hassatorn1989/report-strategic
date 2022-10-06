@@ -49,10 +49,10 @@
                             <div class="card-body">
                                 <form action="" method="post" id="search-form">
                                     <div class="row mb-2">
-                                        <div class="col-md-3">
+                                        <div class="col-md-5">
                                             <div class="form-group">
                                                 <input type="search" class="form-control" name="filter_year_name"
-                                                    id="filter_year_name" placeholder="{{ __('msg.filter_year_name') }}"
+                                                    id="filter_year_name" placeholder="{{ __('msg.strategic_name'). __('msg.year_name'). ' ' . $year->year_name }}"
                                                     autocomplete="off">
                                             </div>
                                         </div>
@@ -62,7 +62,7 @@
                                                 <i class="fas fa-search"></i>
                                             </button>
                                         </div>
-                                        <div class="col-md-2 offset-md-6">
+                                        <div class="col-md-2 offset-md-4">
                                             <button type="button" class="btn btn-primary btn-block" data-toggle="modal"
                                                 data-target="#modal-default" onclick="add_data()">
                                                 <i class="fas fa-plus-circle"></i> {{ __('msg.btn_add') }}
@@ -75,7 +75,7 @@
                                         <tr>
                                             <th width="5%">#</th>
                                             <th width="35%">{{ __('msg.year_name') }}</th>
-                                            <th width="35%">{{ __('msg.year_status') }}</th>
+                                            <th width="35%">{{ __('msg.sub_strategic') }}</th>
                                             <th width="25%">{{ __('msg.action') }}</th>
                                         </tr>
                                     </thead>

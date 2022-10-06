@@ -15,4 +15,9 @@ class view_year_strategic extends Model
     {
         return $this->hasOne(tbl_result_analysis::class, 'year_strategic_id', 'id');
     }
+
+    public function get_year_strategic_detail()
+    {
+        return $this->hasMany(tbl_year_strategic_detail::class, 'year_strategic_id', 'id');
+    }
 }

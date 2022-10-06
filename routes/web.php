@@ -6,6 +6,7 @@ use App\Http\Controllers\change_password_controller;
 use App\Http\Controllers\dashboard_controller;
 use App\Http\Controllers\faculty_controller;
 use App\Http\Controllers\project_type_controller;
+use App\Http\Controllers\project_controller;
 use App\Http\Controllers\result_analysis_controller;
 use App\Http\Controllers\strategic_controller;
 use App\Http\Controllers\user_controller;
@@ -56,6 +57,10 @@ Route::middleware(AuthCheck::class)->group(
         Route::get('/setting/year/manage-strategic/{id}', [year_controller::class, 'manage_strategic'])->name('setting.year.manage-strategic');
         Route::post('/setting/year/manage-strategic/lists', [year_controller::class, 'manage_strategic_lists'])->name('setting.year.manage-strategic-lists');
         Route::post('/setting/year/manage-strategic/store', [year_controller::class, 'manage_strategic_store'])->name('setting.year.manage-strategic-store');
+        Route::post('/setting/year/manage-strategic/check', [year_controller::class, 'manage_strategic_check'])->name('setting.year.manage-strategic-check');
+        Route::post('/setting/year/manage-strategic/edit', [year_controller::class, 'manage_strategic_edit'])->name('setting.year.manage-strategic-edit');
+        Route::post('/setting/year/manage-strategic/update', [year_controller::class, 'manage_strategic_update'])->name('setting.year.manage-strategic-update');
+        Route::post('/setting/year/manage-strategic/destroy', [year_controller::class, 'manage_strategic_destroy'])->name('setting.year.manage-strategic-destroy');
 
 
         Route::get('/setting/user', [user_controller::class, 'index'])->name('setting.user.index');
@@ -81,6 +86,12 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/setting/project-type/update', [project_type_controller::class, 'update'])->name('setting.project-type.update');
         Route::post('/setting/project-type/destroy', [project_type_controller::class, 'destroy'])->name('setting.project-type.destroy');
 
+        Route::get('/project', [project_controller::class, 'index'])->name('project.index');
+        Route::post('/project/lists', [project_controller::class, 'lists'])->name('project.lists');
+        Route::post('/project/store', [project_controller::class, 'store'])->name('project.store');
+        Route::post('/project/edit', [project_controller::class, 'edit'])->name('project.edit');
+        Route::post('/project/update', [project_controller::class, 'update'])->name('project.update');
+        Route::post('/project/destroy', [project_controller::class, 'destroy'])->name('project.destroy');
 
         Route::get('/result-analysis', [result_analysis_controller::class, 'index'])->name('result-analysis.index');
         Route::post('/result-analysis/store', [result_analysis_controller::class, 'store'])->name('result-analysis.store');

@@ -75,9 +75,10 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th width="5%">#</th>
-                                            <th width="35%">{{ __('msg.year_name') }}</th>
-                                            <th width="35%">{{ __('msg.year_status') }}</th>
-                                            <th width="25%">{{ __('msg.action') }}</th>
+                                            <th width="15%">{{ __('msg.year_name') }}</th>
+                                            <th width="50%">{{ __('msg.strategic_name') }}</th>
+                                            <th width="15%">{{ __('msg.year_status') }}</th>
+                                            <th width="15%">{{ __('msg.action') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -16,6 +16,7 @@ var table = $("#example1").DataTable({
     columns: [
         { data: null, sortable: false, searchable: false, className: "text-center" },
         { data: "budget_name", name: "budget_name" },
+        { data: "budget_specify_status", name: "budget_specify_status" },
         { data: "action", name: "action", orderable: false, searchable: false, className: "text-center" }
     ],
     fnRowCallback: function (nRow, aData, iDisplayIndex) {
@@ -74,6 +75,11 @@ function edit_data(id) {
             console.log(response);
             $('input[name="id"]').val(response.id);
             $('input[name="budget_name"]').val(response.budget_name);
+            if (response.budget_specify_status == 'active') {
+                $('input[name="budget_specify_status"]').prop('checked', true);
+            } else {
+                $('input[name="budget_specify_status"]').prop('checked', false);
+            }
         }
     });
 }
@@ -82,7 +88,6 @@ $('#search-form').on('submit', function (e) {
     table.ajax.reload();
     e.preventDefault();
 });
-
 
 function destroy(id) {
     Swal.fire({

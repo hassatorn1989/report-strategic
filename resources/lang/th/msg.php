@@ -14,11 +14,10 @@ return [
     'menu_setting_budget' => 'งบประมาณ',
     'menu_setting_user' => 'ผู้ใช้งาน',
     'menu_setting_project_type' => 'ประเภทโครงการ',
-    'menu_change_password' => 'เปลี่ยนรหัสผ่าน',
     'menu_result_analysis' => 'บันทึกผลการวิเคราะห์',
+    'menu_project' => 'บันทึกผลโครงการ',
+    'menu_change_password' => 'เปลี่ยนรหัสผ่าน',
     'menu_logout' => 'ออกจากระบบ',
-
-
 
     'btn_login' => 'เข้าสู่ระบบ',
     'btn_logining' => 'กำลังเข้าสู่ระบบ...',
@@ -36,17 +35,19 @@ return [
     'btn_export' => 'ส่งออก',
     'btn_import' => 'นำเข้า',
     'btn_print' => 'พิมพ์',
+    'btn_config_strategic' => 'กำหนดยุทธศาสตร์',
     'destroy_title' => 'คุณต้องการลบรายการนี้ใช่หรือไม่?',
     'destroy_ok' => 'ตกลง',
     'destroy_cancle' => 'ยกเลิก',
     'action' => 'จัดการ',
+    'btn_action' => 'จัดการ',
     'placeholder' => 'กรุณากรอกข้อมูล',
     'select' => '--กรุณาเลือก--',
 
     'title_add_strategic' => 'เพิ่มยุทธศาสตร์',
     'title_edit_strategic' => 'แก้ไขยุทธศาสตร์',
-    'filter_strategic_name' =>  'ค้นหาชื่อยุทธศาสตร์',
-    'strategic_name' => 'ชื่อยุทธศาสตร์',
+    'filter_strategic_name' =>  'ค้นหายุทธศาสตร์',
+    'strategic_name' => 'ยุทธศาสตร์',
 
     'title_add_year' => 'เพิ่มปีงบประมาณ',
     'title_edit_year' => 'แก้ไขปีงบประมาณ',
@@ -70,6 +71,7 @@ return [
     'title_edit_budget' => 'แก้ไขงบประมาณ',
     'filter_budget_name' => 'ค้นหาชื่องบประมาณ',
     'budget_name' => 'ชื่องบประมาณ',
+    'budget_specify_status' => 'สถานะการระบุข้อมูล',
 
     'title_add_project_type' => 'เพิ่มประเภทโครงการ',
     'title_edit_project_type' => 'แก้ไขประเภทโครงการ',
@@ -93,6 +95,11 @@ return [
     'user_role_user' => 'User',
     'faculty_id' => 'คณะ',
 
+    'title_add_project' => 'เพิ่มโครงการ',
+    'title_edit_project' => 'แก้ไขโครงการ',
+    'filter_project_name' =>  'ค้นหาชื่อโครงการ',
+    'project_name' => 'ชื่อโครงการ',
+
     'swot_title' => 'SWOT Analysis',
     'swot_strength' => 'จุดแข็ง (Strength)',
     'swot_weakness' => 'จุดอ่อน (Weakness)',
@@ -111,4 +118,3 @@ return [
     'msg_login_false' => 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง',
 
 ];
-?>

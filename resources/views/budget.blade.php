@@ -6,8 +6,8 @@
 @push('script')
     <script>
         var lang = {
-            title_add : '{{ __('msg.title_add_budget') }}',
-            title_edit : '{{ __('msg.title_edit_budget') }}',
+            title_add: '{{ __('msg.title_add_budget') }}',
+            title_edit: '{{ __('msg.title_edit_budget') }}',
         };
     </script>
     <script src="{{ url('resources/assets') }}/app/budget.js?q={{ time() }}"></script>
@@ -71,7 +71,8 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th width="5%">#</th>
-                                            <th width="70%">{{ __('msg.budget_name') }}</th>
+                                            <th width="35%">{{ __('msg.budget_name') }}</th>
+                                            <th width="35%">{{ __('msg.budget_specify_status') }}</th>
                                             <th width="25%">{{ __('msg.action') }}</th>
                                         </tr>
                                     </thead>
@@ -96,7 +97,7 @@
 @section('modal')
     <!-- Modal -->
     <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-        aria-hidden="true"  data-keyboard="false" data-backdrop="static">
+        aria-hidden="true" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <form action="" method="post" id="form">
@@ -113,6 +114,12 @@
                             <input type="hidden" name="id" id="id">
                             <input type="text" class="form-control" name="budget_name" id="budget_name"
                                 placeholder="{{ __('msg.placeholder') }}" autocomplete="off">
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" id="budget_specify_status"
+                                name="budget_specify_status" value="1">
+                            <label for="budget_specify_status"
+                                class="custom-control-label">{{ __('msg.budget_specify_status') }}</label>
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -101,7 +101,7 @@
                  <li class="nav-item">
                     <a href="{{ route('project.index') }}"
                         class="nav-link {{ Request::segment(1) == 'project' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-file-alt"></i>
+                        <i class="nav-icon fas fa-folder-open"></i>
                         <p>
                             {{ __('msg.menu_project') }}
                         </p>

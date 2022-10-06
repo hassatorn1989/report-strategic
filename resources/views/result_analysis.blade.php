@@ -23,13 +23,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>{{ __('msg.menu_result_analysis') }}</h1>
+                        <h1>{{ __('msg.menu_result_analysis').__('msg.year_name').' '.$year->year_name }}</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a
                                     href="{{ route('dashboard.index') }}">{{ __('msg.menu_dashboard') }}</a></li>
-                            <li class="breadcrumb-item active">{{ __('msg.menu_result_analysis') }}</li>
+                            <li class="breadcrumb-item active">{{ __('msg.menu_result_analysis').__('msg.year_name').' '.$year->year_name }}</li>
                         </ol>
                     </div>
                 </div>

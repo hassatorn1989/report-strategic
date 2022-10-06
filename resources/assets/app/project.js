@@ -56,26 +56,7 @@ function add_data() {
     $("#modal-default .modal-title").text(lang.title_add);
     $('#modal-default #form').attr('action', myurl + '/project/store');
     $('#modal-default #form input[type="text"]').removeClass('is-invalid');
-    $('#modal-default #form input[type="text"]').val('');
-}
-
-function edit_data(id) {
-    $('#modal-default .modal-title').text(lang.title_edit);
-    $('#modal-default #form').attr('action', myurl + '/project/update');
-    $('#modal-default #form input[type="text"]').removeClass('is-invalid');
-    $.ajax({
-        type: "POST",
-        url: myurl + '/project/edit',
-        data: {
-            id: id
-        },
-        dataType: "json",
-        success: function (response) {
-            console.log(response);
-            $('input[name="id"]').val(response.id);
-            $('input[name="project_name"]').val(response.project_name);
-        }
-    });
+    $('#modal-default #form input[type="text"]:input[type="year_name"]').val('');
 }
 
 $('#search-form').on('submit', function (e) {

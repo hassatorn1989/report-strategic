@@ -41,6 +41,7 @@ return [
     'destroy_cancle' => 'ยกเลิก',
     'action' => 'จัดการ',
     'btn_action' => 'จัดการ',
+    'btn_manage_project' => 'จัดการข้อมูลโครงการ',
     'placeholder' => 'กรุณากรอกข้อมูล',
     'select' => '--กรุณาเลือก--',
 
@@ -48,11 +49,12 @@ return [
     'title_edit_strategic' => 'แก้ไขยุทธศาสตร์',
     'filter_strategic_name' =>  'ค้นหายุทธศาสตร์',
     'strategic_name' => 'ยุทธศาสตร์',
+    'strategic_not_specified' => '*ไม่ระบุยุทธศาสตร์',
 
     'title_add_year' => 'เพิ่มปีงบประมาณ',
     'title_edit_year' => 'แก้ไขปีงบประมาณ',
-    'filter_year_name' => 'ค้นหาชื่อปีงบประมาณ',
-    'year_name' => 'ชื่อปีงบประมาณ',
+    'filter_year_name' => 'ค้นหาปีงบประมาณ',
+    'year_name' => 'ปีงบประมาณ',
     'year_status' => 'สถานะ',
     'year_status_active' => 'ใช้งาน',
     'year_status_inactive' => 'ไม่ใช้งาน',
@@ -69,9 +71,15 @@ return [
 
     'title_add_budget' => 'เพิ่มงบประมาณ',
     'title_edit_budget' => 'แก้ไขงบประมาณ',
-    'filter_budget_name' => 'ค้นหาชื่องบประมาณ',
-    'budget_name' => 'ชื่องบประมาณ',
+    'filter_budget_name' => 'ค้นหางบประมาณ',
+    'budget_name' => 'งบประมาณ',
     'budget_specify_status' => 'สถานะการระบุข้อมูล',
+    'budget_not_specified' => '*ไม่ระบุงบประมาณ',
+
+    'project_responsible_person_name'   => 'ชื่อผู้รับผิดชอบโครงการ',
+
+    'tab_project_main' => 'ข้อมูลโครงการ',
+    'tab_project_responsible_person' => 'ผู้รับผิดชอบโครงการ',
 
     'title_add_project_type' => 'เพิ่มประเภทโครงการ',
     'title_edit_project_type' => 'แก้ไขประเภทโครงการ',
@@ -99,6 +107,13 @@ return [
     'title_edit_project' => 'แก้ไขโครงการ',
     'filter_project_name' =>  'ค้นหาชื่อโครงการ',
     'project_name' => 'ชื่อโครงการ',
+    'project_budget' => 'งบประมาณที่ได้รับ',
+    'project_period' =>  'ระยะเวลาดำเนินโครงการ',
+    'project_target_group' => 'กลุ่มเป้าหมาย',
+    'project_problem' => 'ปัญหา',
+    'project_solotion_problem' => 'วิธีการแก้ปัญหา',
+
+    'title_manage_project' => 'จัดการข้อมูลโครงการ',
 
     'swot_title' => 'SWOT Analysis',
     'swot_strength' => 'จุดแข็ง (Strength)',
@@ -114,6 +129,7 @@ return [
     'msg_list' => 'รายการ',
     'msg_username_used' => 'ชื่อผู้ใช้งานนี้ถูกใช้งานแล้ว',
     'msg_password_minlength' => 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร',
+    'msg_no_data' => 'ไม่พบข้อมูล',
     'admin_university' => 'ผู้ดูแลระบบมหาวิทยาลัย',
     'msg_login_false' => 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง',
 

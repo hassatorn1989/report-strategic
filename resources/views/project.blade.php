@@ -6,8 +6,8 @@
 @push('script')
     <script>
         var lang = {
-            title_add : '{{ __('msg.title_add_project') }}',
-            title_edit : '{{ __('msg.title_edit_project') }}',
+            title_add : '{{ __('msg.title_add_project').__('msg.year_name').' '.$year->year_name }}',
+            title_edit : '{{ __('msg.title_edit_project').__('msg.year_name').' '.$year->year_name }}',
         };
     </script>
     <script src="{{ url('resources/assets') }}/app/project.js?q={{ time() }}"></script>
@@ -19,13 +19,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>{{ __('msg.menu_project') }}</h1>
+                        <h1>{{ __('msg.menu_project').__('msg.year_name').' '.$year->year_name }}</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a
                                     href="{{ route('dashboard.index') }}">{{ __('msg.menu_dashboard') }}</a></li>
-                            <li class="breadcrumb-item active">{{ __('msg.menu_project') }}</li>
+                            <li class="breadcrumb-item active">{{ __('msg.menu_project').__('msg.year_name').' '.$year->year_name }}</li>
                         </ol>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                         <div class="card card-info">
                             <div class="card-header">
                                 <h3 class="card-title"><i class="fas fa-list"></i>
-                                    {{ __('msg.msg_list') . __('msg.menu_project') }}</h3>
+                                    {{ __('msg.msg_list') . __('msg.menu_project').__('msg.year_name').' '.$year->year_name }}</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -108,9 +108,15 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                       <div class="form-group">
+                            <label for="year_name">{{ __('msg.year_name') }}</label>
+                            <input type="hidden" name="id" id="id">
+                            <input type="hidden" name="year_id" id="year_id" value="{{ $year->id }}">
+                            <input type="text" class="form-control" name="year_name" id="year_name"
+                                placeholder="{{ __('msg.placeholder') }}" autocomplete="off" value="{{ $year->year_name }}" readonly>
+                        </div>
                         <div class="form-group">
                             <label for="project_name">{{ __('msg.project_name') }}</label>
-                            <input type="hidden" name="id" id="id">
                             <input type="text" class="form-control" name="project_name" id="project_name"
                                 placeholder="{{ __('msg.placeholder') }}" autocomplete="off">
                         </div>

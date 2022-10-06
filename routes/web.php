@@ -92,6 +92,7 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/project/edit', [project_controller::class, 'edit'])->name('project.edit');
         Route::post('/project/update', [project_controller::class, 'update'])->name('project.update');
         Route::post('/project/destroy', [project_controller::class, 'destroy'])->name('project.destroy');
+        Route::get('/project/manage/{id}', [project_controller::class, 'manage'])->name('project.manage');
 
         Route::get('/result-analysis', [result_analysis_controller::class, 'index'])->name('result-analysis.index');
         Route::post('/result-analysis/store', [result_analysis_controller::class, 'store'])->name('result-analysis.store');

@@ -155,7 +155,7 @@
                                         <option value="{{ $item->id }}">{{ $item->faculty_name }}</option>
                                     @endforeach
                                 @endif
-                                <option value="99">{{ __('msg.admin_university') }}</option>
+                                <option value="other">{{ __('msg.admin_university') }}</option>
                             </select>
                         </div>
                     </div>

@@ -17,7 +17,7 @@ class result_analysis_controller extends Controller
         $year = tbl_year::where('year_status', 'active')->first();
         $strategic = view_year_strategic::with(['get_result_analysis'])->where('year_id', $year->id)->get();
         // dd($strategic);
-        return view('result_analysis', compact('strategic'));
+        return view('result_analysis', compact('strategic', 'year'));
     }
 
     public function store(Request $request)

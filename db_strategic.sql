@@ -25,10 +25,11 @@ DROP TABLE IF EXISTS `tbl_budget`;
 CREATE TABLE `tbl_budget` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `budget_name` varchar(255) DEFAULT '',
+  `budget_specify_status` enum('active','inactive') DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +38,7 @@ CREATE TABLE `tbl_budget` (
 
 LOCK TABLES `tbl_budget` WRITE;
 /*!40000 ALTER TABLE `tbl_budget` DISABLE KEYS */;
+INSERT INTO `tbl_budget` VALUES (2,'งบประมาณแผ่นดิน','inactive','2022-10-05 02:00:19','2022-10-06 04:18:34'),(3,'งบประมาณรายได้มหาวิทยาลัย','inactive','2022-10-06 04:10:16','2022-10-06 04:18:31'),(4,'งบประมาณสนับสนุนอื่น ๆ','active','2022-10-06 04:10:28','2022-10-06 04:18:38');
 /*!40000 ALTER TABLE `tbl_budget` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -53,7 +55,7 @@ CREATE TABLE `tbl_faculty` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,8 +64,105 @@ CREATE TABLE `tbl_faculty` (
 
 LOCK TABLES `tbl_faculty` WRITE;
 /*!40000 ALTER TABLE `tbl_faculty` DISABLE KEYS */;
-INSERT INTO `tbl_faculty` VALUES (3,'คณะวิทยาศาสตร์','2022-10-04 04:37:36','2022-10-04 04:37:36');
+INSERT INTO `tbl_faculty` VALUES (3,'คณะวิทยาศาสตร์เละเทคโนโลยี','2022-10-04 04:37:36','2022-10-06 04:09:20'),(4,'คณะครุศาสตร์','2022-10-06 04:09:10','2022-10-06 04:09:10');
 /*!40000 ALTER TABLE `tbl_faculty` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_project`
+--
+
+DROP TABLE IF EXISTS `tbl_project`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_project` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_name` varchar(255) DEFAULT '',
+  `project_budget` decimal(10,2) DEFAULT NULL,
+  `project_target_group` text DEFAULT NULL,
+  `project_problem` text DEFAULT NULL,
+  `project_solotion_problem` text DEFAULT NULL,
+  `project_period_start` date DEFAULT NULL,
+  `project_period_end` date DEFAULT NULL,
+  `project_quantitative_indicators` text DEFAULT NULL,
+  `project_qualitative_indicators` text DEFAULT NULL,
+  `project_output` text DEFAULT NULL,
+  `project_outcome` text DEFAULT NULL,
+  `project_status` enum('draff','pending','publish','unpublish') DEFAULT NULL,
+  `year_id` int(11) DEFAULT NULL,
+  `year_strategic_id` varchar(11) DEFAULT NULL,
+  `year_strategic_detail_id` varchar(11) DEFAULT NULL,
+  `budget_id` varchar(11) DEFAULT NULL,
+  `budget_specify_other` varchar(255) DEFAULT '',
+  `project_type_id` varchar(11) DEFAULT NULL,
+  `faculty_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_project`
+--
+
+LOCK TABLES `tbl_project` WRITE;
+/*!40000 ALTER TABLE `tbl_project` DISABLE KEYS */;
+INSERT INTO `tbl_project` VALUES (2,'5555',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'draff',1,NULL,NULL,NULL,NULL,NULL,NULL,'2022-10-06 06:43:07','2022-10-06 06:50:30'),(3,'666',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'draff',1,NULL,NULL,NULL,NULL,NULL,NULL,'2022-10-06 06:50:35','2022-10-06 06:50:35'),(4,'dasds',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'draff',1,NULL,NULL,NULL,NULL,NULL,NULL,'2022-10-06 06:54:52','2022-10-06 06:54:52');
+/*!40000 ALTER TABLE `tbl_project` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_project_responsible_person`
+--
+
+DROP TABLE IF EXISTS `tbl_project_responsible_person`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_project_responsible_person` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_responsible_person_name` varchar(255) DEFAULT NULL,
+  `project_responsible_person_tel` varchar(10) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_project_responsible_person`
+--
+
+LOCK TABLES `tbl_project_responsible_person` WRITE;
+/*!40000 ALTER TABLE `tbl_project_responsible_person` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_project_responsible_person` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_project_type`
+--
+
+DROP TABLE IF EXISTS `tbl_project_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_project_type` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_type_name` varchar(255) DEFAULT '',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_project_type`
+--
+
+LOCK TABLES `tbl_project_type` WRITE;
+/*!40000 ALTER TABLE `tbl_project_type` DISABLE KEYS */;
+INSERT INTO `tbl_project_type` VALUES (2,'กิจกรรมการพัฒนา','2022-10-05 07:13:37','2022-10-06 04:42:15'),(3,'กิจกรรมการวิจัย','2022-10-06 04:42:23','2022-10-06 04:42:23'),(4,'กิจกรรมการอบรม','2022-10-06 04:42:39','2022-10-06 04:42:39'),(5,'กิจกรรมบริการวิชาการ','2022-10-06 04:42:54','2022-10-06 04:42:54'),(6,'กิจกรรมสัมพันธ์','2022-10-06 04:43:03','2022-10-06 04:43:03');
+/*!40000 ALTER TABLE `tbl_project_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -140,11 +239,11 @@ CREATE TABLE `tbl_user` (
   `username` varchar(50) DEFAULT '',
   `password` varchar(100) DEFAULT '',
   `user_role` enum('admin','user') DEFAULT NULL,
-  `faculty_id` int(11) DEFAULT NULL,
+  `faculty_id` varchar(11) DEFAULT '',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,7 +252,7 @@ CREATE TABLE `tbl_user` (
 
 LOCK TABLES `tbl_user` WRITE;
 /*!40000 ALTER TABLE `tbl_user` DISABLE KEYS */;
-INSERT INTO `tbl_user` VALUES (1,'นาย','หรรษธร','ขวัญหอม','admin','$2y$10$AbBm6g9B0D3.HthveoJWO.L0jALRBlS4P7uRnslJOI9zKLdkjruu.','admin',99,'2022-10-04 04:38:45','2022-10-04 06:28:47');
+INSERT INTO `tbl_user` VALUES (1,'นาย','หรรษธร','ขวัญหอม','admin','$2y$10$AbBm6g9B0D3.HthveoJWO.L0jALRBlS4P7uRnslJOI9zKLdkjruu.','admin','other','2022-10-04 04:38:45','2022-10-06 06:15:32'),(3,'ผศ.','เจษฎาภรณ์','ปาคำวัง','user1','$2y$10$1PN53rZSYd8rkm4A4O8uc./mBiBQ.SVoh9f9C.6v8fkUbQYtX.m7W','user','3','2022-10-06 04:45:02','2022-10-06 04:45:55');
 /*!40000 ALTER TABLE `tbl_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -171,7 +270,7 @@ CREATE TABLE `tbl_year` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,9 +279,25 @@ CREATE TABLE `tbl_year` (
 
 LOCK TABLES `tbl_year` WRITE;
 /*!40000 ALTER TABLE `tbl_year` DISABLE KEYS */;
-INSERT INTO `tbl_year` VALUES (4,'2565','active','2022-10-04 07:32:32','2022-10-04 09:37:46'),(5,'2566','inactive','2022-10-04 09:36:42','2022-10-04 09:37:46');
+INSERT INTO `tbl_year` VALUES (1,'2565','active','2022-10-06 04:02:50','2022-10-06 04:08:43');
 /*!40000 ALTER TABLE `tbl_year` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `delete_year_strategic` BEFORE DELETE ON `tbl_year`
+FOR EACH ROW DELETE FROM  tbl_year_strategic WHERE tbl_year_strategic.id = id */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `tbl_year_strategic`
@@ -207,9 +322,88 @@ CREATE TABLE `tbl_year_strategic` (
 
 LOCK TABLES `tbl_year_strategic` WRITE;
 /*!40000 ALTER TABLE `tbl_year_strategic` DISABLE KEYS */;
-INSERT INTO `tbl_year_strategic` VALUES (1,4,2,'2022-10-04 09:37:46','2022-10-04 09:37:46'),(2,4,3,'2022-10-04 09:37:46','2022-10-04 09:37:46'),(3,4,4,'2022-10-04 09:37:46','2022-10-04 09:37:46'),(4,4,5,'2022-10-04 09:37:46','2022-10-04 09:37:46');
+INSERT INTO `tbl_year_strategic` VALUES (1,1,2,'2022-10-06 04:05:10','2022-10-06 04:05:10'),(2,1,3,'2022-10-06 04:05:55','2022-10-06 04:05:55'),(3,1,4,'2022-10-06 04:06:05','2022-10-06 04:06:05'),(4,1,5,'2022-10-06 04:06:13','2022-10-06 04:06:13');
 /*!40000 ALTER TABLE `tbl_year_strategic` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `delete_year_strategic_detail` BEFORE DELETE ON `tbl_year_strategic`
+FOR EACH ROW DELETE FROM tbl_year_strategic_detail
+WHERE tbl_year_strategic_detail.id = id */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `tbl_year_strategic_detail`
+--
+
+DROP TABLE IF EXISTS `tbl_year_strategic_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_year_strategic_detail` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `year_strategic_detail_detail` varchar(255) DEFAULT NULL,
+  `year_strategic_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_year_strategic_detail`
+--
+
+LOCK TABLES `tbl_year_strategic_detail` WRITE;
+/*!40000 ALTER TABLE `tbl_year_strategic_detail` DISABLE KEYS */;
+INSERT INTO `tbl_year_strategic_detail` VALUES (1,'ด้านเศรษฐกิจ',1,'2022-10-06 04:05:10','2022-10-06 04:05:10'),(2,'ด้านสังคม',1,'2022-10-06 04:05:10','2022-10-06 04:05:10'),(3,'ด้านสิ่งแวดล้อม',1,'2022-10-06 04:05:10','2022-10-06 04:05:10'),(4,'ด้านการศึกษา',1,'2022-10-06 04:05:10','2022-10-06 04:05:10'),(5,'การผลิตครู',2,'2022-10-06 04:05:55','2022-10-06 04:05:55'),(6,'การพัฒนาครู (บัณฑิต มรภ.)',2,'2022-10-06 04:05:55','2022-10-06 04:05:55');
+/*!40000 ALTER TABLE `tbl_year_strategic_detail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `view_project`
+--
+
+DROP TABLE IF EXISTS `view_project`;
+/*!50001 DROP VIEW IF EXISTS `view_project`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `view_project` (
+  `id` tinyint NOT NULL,
+  `project_name` tinyint NOT NULL,
+  `project_budget` tinyint NOT NULL,
+  `project_target_group` tinyint NOT NULL,
+  `project_problem` tinyint NOT NULL,
+  `project_solotion_problem` tinyint NOT NULL,
+  `project_period_start` tinyint NOT NULL,
+  `project_period_end` tinyint NOT NULL,
+  `project_quantitative_indicators` tinyint NOT NULL,
+  `project_qualitative_indicators` tinyint NOT NULL,
+  `project_output` tinyint NOT NULL,
+  `project_outcome` tinyint NOT NULL,
+  `project_status` tinyint NOT NULL,
+  `year_id` tinyint NOT NULL,
+  `year_strategic_id` tinyint NOT NULL,
+  `year_strategic_detail_id` tinyint NOT NULL,
+  `budget_id` tinyint NOT NULL,
+  `project_type_id` tinyint NOT NULL,
+  `created_at` tinyint NOT NULL,
+  `updated_at` tinyint NOT NULL,
+  `year_name` tinyint NOT NULL,
+  `strategic_name` tinyint NOT NULL,
+  `budget_specify_other` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Temporary table structure for view `view_user`
@@ -250,9 +444,29 @@ SET character_set_client = utf8;
   `created_at` tinyint NOT NULL,
   `updated_at` tinyint NOT NULL,
   `year_name` tinyint NOT NULL,
-  `strategic_name` tinyint NOT NULL
+  `strategic_name` tinyint NOT NULL,
+  `count_year_strategic_detail` tinyint NOT NULL
 ) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
+
+--
+-- Final view structure for view `view_project`
+--
+
+/*!50001 DROP TABLE IF EXISTS `view_project`*/;
+/*!50001 DROP VIEW IF EXISTS `view_project`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_project` AS select `tbl_project`.`id` AS `id`,`tbl_project`.`project_name` AS `project_name`,`tbl_project`.`project_budget` AS `project_budget`,`tbl_project`.`project_target_group` AS `project_target_group`,`tbl_project`.`project_problem` AS `project_problem`,`tbl_project`.`project_solotion_problem` AS `project_solotion_problem`,`tbl_project`.`project_period_start` AS `project_period_start`,`tbl_project`.`project_period_end` AS `project_period_end`,`tbl_project`.`project_quantitative_indicators` AS `project_quantitative_indicators`,`tbl_project`.`project_qualitative_indicators` AS `project_qualitative_indicators`,`tbl_project`.`project_output` AS `project_output`,`tbl_project`.`project_outcome` AS `project_outcome`,`tbl_project`.`project_status` AS `project_status`,`tbl_project`.`year_id` AS `year_id`,`tbl_project`.`year_strategic_id` AS `year_strategic_id`,`tbl_project`.`year_strategic_detail_id` AS `year_strategic_detail_id`,`tbl_project`.`budget_id` AS `budget_id`,`tbl_project`.`project_type_id` AS `project_type_id`,`tbl_project`.`created_at` AS `created_at`,`tbl_project`.`updated_at` AS `updated_at`,`tbl_year`.`year_name` AS `year_name`,`tbl_strategic`.`strategic_name` AS `strategic_name`,`tbl_project`.`budget_specify_other` AS `budget_specify_other` from (((`tbl_project` left join `tbl_year` on(`tbl_project`.`year_id` = `tbl_year`.`id`)) left join `tbl_year_strategic` on(`tbl_project`.`year_strategic_id` = `tbl_year_strategic`.`id`)) left join `tbl_strategic` on(`tbl_year_strategic`.`strategic_id` = `tbl_strategic`.`id`)) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
 -- Final view structure for view `view_user`
@@ -268,7 +482,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb3_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_user` AS select `tbl_user`.`id` AS `id`,`tbl_user`.`user_prefix` AS `user_prefix`,`tbl_user`.`user_name` AS `user_name`,`tbl_user`.`user_last` AS `user_last`,concat(`tbl_user`.`user_prefix`,`tbl_user`.`user_name`,' ',`tbl_user`.`user_last`) AS `full_name`,`tbl_user`.`username` AS `username`,`tbl_user`.`password` AS `password`,`tbl_user`.`user_role` AS `user_role`,`tbl_user`.`faculty_id` AS `faculty_id`,if(`tbl_user`.`faculty_id` = '99','ผู้ดูแลระบบมหาวิทยาลัย',`tbl_faculty`.`faculty_name`) AS `faculty_name`,`tbl_user`.`created_at` AS `created_at`,`tbl_user`.`updated_at` AS `updated_at` from (`tbl_user` left join `tbl_faculty` on(`tbl_user`.`faculty_id` = `tbl_faculty`.`id`)) */;
+/*!50001 VIEW `view_user` AS select `tbl_user`.`id` AS `id`,`tbl_user`.`user_prefix` AS `user_prefix`,`tbl_user`.`user_name` AS `user_name`,`tbl_user`.`user_last` AS `user_last`,concat(`tbl_user`.`user_prefix`,`tbl_user`.`user_name`,' ',`tbl_user`.`user_last`) AS `full_name`,`tbl_user`.`username` AS `username`,`tbl_user`.`password` AS `password`,`tbl_user`.`user_role` AS `user_role`,`tbl_user`.`faculty_id` AS `faculty_id`,if(`tbl_user`.`faculty_id` = 'other','ผู้ดูแลระบบมหาวิทยาลัย',`tbl_faculty`.`faculty_name`) AS `faculty_name`,`tbl_user`.`created_at` AS `created_at`,`tbl_user`.`updated_at` AS `updated_at` from (`tbl_user` left join `tbl_faculty` on(`tbl_user`.`faculty_id` = `tbl_faculty`.`id`)) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -287,7 +501,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb3_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_year_strategic` AS select `tbl_year_strategic`.`id` AS `id`,`tbl_year_strategic`.`year_id` AS `year_id`,`tbl_year_strategic`.`strategic_id` AS `strategic_id`,`tbl_year_strategic`.`created_at` AS `created_at`,`tbl_year_strategic`.`updated_at` AS `updated_at`,`tbl_year`.`year_name` AS `year_name`,`tbl_strategic`.`strategic_name` AS `strategic_name` from ((`tbl_year_strategic` left join `tbl_year` on(`tbl_year_strategic`.`year_id` = `tbl_year`.`id`)) left join `tbl_strategic` on(`tbl_year_strategic`.`strategic_id` = `tbl_strategic`.`id`)) */;
+/*!50001 VIEW `view_year_strategic` AS select `tbl_year_strategic`.`id` AS `id`,`tbl_year_strategic`.`year_id` AS `year_id`,`tbl_year_strategic`.`strategic_id` AS `strategic_id`,`tbl_year_strategic`.`created_at` AS `created_at`,`tbl_year_strategic`.`updated_at` AS `updated_at`,`tbl_year`.`year_name` AS `year_name`,`tbl_strategic`.`strategic_name` AS `strategic_name`,ifnull((select count(`tbl_year_strategic_detail`.`id`) from `tbl_year_strategic_detail` where `tbl_year_strategic_detail`.`year_strategic_id` = `tbl_year_strategic`.`id`),0) AS `count_year_strategic_detail` from ((`tbl_year_strategic` left join `tbl_year` on(`tbl_year_strategic`.`year_id` = `tbl_year`.`id`)) left join `tbl_strategic` on(`tbl_year_strategic`.`strategic_id` = `tbl_strategic`.`id`)) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -301,4 +515,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-10-04 16:40:21
+-- Dump completed on 2022-10-06 16:27:18

@@ -113,6 +113,224 @@ INSERT INTO `tbl_project` VALUES (2,'5555',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NU
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tbl_project_impact`
+--
+
+DROP TABLE IF EXISTS `tbl_project_impact`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_project_impact` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_impact_detail` varchar(255) DEFAULT '',
+  `project_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_project_impact`
+--
+
+LOCK TABLES `tbl_project_impact` WRITE;
+/*!40000 ALTER TABLE `tbl_project_impact` DISABLE KEYS */;
+INSERT INTO `tbl_project_impact` VALUES (14,'/878787',2,'2022-10-07 07:01:04','2022-10-07 07:01:04');
+/*!40000 ALTER TABLE `tbl_project_impact` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_project_outcome`
+--
+
+DROP TABLE IF EXISTS `tbl_project_outcome`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_project_outcome` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_outcome_detail` varchar(255) DEFAULT '',
+  `project_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_project_outcome`
+--
+
+LOCK TABLES `tbl_project_outcome` WRITE;
+/*!40000 ALTER TABLE `tbl_project_outcome` DISABLE KEYS */;
+INSERT INTO `tbl_project_outcome` VALUES (9,'ฟกฟห',2,'2022-10-07 04:00:55','2022-10-07 04:00:55'),(11,'565656',2,'2022-10-07 06:51:04','2022-10-07 06:51:04');
+/*!40000 ALTER TABLE `tbl_project_outcome` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_project_output`
+--
+
+DROP TABLE IF EXISTS `tbl_project_output`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_project_output` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_output_detail` varchar(255) DEFAULT '',
+  `project_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_project_output`
+--
+
+LOCK TABLES `tbl_project_output` WRITE;
+/*!40000 ALTER TABLE `tbl_project_output` DISABLE KEYS */;
+INSERT INTO `tbl_project_output` VALUES (9,'ฟกฟห',2,'2022-10-07 04:00:55','2022-10-07 04:00:55'),(11,'565656',2,'2022-10-07 06:51:04','2022-10-07 06:51:04');
+/*!40000 ALTER TABLE `tbl_project_output` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_project_output_gallery`
+--
+
+DROP TABLE IF EXISTS `tbl_project_output_gallery`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_project_output_gallery` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_output_gallery_path` varchar(255) DEFAULT '',
+  `project_output_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_project_output_gallery`
+--
+
+LOCK TABLES `tbl_project_output_gallery` WRITE;
+/*!40000 ALTER TABLE `tbl_project_output_gallery` DISABLE KEYS */;
+INSERT INTO `tbl_project_output_gallery` VALUES (1,'asdasd',11,'2022-10-07 09:16:18','2022-10-07 09:16:18'),(2,'file-project-output/x4FXbn0yjAfX77yYA0TEYQkJMCA9wRSYtD0UQibG.png',11,'2022-10-07 09:23:35','2022-10-07 09:23:35'),(3,'file-project-output/ffps7QCyH0L6sH4mOhr1iB7dClUEKRYDuj4ns5wF.jpg',11,'2022-10-07 09:23:35','2022-10-07 09:23:35'),(4,'file-project-output/huvOrXdMTyjz3B9Tz4LN4dwm20WUY49lrNv4fAai.png',11,'2022-10-07 09:27:14','2022-10-07 09:27:14'),(5,'file-project-output/stH45LcY8hNlmhsB71j9hmYy1Um3fq7WqsKb3oqV.jpg',11,'2022-10-07 09:27:14','2022-10-07 09:27:14'),(6,'file-project-output/aV6KFIMTFBkTrxn4G2rmunlo87EqBdEhJ9hzLHQv.jpg',11,'2022-10-07 09:28:21','2022-10-07 09:28:21'),(7,'file-project-output/VAVkUyCwThux0XV4u9Kf7RyfBT1vvETEmmxCkkUf.jpg',11,'2022-10-07 09:28:21','2022-10-07 09:28:21'),(8,'file-project-output/pJWz1EuPPPARHDBEHSGHAnetYMkAWE4rol9j9vIV.jpg',11,'2022-10-07 09:28:21','2022-10-07 09:28:21'),(9,'file-project-output/2iYtSm83OlHOQllGatxYqVFimB2oa49EAP3uUvy7.jpg',11,'2022-10-07 09:36:15','2022-10-07 09:36:15'),(10,'file-project-output/Arrz48DUuSeSqmc9jKmqZpdUKRLmL0wBpmgqQtHt.jpg',11,'2022-10-07 09:36:15','2022-10-07 09:36:15'),(11,'file-project-output/47nS910sKgyZTm098hlTHjtgD93AZbKFOcByDzfP.jpg',11,'2022-10-07 09:36:15','2022-10-07 09:36:15'),(12,'file-project-output/cDrRtZO9Fcnzo2xuvhwri9kOyvjZ46j5bAS3fRQy.jpg',11,'2022-10-07 09:39:32','2022-10-07 09:39:32');
+/*!40000 ALTER TABLE `tbl_project_output_gallery` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_project_problem`
+--
+
+DROP TABLE IF EXISTS `tbl_project_problem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_project_problem` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_problem_detail` varchar(255) DEFAULT '',
+  `project_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_project_problem`
+--
+
+LOCK TABLES `tbl_project_problem` WRITE;
+/*!40000 ALTER TABLE `tbl_project_problem` DISABLE KEYS */;
+INSERT INTO `tbl_project_problem` VALUES (8,'กกกกกdssdsdsd',2,'2022-10-07 04:00:52','2022-10-07 04:08:05'),(9,'ฟกฟห',2,'2022-10-07 04:00:55','2022-10-07 04:00:55');
+/*!40000 ALTER TABLE `tbl_project_problem` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_project_problem_solution`
+--
+
+DROP TABLE IF EXISTS `tbl_project_problem_solution`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_project_problem_solution` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_problem_solution_detail` varchar(255) DEFAULT '',
+  `project_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_project_problem_solution`
+--
+
+LOCK TABLES `tbl_project_problem_solution` WRITE;
+/*!40000 ALTER TABLE `tbl_project_problem_solution` DISABLE KEYS */;
+INSERT INTO `tbl_project_problem_solution` VALUES (9,'ฟกฟห',2,'2022-10-07 04:00:55','2022-10-07 04:00:55'),(11,'asdasd9999',2,'2022-10-07 04:30:00','2022-10-07 04:37:08'),(12,'5555',2,'2022-10-07 04:31:39','2022-10-07 04:31:39'),(14,'sfdsdf',2,'2022-10-07 04:35:27','2022-10-07 04:35:27'),(15,'33333',2,'2022-10-07 04:35:56','2022-10-07 04:35:56'),(16,'22156454',2,'2022-10-07 04:36:20','2022-10-07 04:36:20');
+/*!40000 ALTER TABLE `tbl_project_problem_solution` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_project_qualitative_indicators`
+--
+
+DROP TABLE IF EXISTS `tbl_project_qualitative_indicators`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_project_qualitative_indicators` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_qualitative_indicators_value` varchar(100) DEFAULT '',
+  `project_qualitative_indicators_unit` varchar(50) DEFAULT '',
+  `project_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_project_qualitative_indicators`
+--
+
+LOCK TABLES `tbl_project_qualitative_indicators` WRITE;
+/*!40000 ALTER TABLE `tbl_project_qualitative_indicators` DISABLE KEYS */;
+INSERT INTO `tbl_project_qualitative_indicators` VALUES (13,'50','ร้อยละ',2,'2022-10-07 06:31:30','2022-10-07 06:31:30');
+/*!40000 ALTER TABLE `tbl_project_qualitative_indicators` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_project_quantitative_indicators`
+--
+
+DROP TABLE IF EXISTS `tbl_project_quantitative_indicators`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_project_quantitative_indicators` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_quantitative_indicators_value` varchar(100) DEFAULT '',
+  `project_quantitative_indicators_unit` varchar(50) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_project_quantitative_indicators`
+--
+
+LOCK TABLES `tbl_project_quantitative_indicators` WRITE;
+/*!40000 ALTER TABLE `tbl_project_quantitative_indicators` DISABLE KEYS */;
+INSERT INTO `tbl_project_quantitative_indicators` VALUES (13,'50','ร้อยละ',2,'2022-10-07 06:31:30','2022-10-07 06:31:30');
+/*!40000 ALTER TABLE `tbl_project_quantitative_indicators` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tbl_project_responsible_person`
 --
 
@@ -127,7 +345,7 @@ CREATE TABLE `tbl_project_responsible_person` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,7 +354,35 @@ CREATE TABLE `tbl_project_responsible_person` (
 
 LOCK TABLES `tbl_project_responsible_person` WRITE;
 /*!40000 ALTER TABLE `tbl_project_responsible_person` DISABLE KEYS */;
+INSERT INTO `tbl_project_responsible_person` VALUES (1,'นายหรรษธร ขวัญหอม','0956341741',2,'2022-10-07 02:40:56','2022-10-07 04:02:03'),(2,'นายไพบูลย์ กันยา','0956633224',2,'2022-10-07 03:04:00','2022-10-07 03:05:43'),(7,'นางวรรณภัสร์ ปราบพาลา','0956633227',2,'2022-10-07 07:06:28','2022-10-07 07:06:28');
 /*!40000 ALTER TABLE `tbl_project_responsible_person` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_project_target_group`
+--
+
+DROP TABLE IF EXISTS `tbl_project_target_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_project_target_group` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_target_group_detail` varchar(255) DEFAULT '',
+  `project_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_project_target_group`
+--
+
+LOCK TABLES `tbl_project_target_group` WRITE;
+/*!40000 ALTER TABLE `tbl_project_target_group` DISABLE KEYS */;
+INSERT INTO `tbl_project_target_group` VALUES (7,'นฟหกฟหกฟหกกหกหก',2,'2022-10-07 04:00:36','2022-10-07 04:00:43'),(8,'กกกกก',2,'2022-10-07 04:00:52','2022-10-07 04:00:52'),(9,'ฟกฟห5454',2,'2022-10-07 04:00:55','2022-10-07 04:54:25'),(10,'123123123123',2,'2022-10-07 04:02:13','2022-10-07 04:02:13'),(11,'5454',2,'2022-10-07 04:54:14','2022-10-07 04:54:14'),(12,'1545',2,'2022-10-07 04:54:17','2022-10-07 04:54:17');
+/*!40000 ALTER TABLE `tbl_project_target_group` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -515,4 +761,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-10-06 16:27:18
+-- Dump completed on 2022-10-07 16:43:00

@@ -76,10 +76,6 @@ return [
     'budget_specify_status' => 'สถานะการระบุข้อมูล',
     'budget_not_specified' => '*ไม่ระบุงบประมาณ',
 
-    'project_responsible_person_name'   => 'ชื่อผู้รับผิดชอบโครงการ',
-
-    'tab_project_main' => 'ข้อมูลโครงการ',
-    'tab_project_responsible_person' => 'ผู้รับผิดชอบโครงการ',
 
     'title_add_project_type' => 'เพิ่มประเภทโครงการ',
     'title_edit_project_type' => 'แก้ไขประเภทโครงการ',
@@ -114,6 +110,31 @@ return [
     'project_solotion_problem' => 'วิธีการแก้ปัญหา',
 
     'title_manage_project' => 'จัดการข้อมูลโครงการ',
+    'tab_project_main' => 'ข้อมูลโครงการ',
+    'tab_project_responsible_person' => 'ผู้รับผิดชอบโครงการ',
+    'tab_project_location' => 'พื้นที่ดำเนินการ',
+    'tab_project_target_group' => 'กลุ่มเป้าหมาย',
+    'tab_project_problem' => 'ปัญหา',
+    'tab_project_problem_solution' => 'วิธีการแก้ปัญหา',
+    'tab_project_quantitative_indicators'  => 'ตัวชี้วัดเชิงปริมาณ',
+    'tab_project_qualitative_indicators'  => 'ตัวชี้วัดเชิงคุณภาพ',
+    'tab_project_output' => 'ผลผลิต',
+    'tab_project_outcome' => 'ผลลัพธ์',
+    'tab_project_impact' => 'ผลกระทบ',
+
+    'project_responsible_person_name'  => 'ชื่อผู้รับผิดชอบโครงการ',
+    'project_responsible_person_tel'  => 'เบอร์โทร',
+
+    'project_target_group_detail' => 'รายละเอียดกลุ่มเป้าหมาย',
+    'project_problem_detail' => 'รายละเอียดปัญหา',
+    'project_problem_solution_detail' => 'รายละเอียดวิธีการแก้ปัญหา',
+    'project_quantitative_indicators_value' => 'ค่าตัวชี้วัดเชิงปริมาณ',
+    'project_quantitative_indicators_unit'  => 'หน่วยวัด',
+    'project_qualitative_indicators_value' => 'ค่าตัวชี้วัดเชิงคุณภาพ',
+    'project_qualitative_indicators_unit' => 'หน่วยวัด',
+    'project_output_detail' => 'รายละเอียดผลผลิต',
+    'project_outcome_detail' => 'รายละเอียดผลลัพธ์',
+    'project_impact_detail' => 'รายละเอียดผลกระทบ',
 
     'swot_title' => 'SWOT Analysis',
     'swot_strength' => 'จุดแข็ง (Strength)',
@@ -132,5 +153,6 @@ return [
     'msg_no_data' => 'ไม่พบข้อมูล',
     'admin_university' => 'ผู้ดูแลระบบมหาวิทยาลัย',
     'msg_login_false' => 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง',
+    'msg_mode' => 'สถานะทำรายการ',
 
 ];

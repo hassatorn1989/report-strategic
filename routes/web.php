@@ -9,6 +9,7 @@ use App\Http\Controllers\project_type_controller;
 use App\Http\Controllers\project_controller;
 use App\Http\Controllers\result_analysis_controller;
 use App\Http\Controllers\strategic_controller;
+use App\Http\Controllers\test_controller;
 use App\Http\Controllers\user_controller;
 use App\Http\Controllers\year_controller;
 use App\Http\Middleware\AuthCheck;
@@ -92,7 +93,55 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/project/edit', [project_controller::class, 'edit'])->name('project.edit');
         Route::post('/project/update', [project_controller::class, 'update'])->name('project.update');
         Route::post('/project/destroy', [project_controller::class, 'destroy'])->name('project.destroy');
+
         Route::get('/project/manage/{id}', [project_controller::class, 'manage'])->name('project.manage');
+
+        Route::post('/project/manage/responsible-person-store', [project_controller::class, 'manage_responsible_person_store'])->name('project.manage.responsible-person-store');
+        Route::post('/project/manage/responsible-person-edit', [project_controller::class, 'manage_responsible_person_edit'])->name('project.manage.responsible-person-edit');
+        Route::post('/project/manage/responsible-person-update', [project_controller::class, 'manage_responsible_person_update'])->name('project.manage.responsible-person-update');
+        Route::post('/project/manage/responsible-person-destroy', [project_controller::class, 'manage_responsible_person_destroy'])->name('project.manage.responsible-person-destroy');
+
+        Route::post('/project/manage/target-group-store', [project_controller::class, 'manage_target_group_store'])->name('project.manage.target-group-store');
+        Route::post('/project/manage/target-group-edit', [project_controller::class, 'manage_target_group_edit'])->name('project.manage.target-group-edit');
+        Route::post('/project/manage/target-group-update', [project_controller::class, 'manage_target_group_update'])->name('project.manage.target-group-update');
+        Route::post('/project/manage/target-group-destroy', [project_controller::class, 'manage_target_group_destroy'])->name('project.manage.target-group-destroy');
+
+        Route::post('/project/manage/problem-store', [project_controller::class, 'manage_problem_store'])->name('project.manage.problem-store');
+        Route::post('/project/manage/problem-edit', [project_controller::class, 'manage_problem_edit'])->name('project.manage.problem-edit');
+        Route::post('/project/manage/problem-update', [project_controller::class, 'manage_problem_update'])->name('project.manage.problem-update');
+        Route::post('/project/manage/problem-destroy', [project_controller::class, 'manage_problem_destroy'])->name('project.manage.problem-destroy');
+
+
+        Route::post('/project/manage/problem-solution-store', [project_controller::class, 'manage_problem_solution_store'])->name('project.manage.problem-solution-store');
+        Route::post('/project/manage/problem-solution-edit', [project_controller::class, 'manage_problem_solution_edit'])->name('project.manage.problem-solution-edit');
+        Route::post('/project/manage/problem-solution-update', [project_controller::class, 'manage_problem_solution_update'])->name('project.manage.problem-solution-update');
+        Route::post('/project/manage/problem-solution-destroy', [project_controller::class, 'manage_problem_solution_destroy'])->name('project.manage.problem-solution-destroy');
+
+        Route::post('/project/manage/quantitative-indicators-store', [project_controller::class, 'manage_quantitative_indicators_store'])->name('project.manage.quantitative-indicators-store');
+        Route::post('/project/manage/quantitative-indicators-edit', [project_controller::class, 'manage_quantitative_indicators_edit'])->name('project.manage.quantitative-indicators-edit');
+        Route::post('/project/manage/quantitative-indicators-update', [project_controller::class, 'manage_quantitative_indicators_update'])->name('project.manage.quantitative-indicators-update');
+        Route::post('/project/manage/quantitative-indicators-destroy', [project_controller::class, 'manage_quantitative_indicators_destroy'])->name('project.manage.quantitative-indicators-destroy');
+
+        Route::post('/project/manage/qualitative-indicators-store', [project_controller::class, 'manage_qualitative_indicators_store'])->name('project.manage.qualitative-indicators-store');
+        Route::post('/project/manage/qualitative-indicators-edit', [project_controller::class, 'manage_qualitative_indicators_edit'])->name('project.manage.qualitative-indicators-edit');
+        Route::post('/project/manage/qualitative-indicators-update', [project_controller::class, 'manage_qualitative_indicators_update'])->name('project.manage.qualitative-indicators-update');
+        Route::post('/project/manage/qualitative-indicators-destroy', [project_controller::class, 'manage_qualitative_indicators_destroy'])->name('project.manage.qualitative-indicators-destroy');
+
+        Route::post('/project/manage/output-store', [project_controller::class, 'manage_output_store'])->name('project.manage.output-store');
+        Route::post('/project/manage/output-edit', [project_controller::class, 'manage_output_edit'])->name('project.manage.output-edit');
+        Route::post('/project/manage/output-update', [project_controller::class, 'manage_output_update'])->name('project.manage.output-update');
+        Route::post('/project/manage/output-destroy', [project_controller::class, 'manage_output_destroy'])->name('project.manage.output-destroy');
+        Route::post('/project/manage/output-gallery-store', [project_controller::class, 'manage_output_gallery_store'])->name('project.manage.output-gallery-store');
+
+        Route::post('/project/manage/outcome-store', [project_controller::class, 'manage_outcome_store'])->name('project.manage.outcome-store');
+        Route::post('/project/manage/outcome-edit', [project_controller::class, 'manage_outcome_edit'])->name('project.manage.outcome-edit');
+        Route::post('/project/manage/outcome-update', [project_controller::class, 'manage_outcome_update'])->name('project.manage.outcome-update');
+        Route::post('/project/manage/outcome-destroy', [project_controller::class, 'manage_outcome_destroy'])->name('project.manage.outcome-destroy');
+
+        Route::post('/project/manage/impact-store', [project_controller::class, 'manage_impact_store'])->name('project.manage.impact-store');
+        Route::post('/project/manage/impact-edit', [project_controller::class, 'manage_impact_edit'])->name('project.manage.impact-edit');
+        Route::post('/project/manage/impact-update', [project_controller::class, 'manage_impact_update'])->name('project.manage.impact-update');
+        Route::post('/project/manage/impact-destroy', [project_controller::class, 'manage_impact_destroy'])->name('project.manage.impact-destroy');
 
         Route::get('/result-analysis', [result_analysis_controller::class, 'index'])->name('result-analysis.index');
         Route::post('/result-analysis/store', [result_analysis_controller::class, 'store'])->name('result-analysis.store');
@@ -104,3 +153,5 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/change-password/check', [change_password_controller::class, 'check'])->name('change-password.check');
     }
 );
+
+Route::get('/test', [test_controller::class, 'index'])->name('test.index');

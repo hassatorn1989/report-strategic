@@ -133,6 +133,7 @@ return [
     'project_qualitative_indicators_value' => 'ค่าตัวชี้วัดเชิงคุณภาพ',
     'project_qualitative_indicators_unit' => 'หน่วยวัด',
     'project_output_detail' => 'รายละเอียดผลผลิต',
+    'project_output_detail_gallery' => 'อัลบั้มภาพผลผลิต',
     'project_outcome_detail' => 'รายละเอียดผลลัพธ์',
     'project_impact_detail' => 'รายละเอียดผลกระทบ',
 
@@ -154,5 +155,11 @@ return [
     'admin_university' => 'ผู้ดูแลระบบมหาวิทยาลัย',
     'msg_login_false' => 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง',
     'msg_mode' => 'สถานะทำรายการ',
+
+    'pname' => 'จังหวัด',
+    'aname' => 'อำเภอ',
+    'tname' => 'ตำบล',
+    'mname' => 'หมู่บ้าน',
+
 
 ];

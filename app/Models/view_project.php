@@ -55,4 +55,14 @@ class view_project extends Model
     {
         return $this->hasMany(tbl_project_impact::class, 'project_id', 'id');
     }
+
+    function get_year_strategic_detail()
+    {
+        return $this->hasMany(tbl_year_strategic_detail::class, 'year_strategic_id', 'year_strategic_id');
+    }
+
+    function get_project_location()
+    {
+        return $this->hasMany(view_project_location::class, 'project_id', 'id');
+    }
 }

@@ -102,6 +102,7 @@
         var myurl = '{{ url('') }}';
         var lang_action = {
             'btn_saving': '{{ __('msg.btn_saving') }}',
+            'btn_saving': '{{ __('msg.btn_saving') }}',
             'btn_detail': '{{ __('msg.btn_detail') }}',
             'destroy_title': '{{ __('msg.destroy_title') }}',
             'checkin_title': '{{ __('msg.checkin_title') }}',
@@ -109,6 +110,7 @@
             'destroy_ok': '{{ __('msg.destroy_ok') }}',
             'destroy_cancle': '{{ __('msg.destroy_cancle') }}',
             'placeholder': '{{ __('msg.placeholder') }}',
+            'select': '{{ __('msg.select') }}',
         };
     </script>
     <!-- Page specific script -->

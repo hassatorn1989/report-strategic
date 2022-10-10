@@ -1,31 +1,73 @@
-// bsCustomFileInput.init();
-// Dropzone.options.myDropzone = {
-//     url: myurl + '/project/manage/output-gallery-store',
-//     autoProcessQueue: false,
-//     uploadMultiple: true,
-//     parallelUploads: 5,
-//     // maxFiles: 5,
-//     maxFilesize: 5,
-//     acceptedFiles: 'image/*',
-//     addRemoveLinks: true,
-//     init: function () {
-//         dzClosure = this; // Makes sure that 'this' is understood inside the functions below.
 
-//         // for Dropzone to process the queue (instead of default form behavior):
-//         document.getElementById("btn_save_gallery_project_output").addEventListener("click", function (e) {
-//             // Make sure that the form isn't actually being sent.
-//             e.preventDefault();
-//             e.stopPropagation();
-//             dzClosure.processQueue();
-//         });
 
-//         // //send all the form data along with the files:
-//         this.on("sendingmultiple", function (data, xhr, formData) {
-//             formData.append("_token", $('meta[name="csrf-token"]').attr('content'));
-//             // formData.append("lastname", jQuery("#lastname").val());
-//         });
-//     }
-// }
+$('#form_update').validate({
+    ignore: ".ignore",
+    rules: {
+        project_name: {
+            required: true,
+        },
+        project_type_id: {
+            required: true,
+        },
+        project_budget: {
+            required: true,
+        },
+        project_period: {
+            required: true,
+        },
+        year_strategic_id: {
+            required: true,
+        },
+        year_strategic_detail_id: {
+            required: true,
+        },
+        budget_id: {
+            required: true,
+        },
+        budget_specify_other: {
+            required: true,
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function (form) {
+        $('#btn_save_project').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> ' + lang_action.btn_saving).attr('disabled', true);
+        form.submit();
+    }
+});
+
+
+$('select[name="year_strategic_id"]').on('change', function () {
+    var option = `<option value="">${lang_action.select}</option>`;
+    if ($(this).find(':selected').data('year_strategic_detail_count') > 0) {
+        // console.log($(this).find(':selected').data('year_strategic_detail'));
+        $.each($(this).find(':selected').data('year_strategic_detail'), function (index, item) {
+            option += `<option value="${item.id}">${item.year_strategic_detail_detail}</option>`;
+        });
+        $('select[name="year_strategic_detail_id"]').empty().append(option).prop('disabled', false);
+    } else {
+        $('select[name="year_strategic_detail_id"]').empty().append(option).prop('disabled', true)
+    }
+});
+
+$('select[name="budget_id"]').on('change', function () {
+    var option = `<option value="">${lang_action.select}</option>`;
+    if ($(this).find(':selected').data('budget_specify_status') == 'active') {
+        $('input[name="budget_specify_other"]').prop('disabled', false).val('');
+    } else {
+        $('input[name="budget_specify_other"]').prop('disabled', true).val('');
+    }
+});
+
 
 $("div#myDropzone").dropzone({
     url: myurl + '/project/manage/output-gallery-store',
@@ -59,8 +101,6 @@ $("div#myDropzone").dropzone({
         });
 
         this.on("successmultiple", function (files, response) {
-            // console.log("successmultiple");
-            // console.log(response);
             location.reload();
         })
 
@@ -76,9 +116,14 @@ if (activeTab) {
     $('#vert-tabs-tab a[href="' + activeTab + '"]').tab('show');
 }
 
+function cb(start, end) {
+    $('input[name=project_period]').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+}
 
 $('input[name="project_period"]').daterangepicker({
     showDropdowns: true,
+    startDate: project_period.start,
+    endDate: project_period.end,
     locale: {
         format: 'DD/MM/YYYY',
         "separator": " - ",
@@ -111,7 +156,174 @@ $('input[name="project_period"]').daterangepicker({
             "ธันวาคม"
         ],
     }
+}, cb);
+
+
+//------------------------------project-location------------------------
+
+$('select[name="pcode"]').on('change', function () {
+    $.ajax({
+        type: "POST",
+        url: myurl + '/project/manage/get-location-district',
+        data: {
+            pcode : $(this).val(),
+        },
+        dataType: "json",
+        success: function (response) {
+            var option = `<option value="">${lang_action.select}</option>`;
+            $.each(response, function (index, item) {
+                option += `<option value="${item.acode}">${item.acode}-${item.aname}</option>`;
+            });
+            $('select[name="acode"]').empty().append(option);
+            $('select[name="tcode"]').empty().append(`<option value="">${lang_action.select}</option>`);
+            $('select[name="mcode"]').empty().append(`<option value="">${lang_action.select}</option>`);
+        }
+    });
 });
+
+$('select[name="acode"]').on('change', function () {
+    $.ajax({
+        type: "POST",
+        url: myurl + '/project/manage/get-location-subdistrict',
+        data: {
+            acode : $(this).val(),
+        },
+        dataType: "json",
+        success: function (response) {
+            var option = `<option value="">${lang_action.select}</option>`;
+            $.each(response, function (index, item) {
+                option += `<option value="${item.tcode}">${item.tcode}-${item.tname}</option>`;
+            });
+            $('select[name="tcode"]').empty().append(option);
+            $('select[name="mcode"]').empty().append(`<option value="">${lang_action.select}</option>`);
+        }
+    });
+});
+
+$('select[name="tcode"]').on('change', function () {
+    $.ajax({
+        type: "POST",
+        url: myurl + '/project/manage/get-location-village',
+        data: {
+            tcode : $(this).val(),
+        },
+        dataType: "json",
+        success: function (response) {
+            var option = `<option value="">${lang_action.select}</option>`;
+            $.each(response, function (index, item) {
+                option += `<option value="${item.mcode}">${item.mcode}-${item.mname}</option>`;
+            });
+            $('select[name="mcode"]').empty().append(option);
+        }
+    });
+});
+
+$('#form-project-location').validate({
+    ignore: ".ignore",
+    rules: {
+        pcode: {
+            required: true,
+        },
+        acode: {
+            required: true,
+        },
+        tcode: {
+            required: true,
+        },
+        mcode: {
+            required: true,
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function (form) {
+        $('#btn_save_project_location').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>').attr('disabled', true);
+        form.submit();
+    }
+});
+
+function add_data_project_location() {
+    $('#form-project-location').attr('action', myurl + '/project/manage/location-store');
+    $('#form-project-location select').removeClass('is-invalid').val('');
+    $('#form-project-location select[name="acode"]').empty().append(`<option value="">${lang_action.select}</option>`);
+    $('#form-project-location select[name="tcode"]').empty().append(`<option value="">${lang_action.select}</option>`);
+    $('#form-project-location select[name="mcode"]').empty().append(`<option value="">${lang_action.select}</option>`);
+}
+
+function edit_data_project_location(id) {
+    $('#form-project-location').attr('action', myurl + '/project/manage/location-update');
+    $('#form-project-location input[type="text"]').removeClass('is-invalid');
+    // $('#project_location_mode').text('แก้ไขข้อมูล');
+    $.ajax({
+        type: "POST",
+        url: myurl + '/project/manage/location-edit',
+        data: {
+            id: id
+        },
+        dataType: "json",
+        success: function (response) {
+            console.log(response.get_village);
+            var option = `<option value="">${lang_action.select}</option>`;
+            $.each(response.get_district, function (index, item) {
+                option += `<option value="${item.acode}">${item.acode}-${item.aname}</option>`;
+            });
+            $('select[name="acode"]').empty().append(option);
+
+            var option = `<option value="">${lang_action.select}</option>`;
+            $.each(response.get_subdistrict, function (index, item) {
+                option += `<option value="${item.tcode}">${item.tcode}-${item.tname}</option>`;
+            });
+            $('select[name="tcode"]').empty().append(option);
+
+            var option = `<option value="">${lang_action.select}</option>`;
+            $.each(response.get_village, function (index, item) {
+                option += `<option value="${item.mcode}">${item.mcode}-${item.mname}</option>`;
+            });
+
+            $('select[name="mcode"]').empty().append(option);
+            $('#form-project-location select[name="pcode"]').val(response.pcode);
+            $('#form-project-location select[name="acode"]').val(response.acode);
+            $('#form-project-location select[name="tcode"]').val(response.tcode);
+            $('#form-project-location select[name="mcode"]').val(response.mcode);
+
+        }
+    });
+}
+
+function destroy_project_location(id) {
+    Swal.fire({
+        title: lang_action.destroy_title,
+        icon: 'question',
+        showCancelButton: true,
+        cancelButtonColor: '#d33',
+        confirmButtonText: lang_action.destroy_ok,
+        cancelButtonText: lang_action.destroy_cancle
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: "POST",
+                url: myurl + "/project/manage/location-destroy",
+                data: {
+                    id: id
+                },
+                success: function (data) {
+                    window.location.reload();
+                }
+            });
+        }
+    });
+}
+
+//------------------------------end-project-location------------------------
 
 //------------------------------project-responsible-person------------------------
 
@@ -241,7 +453,6 @@ function edit_data_project_target_group(id) {
         },
         dataType: "json",
         success: function (response) {
-            console.log(response);
             $('#form-project-target-group input[name="id"]').val(response.id);
             $('#form-project-target-group input[name="project_target_group_detail"]').val(response.project_target_group_detail);
         }
@@ -673,9 +884,131 @@ function destroy_project_output(id) {
 
 
 function manage_gallery_project_output(id) {
-    $('#modal-manage-gallery-project-output .modal-title').text('จัดการรูปภาพ');
+    $('#modal-manage-gallery-project-output .modal-title').text('จัดการอัลบั้มภาพ');
     $('input[name="project_output_id"]').val(id)
 }
+
+function manage_output_gallery_show(id) {
+    $('#modal-manage-gallery-project-output-view .modal-title').text('แสดงอัลบั้มภาพ');
+    $('#modal-manage-gallery-project-output-view input[name="project_output_id"]').val(id);
+    $.ajax({
+        type: "POST",
+        url: myurl + "/project/manage/output-gallery-show",
+        data: {
+            id: id
+        },
+        dataType: "json",
+        success: function (response) {
+            var row = '';
+            if (response.length > 0) {
+                $.each(response, function (index, item) {
+                    row += `
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img class="card-img-top" src="${myurl}/storage/app/${item.project_output_gallery_path}" >
+                            <div class="card-body">
+                                <div  style="text-align:center;">
+                                    <button type="button" class="btn btn-danger btn-sm remove_row_output" value="${item.id}"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+                });
+            } else {
+                row += `
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div  style="text-align:center;">
+                                <h5>ไม่พบข้อมูล</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+            }
+            $('#modal-manage-gallery-project-output-view .modal-body .show_gallery').empty().append(row);
+        }
+    });
+}
+
+
+$(".show_gallery").on('click', '.remove_row_output', function () {
+    var project_output_id = $('#modal-manage-gallery-project-output-view input[name="project_output_id"]').val()
+    Swal.fire({
+        title: lang_action.destroy_title,
+        icon: 'question',
+        showCancelButton: true,
+        cancelButtonColor: '#d33',
+        confirmButtonText: lang_action.destroy_ok,
+        cancelButtonText: lang_action.destroy_cancle
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: "POST",
+                url: myurl + "/project/manage/output-gallery-destroy",
+                data: {
+                    id: $(this).val(),
+                    project_output_id: project_output_id
+                },
+                success: function (response) {
+                    var count_image = (response.project_output.count_id > 0) ? `<a href="#" data-toggle="modal" data-target="#modal-manage-gallery-project-output-view" onclick="manage_output_gallery_show('{{ $item->id }}')">${response.project_output.count_id} รูป</a>` : `-`;
+                    $(`#count_image_${project_output_id}`).empty().append(count_image);
+                }
+            });
+        }
+        $(this).closest('.col-md-4').remove();
+    });
+
+    // console.log();
+    // if ($(this).closest('table').find('tbody tr').length > 1) {
+    //     $(this).closest('tr').remove();
+    // } else {
+    //     Swal.fire(
+    //         'แจ้งเตือน!',
+    //         'คุณต้องมีข้อมูลอย่างน้อย 1 แถว',
+    //         'warning'
+    //     )
+    // }
+});
+
+// function manage_output_gallery_destroy(id) {
+//     Swal.fire({
+//         title: lang_action.destroy_title,
+//         icon: 'question',
+//         showCancelButton: true,
+//         cancelButtonColor: '#d33',
+//         confirmButtonText: lang_action.destroy_ok,
+//         cancelButtonText: lang_action.destroy_cancle
+//     }).then((result) => {
+//         if (result.value) {
+//             $.ajax({
+//                 type: "POST",
+//                 url: myurl + "/project/manage/output-gallery-destroy",
+//                 data: {
+//                     id: id
+//                 },
+//                 success: function (data) {
+
+//                     // $("#tb_sub").on('click', '.remove_row', function () {
+//                     //     // console.log();
+//                     //     if ($(this).closest('table').find('tbody tr').length > 1) {
+//                     //         $(this).closest('tr').remove();
+//                     //     } else {
+//                     //         Swal.fire(
+//                     //             'แจ้งเตือน!',
+//                     //             'คุณต้องมีข้อมูลอย่างน้อย 1 แถว',
+//                     //             'warning'
+//                     //         )
+//                     //     }
+//                     // });
+//                 }
+//             });
+//             $('.remove_row_output').closest('tr').remove();
+//         }
+//     });
+// }
 //------------------------------end-project-output------------------------
 
 //------------------------------project-outcome------------------------

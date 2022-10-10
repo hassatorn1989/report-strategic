@@ -132,6 +132,8 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/project/manage/output-update', [project_controller::class, 'manage_output_update'])->name('project.manage.output-update');
         Route::post('/project/manage/output-destroy', [project_controller::class, 'manage_output_destroy'])->name('project.manage.output-destroy');
         Route::post('/project/manage/output-gallery-store', [project_controller::class, 'manage_output_gallery_store'])->name('project.manage.output-gallery-store');
+        Route::post('/project/manage/output-gallery-show', [project_controller::class, 'manage_output_gallery_show'])->name('project.manage.output-gallery-show');
+        Route::post('/project/manage/output-gallery-destroy', [project_controller::class, 'manage_output_gallery_destroy'])->name('project.manage.output-gallery-destroy');
 
         Route::post('/project/manage/outcome-store', [project_controller::class, 'manage_outcome_store'])->name('project.manage.outcome-store');
         Route::post('/project/manage/outcome-edit', [project_controller::class, 'manage_outcome_edit'])->name('project.manage.outcome-edit');
@@ -142,6 +144,15 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/project/manage/impact-edit', [project_controller::class, 'manage_impact_edit'])->name('project.manage.impact-edit');
         Route::post('/project/manage/impact-update', [project_controller::class, 'manage_impact_update'])->name('project.manage.impact-update');
         Route::post('/project/manage/impact-destroy', [project_controller::class, 'manage_impact_destroy'])->name('project.manage.impact-destroy');
+
+
+        Route::post('/project/manage/location-store', [project_controller::class, 'manage_location_store'])->name('project.manage.location-store');
+        Route::post('/project/manage/location-edit', [project_controller::class, 'manage_location_edit'])->name('project.manage.location-edit');
+        Route::post('/project/manage/location-update', [project_controller::class, 'manage_location_update'])->name('project.manage.location-update');
+        Route::post('/project/manage/location-destroy', [project_controller::class, 'manage_location_destroy'])->name('project.manage.location-destroy');
+        Route::post('/project/manage/get-location-district', [project_controller::class, 'get_location_district'])->name('project.manage.get-location-district');
+        Route::post('/project/manage/get-location-subdistrict', [project_controller::class, 'get_location_subdistrict'])->name('project.manage.get-location-subdistrict');
+        Route::post('/project/manage/get-location-village', [project_controller::class, 'get_location_village'])->name('project.manage.get-location-village');
 
         Route::get('/result-analysis', [result_analysis_controller::class, 'index'])->name('result-analysis.index');
         Route::post('/result-analysis/store', [result_analysis_controller::class, 'store'])->name('result-analysis.store');

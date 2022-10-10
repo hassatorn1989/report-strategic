@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\tbl_budget;
+use App\Models\tbl_location;
 use App\Models\tbl_project;
 use App\Models\tbl_project_impact;
+use App\Models\tbl_project_location;
 use App\Models\tbl_project_outcome;
 use App\Models\tbl_project_output;
 use App\Models\tbl_project_output_gallery;
@@ -16,12 +18,16 @@ use App\Models\tbl_project_responsible_person;
 use App\Models\tbl_project_target_group;
 use App\Models\tbl_project_type;
 use App\Models\tbl_year;
+use App\Models\view_location;
 use App\Models\view_project;
+use App\Models\view_project_location;
+use App\Models\view_project_output_gallery;
 use App\Models\view_year_strategic;
 use Illuminate\Http\Request;
 use DataTables;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class project_controller extends Controller
 {
@@ -82,13 +88,31 @@ class project_controller extends Controller
     {
         $request->validate([
             'id' => 'required',
-            'project_name' => 'required'
+            'project_name' => 'required',
+            'project_type_id' => 'required',
+            'project_budget' => 'required',
+            'project_period' => 'required',
+            'year_strategic_id' => 'required',
+            'budget_id' => 'required',
         ]);
 
         DB::beginTransaction();
         try {
+            // dd($request->all());
+            $project_period = explode(' - ', $request->project_period);
+            $project_period_start = date('Y-m-d', strtotime(str_replace('/', '-', $project_period[0])));
+            $project_period_end = date('Y-m-d', strtotime(str_replace('/', '-', $project_period[1])));
+
             $q = tbl_project::find($request->id);
             $q->project_name = $request->project_name;
+            $q->project_type_id = $request->project_type_id;
+            $q->project_budget = $request->project_budget;
+            $q->project_period_start = $project_period_start;
+            $q->project_period_end = $project_period_end;
+            $q->year_strategic_id = $request->year_strategic_id;
+            $q->year_strategic_detail_id = (!empty($request->year_strategic_detail_id)) ? $request->year_strategic_detail_id : null;
+            $q->budget_id = $request->budget_id;
+            $q->budget_specify_other = (!empty($request->budget_specify_other))  ? $request->budget_specify_other : null;
             $q->save();
             DB::commit();
             return redirect()->back()->with(['message' => __('msg.msg_update_success')]);
@@ -105,6 +129,12 @@ class project_controller extends Controller
         ]);
         DB::beginTransaction();
         try {
+            $q1 = view_project_output_gallery::where('project_id', $request->id)->get();
+            if ($q1->count() > 0) {
+                foreach ($q1 as $key => $value) {
+                    Storage::delete($value->project_output_gallery_path);
+                }
+            }
             $q = tbl_project::find($request->id);
             $q->delete();
             DB::commit();
@@ -145,12 +175,114 @@ class project_controller extends Controller
                 'get_project_outcome' => function ($q) {
                     $q->orderBy('id', 'DESC');
                 },
+                'get_project_location' => function ($q) {
+                    $q->orderBy('id', 'DESC');
+                },
+                'get_year_strategic_detail',
             ]
         )->find($request->id);
-        $year_strategic = view_year_strategic::select('id', 'strategic_name', 'count_year_strategic_detail')->where('year_id', $project->year_id)->get();
+        // dd($project);
+        $year_strategic = view_year_strategic::with('get_year_strategic_detail')->select('id', 'strategic_name', 'count_year_strategic_detail')->where('year_id', $project->year_id)->get();
         $budget = tbl_budget::all();
         $project_type = tbl_project_type::all();
-        return view('project_manage', compact('project', 'year_strategic', 'budget', 'project_type'));
+        $province = view_location::selectRaw("DISTINCT(pcode), pname")->orderBy('pcode', 'ASC')->get();
+        return view('project_manage', compact('project', 'year_strategic', 'budget', 'project_type', 'province'));
+    }
+
+
+    public function manage_location_store(Request $request)
+    {
+        $request->validate([
+            'project_id' => 'required',
+            'pcode' => 'required',
+            'acode' => 'required',
+            'tcode' => 'required',
+            'mcode' => 'required',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $q = new tbl_project_location();
+            $q->project_id = $request->project_id;
+            $q->pcode = $request->pcode;
+            $q->acode = $request->acode;
+            $q->tcode = $request->tcode;
+            $q->mcode = $request->mcode;
+            $q->save();
+            DB::commit();
+            return redirect()->back()->with(['message' => __('msg.msg_create_success')]);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return back()->withError($e->getMessage())->withInput();
+        }
+    }
+
+    public function manage_location_edit(Request $request)
+    {
+        $q = view_project_location::with(['get_district', 'get_subdistrict', 'get_village'])->find($request->id);
+        return response()->json($q);
+    }
+
+    public function manage_location_update(Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
+            'pcode' => 'required',
+            'acode' => 'required',
+            'tcode' => 'required',
+            'mcode' => 'required',
+        ]);
+
+
+        DB::beginTransaction();
+        try {
+            $q = tbl_project_location::find($request->id);
+            $q->pcode = $request->pcode;
+            $q->acode = $request->acode;
+            $q->tcode = $request->tcode;
+            $q->mcode = $request->mcode;
+            $q->save();
+            DB::commit();
+            return redirect()->back()->with(['message' => __('msg.msg_update_success')]);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return back()->withError($e->getMessage())->withInput();
+        }
+    }
+
+    public function manage_location_destroy(Request $request)
+    {
+        $request->validate([
+            'id' => 'required'
+        ]);
+        DB::beginTransaction();
+        try {
+            $q = tbl_project_location::find($request->id);
+            $q->delete();
+            DB::commit();
+            return response()->json(['status' => 'success']);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return response()->json(['status' => 'error']);
+        }
+    }
+
+    public function get_location_district(Request $request)
+    {
+        $q = view_location::selectRaw("DISTINCT(acode), aname")->whereRaw("substr(pcode,1,2) = {$request->pcode}")->orderBy('acode', 'ASC')->get();
+        return response()->json($q);
+    }
+
+    public function get_location_subdistrict(Request $request)
+    {
+        $q = view_location::selectRaw("DISTINCT(tcode), tname")->whereRaw("substr(acode,1,4) = {$request->acode}")->orderBy('tcode', 'ASC')->get();
+        return response()->json($q);
+    }
+
+    public function get_location_village(Request $request)
+    {
+        $q = view_location::selectRaw("DISTINCT(mcode), mname")->whereRaw("substr(tcode,1,6) = '" . substr($request->tcode, 0, 6) . "'")->orderBy('mcode', 'ASC')->get();
+        return response()->json($q);
     }
 
     public function manage_responsible_person_store(Request $request)
@@ -655,6 +787,33 @@ class project_controller extends Controller
             }
             DB::commit();
             return response()->json(['status' => 'success']);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return response()->json(['status' => 'error']);
+        }
+    }
+
+    public function manage_output_gallery_show(Request $request)
+    {
+        $q = tbl_project_output_gallery::where('project_output_id', $request->id)->get();
+        return response()->json($q);
+    }
+
+    public function manage_output_gallery_destroy(Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
+            'project_output_id' => 'required',
+        ]);
+        DB::beginTransaction();
+        try {
+            $q = tbl_project_output_gallery::find($request->id);
+            Storage::delete($q->project_output_gallery_path);
+            $q->delete();
+
+            $project_output = tbl_project_output_gallery::selectRaw("count(id) as count_id")->where('project_output_id', $request->project_output_id)->first();
+            DB::commit();
+            return response()->json(compact('project_output'));
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
             return response()->json(['status' => 'error']);

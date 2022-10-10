@@ -64,7 +64,6 @@ $('#search-form').on('submit', function (e) {
     e.preventDefault();
 });
 
-
 function destroy(id) {
     Swal.fire({
         title: lang_action.destroy_title,
@@ -88,3 +87,4 @@ function destroy(id) {
         }
     });
 }
+

@@ -18,12 +18,23 @@
             title_edit_project_responsible_person: '{{ __('msg.title_edit_project_responsible_person') }}',
         };
     </script>
-    <!-- bs-custom-file-input -->
-    {{-- <script src="{{ url('resources/assets') }}/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script> --}}
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-
+    <script>
+        @if ($project->project_period_start == '' && $project->project_period_end == '')
+            var project_period = {
+                start: '{{ date('d/m/Y') }}',
+                end: '{{ date('d/m/Y') }}',
+            };
+        @else
+            var project_period = {
+                start: '{{ date('d/m/Y', strtotime($project->project_period_start)) }}',
+                end: '{{ date('d/m/Y', strtotime($project->project_period_end)) }}',
+            };
+        @endif
+    </script>
     <script src="{{ url('resources/assets') }}/app/project_manage.js?q={{ time() }}"></script>
 @endpush
+
 
 @section('content')
     <div class="content-wrapper">
@@ -113,131 +124,156 @@
                                         <div class="tab-content" id="vert-tabs-tabContent">
                                             <div class="tab-pane text-left fade show active" id="vert-tabs-project-main"
                                                 role="tabpanel" aria-labelledby="vert-tabs-project-main-tab">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label for="project_name">{{ __('msg.project_name') }}</label>
-                                                            <input type="text" class="form-control"
-                                                                name="project_name" id="project_name"
-                                                                placeholder="{{ __('msg.placeholder') }}"
-                                                                autocomplete="off" value="{{ $project->project_name }}">
+                                                <form action="{{ route('project.update') }}" method="post"
+                                                    id="form_update">
+                                                    @csrf
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="project_name">{{ __('msg.project_name') }}</label>
+                                                                <input type="hidden" name="id" id="id"
+                                                                    value="{{ $project->id }}">
+                                                                <input type="text" class="form-control"
+                                                                    name="project_name" id="project_name"
+                                                                    placeholder="{{ __('msg.placeholder') }}"
+                                                                    autocomplete="off"
+                                                                    value="{{ $project->project_name }}">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label
-                                                                for="project_type_id">{{ __('msg.project_type_name') }}</label>
-                                                            <select class="custom-select" name="project_type_id"
-                                                                id="project_type_id">
-                                                                <option value="">{{ __('msg.select') }}</option>
-                                                                @if (!empty($project_type))
-                                                                    @foreach ($project_type as $item)
-                                                                        <option value="{{ $item->id }}"
-                                                                            {{ $item->id == $project->project_type_id ? 'selected' : '' }}>
-                                                                            {{ $item->project_type_name }}</option>
-                                                                    @endforeach
-                                                                @endif
-                                                            </select>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="project_type_id">{{ __('msg.project_type_name') }}</label>
+                                                                <select class="custom-select" name="project_type_id"
+                                                                    id="project_type_id">
+                                                                    <option value="">{{ __('msg.select') }}</option>
+                                                                    @if (!empty($project_type))
+                                                                        @foreach ($project_type as $item)
+                                                                            <option value="{{ $item->id }}"
+                                                                                {{ $item->id == $project->project_type_id ? 'selected' : '' }}>
+                                                                                {{ $item->project_type_name }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label
-                                                                for="project_budget">{{ __('msg.project_budget') }}</label>
-                                                            <input type="text" class="form-control"
-                                                                name="project_budget" id="project_budget"
-                                                                placeholder="{{ __('msg.placeholder') }}"
-                                                                value="{{ $project->project_budget }}"
-                                                                autocomplete="off">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="project_budget">{{ __('msg.project_budget') }}</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="project_budget" id="project_budget"
+                                                                    placeholder="{{ __('msg.placeholder') }}"
+                                                                    value="{{ $project->project_budget }}"
+                                                                    autocomplete="off">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="project_period">{{ __('msg.project_period') }}</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="project_period" id="project_period"
+                                                                    placeholder="{{ __('msg.placeholder') }}"
+                                                                    value="{{ $project->project_period }}"
+                                                                    autocomplete="off">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label
-                                                                for="project_period">{{ __('msg.project_period') }}</label>
-                                                            <input type="text" class="form-control"
-                                                                name="project_period" id="project_period"
-                                                                placeholder="{{ __('msg.placeholder') }}"
-                                                                value="{{ $project->project_period }}"
-                                                                autocomplete="off">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label
-                                                                for="strategic_id">{{ __('msg.strategic_name') }}</label>
-                                                            <select class="custom-select" name="year_strategic_id"
-                                                                id="year_strategic_id">
-                                                                <option value="">{{ __('msg.select') }}</option>
-                                                                @if (!empty($year_strategic))
-                                                                    @foreach ($year_strategic as $item)
-                                                                        <option value="{{ $item->id }}"
-                                                                            {{ $item->id == $project->year_strategic_id ? 'selected' : '' }}
-                                                                            data-year_strategic_detail="{{ $item->count_year_strategic_detail }}">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="strategic_id">{{ __('msg.strategic_name') }}</label>
+                                                                <select class="custom-select" name="year_strategic_id"
+                                                                    id="year_strategic_id">
+                                                                    <option value=""
+                                                                        data-year_strategic_detail_count="0"
+                                                                        data-year_strategic_detail="[]">
+                                                                        {{ __('msg.select') }}</option>
+                                                                    @if (!empty($year_strategic))
+                                                                        @foreach ($year_strategic as $item)
+                                                                            <option value="{{ $item->id }}"
+                                                                                {{ $item->id == $project->year_strategic_id ? 'selected' : '' }}
+                                                                                data-year_strategic_detail_count="{{ $item->count_year_strategic_detail }}"
+                                                                                data-year_strategic_detail="{{ json_encode($item->get_year_strategic_detail) }}">
+                                                                                {{ $item->strategic_name }}</option>
+                                                                            >
                                                                             {{ $item->strategic_name }}</option>
-                                                                    @endforeach
-                                                                @endif
-                                                                <option value="no" data-year_strategic_detail="0">
-                                                                    {{ __('msg.strategic_not_specified') }}</option>
-                                                            </select>
+                                                                        @endforeach
+                                                                    @endif
+                                                                    <option value="no"
+                                                                        data-year_strategic_detail_count="0"
+                                                                        data-year_strategic_detail="[]">
+                                                                        {{ __('msg.strategic_not_specified') }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="strategic_id">{{ __('msg.sub_strategic') }}</label>
+
+                                                                <select class="custom-select"
+                                                                    name="year_strategic_detail_id"
+                                                                    id="year_strategic_detail_id"
+                                                                    {{ $project->year_strategic_detail_id == '' ? 'disabled' : '' }}>
+                                                                    <option value="">{{ __('msg.select') }}</option>
+                                                                    @if (count($project->get_year_strategic_detail) > 0)
+                                                                        @foreach ($project->get_year_strategic_detail as $item)
+                                                                            <option value="{{ $item->id }}"
+                                                                                {{ $item->id == $project->year_strategic_detail_id ? 'selected' : '' }}>
+                                                                                {{ $item->year_strategic_detail_detail }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label
-                                                                for="strategic_id">{{ __('msg.sub_strategic') }}</label>
-                                                            <select class="custom-select" name="year_strategic_detail_id"
-                                                                id="year_strategic_detail_id" disabled>
-                                                                <option value="">{{ __('msg.select') }}</option>
-                                                                @if (!empty($year_strategic))
-                                                                    @foreach ($year_strategic as $item)
-                                                                        <option value="{{ $item->id }}"
-                                                                            {{ $item->id == $project->year_strategic_id ? 'selected' : '' }}>
-                                                                            {{ $item->strategic_name }}</option>
-                                                                    @endforeach
-                                                                @endif
-                                                            </select>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="budget_id">{{ __('msg.budget_name') }}</label>
+                                                                <select class="custom-select" name="budget_id"
+                                                                    id="budget_id">
+                                                                    <option value="">{{ __('msg.select') }}</option>
+                                                                    @if (!empty($budget))
+                                                                        @foreach ($budget as $item)
+                                                                            <option value="{{ $item->id }}"
+                                                                                {{ $item->id == $project->budget_id ? 'selected' : '' }}
+                                                                                data-budget_specify_status="{{ $item->budget_specify_status }}">
+                                                                                {{ $item->budget_name }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                    <option value="no"
+                                                                        data-budget_specify_status="inactive">
+                                                                        {{ __('msg.budget_not_specified') }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="budget_specify_other">{{ __('msg.sub_strategic') }}</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="budget_specify_other" id="budget_specify_other"
+                                                                    placeholder="{{ __('msg.placeholder') }}"
+                                                                    value="{{ $project->budget_specify_other }}"
+                                                                    autocomplete="off"
+                                                                    {{ $project->budget_specify_other == '' ? 'disabled' : '' }}>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="budget_id">{{ __('msg.budget_name') }}</label>
-                                                            <select class="custom-select" name="budget_id"
-                                                                id="budget_id">
-                                                                <option value="">{{ __('msg.select') }}</option>
-                                                                @if (!empty($budget))
-                                                                    @foreach ($budget as $item)
-                                                                        <option value="{{ $item->id }}"
-                                                                            {{ $item->id == $project->year_strategic_id ? 'selected' : '' }}
-                                                                            data-budget_specify_status="{{ $item->budget_specify_status }}">
-                                                                            {{ $item->budget_name }}</option>
-                                                                    @endforeach
-                                                                @endif
-                                                                <option value="no"
-                                                                    data-budget_specify_status="inactive">
-                                                                    {{ __('msg.budget_not_specified') }}</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label
-                                                                for="budget_specify_other">{{ __('msg.sub_strategic') }}</label>
-                                                            <input type="text" class="form-control"
-                                                                name="budget_specify_other" id="budget_specify_other"
-                                                                placeholder="{{ __('msg.placeholder') }}" value=""
-                                                                autocomplete="off" disabled>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                    <button type="submit" class="btn btn-primary"
+                                                        id="btn_save_project"><i class="fas fa-save"></i>
+                                                        {{ __('msg.btn_save') }}</button>
+                                                </form>
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-responsible-person"
                                                 role="tabpanel"
@@ -320,7 +356,7 @@
                                                             @endforeach
                                                         @else
                                                             <tr>
-                                                                <td colspan="3" align="center">
+                                                                <td colspan="4" align="center">
                                                                     <span
                                                                         class="text-danger">{{ __('msg.msg_no_data') }}</span>
                                                                 </td>
@@ -332,7 +368,60 @@
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-location" role="tabpanel"
                                                 aria-labelledby="vert-tabs-project-location-tab">
-                                                asdasd
+                                                <table class="table table-hover table-sm table-striped">
+                                                    <thead class="thead-light">
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>{{ __('msg.mname') }}</th>
+                                                            <th>{{ __('msg.tname') }}</th>
+                                                            <th>{{ __('msg.aname') }}</th>
+                                                            <th>{{ __('msg.pname') }}</th>
+                                                            <th>
+                                                                <div style="text-align: center;">
+                                                                    <a href="#" data-toggle="modal"
+                                                                        data-target="#modal-manage-project-location"
+                                                                        onclick="add_data_project_location()"><i
+                                                                            class="fa fa-plus-circle"></i>
+                                                                        {{ __('msg.btn_add') }}</a>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (count($project->get_project_location) > 0)
+                                                            @foreach ($project->get_project_location as $key => $item)
+                                                                <tr>
+                                                                    <td scope="row">{{ $key + 1 }}</td>
+                                                                    <td>{{ $item->mname }}</td>
+                                                                    <td>{{ $item->tname }}</td>
+                                                                    <td>{{ $item->aname }}</td>
+                                                                    <td>{{ $item->pname }}</td>
+                                                                    <td width="20%" align="center">
+                                                                        <button
+                                                                            class="btn btn-warning btn-sm waves-effect waves-light"
+                                                                            data-toggle="modal"
+                                                                            data-target="#modal-manage-project-location"
+                                                                            onclick="edit_data_project_location('{{ $item->id }}')">
+                                                                            <i class="fas fa-edit"></i>
+                                                                        </button>
+                                                                        <button
+                                                                            class="btn btn-danger btn-sm waves-effect waves-light"
+                                                                            onclick="destroy_project_location('{{ $item->id }}')">
+                                                                            <i class="fas fa-trash-alt"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        @else
+                                                            <tr>
+                                                                <td colspan="6" align="center">
+                                                                    <span
+                                                                        class="text-danger">{{ __('msg.msg_no_data') }}</span>
+                                                                </td>
+                                                            </tr>
+                                                        @endif
+                                                    </tbody>
+                                                </table>
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-target-group"
                                                 role="tabpanel" aria-labelledby="vert-tabs-project-target-group-tab">
@@ -361,7 +450,8 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <small class="text-danger">{{ __('msg.msg_mode') }} : <u><span
+                                                            <small class="text-danger">{{ __('msg.msg_mode') }} :
+                                                                <u><span
                                                                         id="project_target_group_mode">เพิ่มข้อมูล</span></u></small>
                                                         </div>
                                                     </div>
@@ -414,8 +504,8 @@
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-problem" role="tabpanel"
                                                 aria-labelledby="vert-tabs-project-problem-tab">
-                                                <form action="{{ route('project.manage.problem-store') }}" method="post"
-                                                    id="form-project-problem">
+                                                <form action="{{ route('project.manage.problem-store') }}"
+                                                    method="post" id="form-project-problem">
                                                     @csrf
                                                     <div class="row">
                                                         <div class="col-md-10">
@@ -438,7 +528,8 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <small class="text-danger">{{ __('msg.msg_mode') }} : <u><span
+                                                            <small class="text-danger">{{ __('msg.msg_mode') }} :
+                                                                <u><span
                                                                         id="project_problem_mode">เพิ่มข้อมูล</span></u></small>
                                                         </div>
                                                     </div>
@@ -653,7 +744,7 @@
                                                             @endforeach
                                                         @else
                                                             <tr>
-                                                                <td colspan="3" align="center">
+                                                                <td colspan="4" align="center">
                                                                     <span
                                                                         class="text-danger">{{ __('msg.msg_no_data') }}</span>
                                                                 </td>
@@ -746,7 +837,7 @@
                                                             @endforeach
                                                         @else
                                                             <tr>
-                                                                <td colspan="3" align="center">
+                                                                <td colspan="4" align="center">
                                                                     <span
                                                                         class="text-danger">{{ __('msg.msg_no_data') }}</span>
                                                                 </td>
@@ -792,7 +883,7 @@
                                                         <tr>
                                                             <th>#</th>
                                                             <th>{{ __('msg.project_output_detail') }}</th>
-                                                            <th>{{ __('msg.project_output_detail') }}</th>
+                                                            <th>{{ __('msg.project_output_detail_gallery') }}</th>
                                                             <th>
                                                                 <div style="text-align: center;">
                                                                     <a href="#"
@@ -810,14 +901,17 @@
                                                                     <td scope="row">{{ $key + 1 }}</td>
                                                                     <td>{{ $item->project_output_detail }}</td>
                                                                     <td>
-                                                                        @if ($item->total_gallery > 0)
-                                                                            <a href="#" data-toggle="modal"
-                                                                                data-target="#modal-manage-gallery-project-output-view">
-                                                                                {{ $item->total_gallery }} รูป
-                                                                            </a>
-                                                                        @else
-                                                                            -
-                                                                        @endif
+                                                                        <span id="count_image_{{ $item->id }}">
+                                                                            @if ($item->total_gallery > 0)
+                                                                                <a href="#" data-toggle="modal"
+                                                                                    data-target="#modal-manage-gallery-project-output-view"
+                                                                                    onclick="manage_output_gallery_show('{{ $item->id }}')">
+                                                                                    {{ $item->total_gallery }} รูป
+                                                                                </a>
+                                                                            @else
+                                                                                -
+                                                                            @endif
+                                                                        </span>
                                                                     </td>
                                                                     <td width="20%" align="center">
                                                                         <button
@@ -841,7 +935,7 @@
                                                             @endforeach
                                                         @else
                                                             <tr>
-                                                                <td colspan="3" align="center">
+                                                                <td colspan="4" align="center">
                                                                     <span
                                                                         class="text-danger">{{ __('msg.msg_no_data') }}</span>
                                                                 </td>
@@ -1054,6 +1148,64 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="modal-manage-project-location" tabindex="-1" role="dialog"
+        aria-labelledby="modelTitleId" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="" method="post" id="form-project-location">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="pcode">{{ __('msg.pname') }}</label>
+                            <input type="hidden" name="project_id" id="project_id" value="{{ Request::segment(3) }}">
+                            <select class="custom-select" name="pcode" id="pcode">
+                                <option value="">{{ __('msg.select') }}</option>
+                                @if (!empty($province))
+                                    @foreach ($province as $item)
+                                        <option value="{{ $item->pcode }}">
+                                            {{ $item->pcode }}-{{ $item->pname }}
+                                        </option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="acode">{{ __('msg.aname') }}</label>
+                            <select class="custom-select" name="acode" id="acode">
+                                <option value="">{{ __('msg.select') }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tcode">{{ __('msg.tname') }}</label>
+                            <select class="custom-select" name="tcode" id="tcode">
+                                <option value="">{{ __('msg.select') }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mcode">{{ __('msg.mname') }}</label>
+                            <select class="custom-select" name="mcode" id="mcode">
+                                <option value="">{{ __('msg.select') }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="btn_save"><i class="fas fa-save"></i>
+                            {{ __('msg.btn_save') }}</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> <i
+                                class="fas fa-times-circle"></i> {{ __('msg.btn_close') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     <div class="modal fade" id="modal-manage-gallery-project-output-view" tabindex="-1" role="dialog"
         aria-labelledby="modelTitleId" aria-hidden="true" data-keyboard="false" data-backdrop="static">
@@ -1068,6 +1220,10 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <input type="hidden" name="project_output_id" value="project_output_id">
+                        <div class="row show_gallery">
+
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal"> <i

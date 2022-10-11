@@ -113,6 +113,8 @@ return [
     'project_status_draff' => 'ร่าง',
     'project_status_publish' => 'เผยแพร่',
     'project_status_unpublish' => 'ยกเลิกเผยแพร่',
+    'project_status' => 'สถานะ',
+    'project_percentage' => 'ความคืบหน้า',
 
     'title_manage_project' => 'จัดการข้อมูลโครงการ',
     'tab_project_main' => 'ข้อมูลโครงการ',

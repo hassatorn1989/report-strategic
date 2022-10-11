@@ -73,8 +73,8 @@
                                         <tr>
                                             <th width="5%">#</th>
                                             <th width="30%">{{ __('msg.project_name') }}</th>
-                                            <th width="20%">{{ __('msg.project_name') }}</th>
-                                            <th width="20%">{{ __('msg.project_name') }}</th>
+                                            <th width="20%">{{ __('msg.project_status') }}</th>
+                                            <th width="20%">{{ __('msg.project_percentage') }}</th>
                                             <th width="25%">{{ __('msg.action') }}</th>
                                         </tr>
                                     </thead>

@@ -117,6 +117,7 @@
                                         <span class="sr-only">20% Complete</span>
                                     </div>
                                 </div>
+                                <small>{{ $cal }}%</small>
                                 <div class="row mt-3">
                                     <div class="col-5 col-sm-3">
                                         <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist"

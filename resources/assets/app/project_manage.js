@@ -1,4 +1,56 @@
 
+$('#form_publish').validate({
+    ignore: ".ignore",
+    rules: {
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function (form) {
+        $.ajax({
+            type: "POST",
+            url: myurl + "/project/manage/check-publish",
+            data: {
+                id: $('#form_publish input[name="id"]').val()
+            },
+            success: function (response) {
+                if (response == 'true') {
+                    var title = ($('#form_publish input[name="project_status"]').val() == 'publish') ? 'ต้องการเผยแพร่โครงการนี้ใช่หรือไม่' : 'ต้องการยกเลิกเผยแพร่โครงการนี้ใช่หรือไม่';
+                    Swal.fire({
+                        title: title,
+                        icon: 'question',
+                        showCancelButton: true,
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: lang_action.destroy_ok,
+                        cancelButtonText: lang_action.destroy_cancle
+                    }).then((result) => {
+                        if (result.value) {
+                            $('#btn_publish').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> ' + lang_action.btn_saving).attr('disabled', true);
+                            form.submit();
+                        }
+                    });
+
+                } else {
+                    Swal.fire(
+                        'แจ้งเตือน!',
+                        'กรุณากรอกข้อมูลให้ครบถ้วน',
+                        'warning'
+                    )
+                }
+            }
+        });
+
+    }
+});
+
 
 $('#form_update').validate({
     ignore: ".ignore",
@@ -84,7 +136,6 @@ $("div#myDropzone").dropzone({
     // aut
     init: function () {
         dzClosure = this; // Makes sure that 'this' is understood inside the functions below.
-
         // for Dropzone to process the queue (instead of default form behavior):
         document.getElementById("btn_save_gallery_project_output").addEventListener("click", function (e) {
             // Make sure that the form isn't actually being sent.
@@ -166,7 +217,7 @@ $('select[name="pcode"]').on('change', function () {
         type: "POST",
         url: myurl + '/project/manage/get-location-district',
         data: {
-            pcode : $(this).val(),
+            pcode: $(this).val(),
         },
         dataType: "json",
         success: function (response) {
@@ -186,7 +237,7 @@ $('select[name="acode"]').on('change', function () {
         type: "POST",
         url: myurl + '/project/manage/get-location-subdistrict',
         data: {
-            acode : $(this).val(),
+            acode: $(this).val(),
         },
         dataType: "json",
         success: function (response) {
@@ -205,7 +256,7 @@ $('select[name="tcode"]').on('change', function () {
         type: "POST",
         url: myurl + '/project/manage/get-location-village',
         data: {
-            tcode : $(this).val(),
+            tcode: $(this).val(),
         },
         dataType: "json",
         success: function (response) {
@@ -246,7 +297,7 @@ $('#form-project-location').validate({
         $(element).removeClass('is-invalid');
     },
     submitHandler: function (form) {
-        $('#btn_save_project_location').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>').attr('disabled', true);
+        $('#btn_save_project_location').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> ' + lang_action.btn_saving).attr('disabled', true);
         form.submit();
     }
 });
@@ -271,7 +322,6 @@ function edit_data_project_location(id) {
         },
         dataType: "json",
         success: function (response) {
-            console.log(response.get_village);
             var option = `<option value="">${lang_action.select}</option>`;
             $.each(response.get_district, function (index, item) {
                 option += `<option value="${item.acode}">${item.acode}-${item.aname}</option>`;
@@ -290,6 +340,7 @@ function edit_data_project_location(id) {
             });
 
             $('select[name="mcode"]').empty().append(option);
+            $('#form-project-location input[name="id"]').val(response.id);
             $('#form-project-location select[name="pcode"]').val(response.pcode);
             $('#form-project-location select[name="acode"]').val(response.acode);
             $('#form-project-location select[name="tcode"]').val(response.tcode);

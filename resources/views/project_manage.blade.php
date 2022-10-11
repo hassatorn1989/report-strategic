@@ -61,63 +61,167 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-md-3 offset-md-9">
+                        @if ($project->project_status == 'draff' || $project->project_status == 'unpublish')
+                            <form action="{{ route('project.manage.publish') }}" method="post" id="form_publish">
+                                @csrf
+                                <input type="hidden" id="id" name="id" value="{{ Request::segment(3) }}">
+                                <input type="hidden" id="project_status" name="project_status" value="publish">
+                                <button type="submit" name="btn_publish" id="btn_publish"
+                                    class="btn btn-primary btn-block"><i class="fas fa-paper-plane"></i>
+                                    {{ __('msg.btn_publish') }}</button>
+                            </form>
+                        @else
+                            <form action="{{ route('project.manage.publish') }}" method="post" id="form_publish">
+                                @csrf
+                                <input type="hidden" id="id" name="id" value="{{ Request::segment(3) }}">
+                                <input type="hidden" id="project_status" name="project_status" value="unpublish">
+                                <button type="submit" name="btn_publish" id="btn_publish"
+                                    class="btn btn-danger btn-block"><i class="fas fa-times-circle"></i>
+                                    {{ __('msg.btn_unpublish') }}</button>
+                            </form>
+                        @endif
+
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-12">
                         <div class="card card-info">
                             <div class="card-header">
                                 <h3 class="card-title"><i class="fas fa-tasks"></i>
                                     {{ $project->project_name }}</h3>
+                                <div class="card-tools">
+                                    @switch($project->project_status)
+                                        @case('draff')
+                                            <small class="badge badge-warning">{{ __('msg.project_status_draff') }}</small>
+                                        @break
+
+                                        @case('publish')
+                                            <small class="badge badge-success">{{ __('msg.project_status_publish') }}</small>
+                                        @break
+
+                                        @case('unpublish')
+                                            <small class="badge badge-danger">{{ __('msg.project_status_unpublish') }}</small>
+                                        @break
+
+                                        @default
+                                    @endswitch
+                                </div>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <div class="row">
+                                <div class="progress progress-sm active">
+                                    <div class="progress-bar bg-primary progress-bar-striped" role="progressbar"
+                                        aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: {{ $cal }}%">
+                                        <span class="sr-only">20% Complete</span>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
                                     <div class="col-5 col-sm-3">
                                         <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist"
                                             aria-orientation="vertical">
+                                            @php
+                                                $flag_update_data = false;
+                                            @endphp
+                                            @if ($project->project_name != '' &&
+                                                $project->project_period_start != '' &&
+                                                $project->project_period_end != '' &&
+                                                $project->project_type_id != '' &&
+                                                $project->project_budget != '' &&
+                                                $project->year_strategic_id != '' &&
+                                                $project->budget_id != '')
+                                                @php
+                                                    $flag_update_data = true;
+                                                @endphp
+                                            @endif
                                             <a class="nav-link active" id="vert-tabs-project-main-tab" data-toggle="pill"
                                                 href="#vert-tabs-project-main" role="tab"
                                                 aria-controls="vert-tabs-project-main"
-                                                aria-selected="true">{{ __('msg.tab_project_main') }}</a>
+                                                aria-selected="true">{{ __('msg.tab_project_main') }}
+                                                {!! $flag_update_data == false
+                                                    ? '<small class="text-danger"><i class="fas fa-exclamation-circle"></i></small>'
+                                                    : '<small class="text-success"><i class="fas fa-check-circle"></i></small>' !!}
+                                            </a>
                                             <a class="nav-link" id="vert-tabs-project-responsible-person-tab"
                                                 data-toggle="pill" href="#vert-tabs-project-responsible-person"
                                                 role="tab" aria-controls="vert-tabs-project-responsible-person"
-                                                aria-selected="false">{{ __('msg.tab_project_responsible_person') }}</a>
+                                                aria-selected="false">{{ __('msg.tab_project_responsible_person') }}
+                                                {!! count($project->get_project_responsible_person) == 0
+                                                    ? '<small class="text-danger"><i class="fas fa-exclamation-circle"></i></small>'
+                                                    : '<small class="text-success"><i class="fas fa-check-circle"></i></small>' !!}</a>
                                             <a class="nav-link" id="vert-tabs-project-location-tab" data-toggle="pill"
                                                 href="#vert-tabs-project-location" role="tab"
                                                 aria-controls="vert-tabs-project-location"
-                                                aria-selected="false">{{ __('msg.tab_project_location') }}</a>
+                                                aria-selected="false">{{ __('msg.tab_project_location') }}
+                                                {!! count($project->get_project_location) == 0
+                                                    ? '<small class="text-danger"><i class="fas fa-exclamation-circle"></i></small>'
+                                                    : '<small class="text-success"><i class="fas fa-check-circle"></i></small>' !!}
+                                            </a>
                                             <a class="nav-link" id="vert-tabs-project-target-group-tab" data-toggle="pill"
                                                 href="#vert-tabs-project-target-group" role="tab"
                                                 aria-controls="vert-tabs-project-target-group"
-                                                aria-selected="false">{{ __('msg.tab_project_target_group') }}</a>
+                                                aria-selected="false">{{ __('msg.tab_project_target_group') }}
+                                                {!! count($project->get_project_target_group) == 0
+                                                    ? '<small class="text-danger"><i class="fas fa-exclamation-circle"></i></small>'
+                                                    : '<small class="text-success"><i class="fas fa-check-circle"></i></small>' !!}
+                                            </a>
                                             <a class="nav-link" id="vert-tabs-project-problem-tab" data-toggle="pill"
                                                 href="#vert-tabs-project-problem" role="tab"
                                                 aria-controls="vert-tabs-project-problem"
-                                                aria-selected="false">{{ __('msg.tab_project_problem') }}</a>
+                                                aria-selected="false">{{ __('msg.tab_project_problem') }}
+                                                {!! count($project->get_project_problem) == 0
+                                                    ? '<small class="text-danger"><i class="fas fa-exclamation-circle"></i></small>'
+                                                    : '<small class="text-success"><i class="fas fa-check-circle"></i></small>' !!}
+                                            </a>
                                             <a class="nav-link" id="vert-tabs-project-problem-solution-tab"
-                                                data-toggle="pill" href="#vert-tabs-project-problem-solution" role="tab"
-                                                aria-controls="vert-tabs-project-problem-solution"
-                                                aria-selected="false">{{ __('msg.tab_project_problem_solution') }}</a>
+                                                data-toggle="pill" href="#vert-tabs-project-problem-solution"
+                                                role="tab" aria-controls="vert-tabs-project-problem-solution"
+                                                aria-selected="false">{{ __('msg.tab_project_problem_solution') }}
+                                                {!! count($project->get_project_problem_solution) == 0
+                                                    ? '<small class="text-danger"><i class="fas fa-exclamation-circle"></i></small>'
+                                                    : '<small class="text-success"><i class="fas fa-check-circle"></i></small>' !!}
+                                            </a>
                                             <a class="nav-link" id="vert-tabs-project-quantitative-indicators-tab"
                                                 data-toggle="pill" href="#vert-tabs-project-quantitative-indicators"
                                                 role="tab" aria-controls="vert-tabs-project-quantitative-indicators"
-                                                aria-selected="false">{{ __('msg.tab_project_quantitative_indicators') }}</a>
+                                                aria-selected="false">{{ __('msg.tab_project_quantitative_indicators') }}
+                                                {!! count($project->get_project_quantitative_indicators) == 0
+                                                    ? '<small class="text-danger"><i class="fas fa-exclamation-circle"></i></small>'
+                                                    : '<small class="text-success"><i class="fas fa-check-circle"></i></small>' !!}
+                                            </a>
                                             <a class="nav-link" id="vert-tabs-project-qualitative-indicators-tab"
                                                 data-toggle="pill" href="#vert-tabs-project-qualitative-indicators"
                                                 role="tab" aria-controls="vert-tabs-project-qualitative-indicators"
-                                                aria-selected="false">{{ __('msg.tab_project_qualitative_indicators') }}</a>
+                                                aria-selected="false">{{ __('msg.tab_project_qualitative_indicators') }}
+                                                {!! count($project->get_project_qualitative_indicators) == 0
+                                                    ? '<small class="text-danger"><i class="fas fa-exclamation-circle"></i></small>'
+                                                    : '<small class="text-success"><i class="fas fa-check-circle"></i></small>' !!}
+                                            </a>
                                             <a class="nav-link" id="vert-tabs-project-output-tab" data-toggle="pill"
                                                 href="#vert-tabs-project-output" role="tab"
                                                 aria-controls="vert-tabs-project-output"
-                                                aria-selected="false">{{ __('msg.tab_project_output') }}</a>
+                                                aria-selected="false">{{ __('msg.tab_project_output') }}
+                                                {!! count($project->get_project_output) == 0
+                                                    ? '<small class="text-danger"><i class="fas fa-exclamation-circle"></i></small>'
+                                                    : '<small class="text-success"><i class="fas fa-check-circle"></i></small>' !!}
+                                            </a>
                                             <a class="nav-link" id="vert-tabs-project-outcome-tab" data-toggle="pill"
                                                 href="#vert-tabs-project-outcome" role="tab"
                                                 aria-controls="vert-tabs-project-outcome"
-                                                aria-selected="false">{{ __('msg.tab_project_outcome') }}</a>
+                                                aria-selected="false">{{ __('msg.tab_project_outcome') }}
+                                                {!! count($project->get_project_outcome) == 0
+                                                    ? '<small class="text-danger"><i class="fas fa-exclamation-circle"></i></small>'
+                                                    : '<small class="text-success"><i class="fas fa-check-circle"></i></small>' !!}
+                                            </a>
                                             <a class="nav-link" id="vert-tabs-project-impact-tab" data-toggle="pill"
                                                 href="#vert-tabs-project-impact" role="tab"
                                                 aria-controls="vert-tabs-project-impact"
-                                                aria-selected="false">{{ __('msg.tab_project_impact') }}</a>
+                                                aria-selected="false">{{ __('msg.tab_project_impact') }}
+                                                {!! count($project->get_project_impact) == 0
+                                                    ? '<small class="text-danger"><i class="fas fa-exclamation-circle"></i></small>'
+                                                    : '<small class="text-success"><i class="fas fa-check-circle"></i></small>' !!}
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="col-7 col-sm-9">
@@ -1164,6 +1268,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="pcode">{{ __('msg.pname') }}</label>
+                            <input type="hidden" name="id" id="id" value="">
                             <input type="hidden" name="project_id" id="project_id" value="{{ Request::segment(3) }}">
                             <select class="custom-select" name="pcode" id="pcode">
                                 <option value="">{{ __('msg.select') }}</option>
@@ -1196,7 +1301,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="btn_save"><i class="fas fa-save"></i>
+                        <button type="submit" class="btn btn-primary" id="btn_save_project_location"><i
+                                class="fas fa-save"></i>
                             {{ __('msg.btn_save') }}</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal"> <i
                                 class="fas fa-times-circle"></i> {{ __('msg.btn_close') }}</button>

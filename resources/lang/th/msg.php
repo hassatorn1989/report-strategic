@@ -35,6 +35,8 @@ return [
     'btn_export' => 'ส่งออก',
     'btn_import' => 'นำเข้า',
     'btn_print' => 'พิมพ์',
+    'btn_publish' => 'เผยแพร่',
+    'btn_unpublish'  => 'ยกเลิกเผยแพร่',
     'btn_config_strategic' => 'กำหนดยุทธศาสตร์',
     'destroy_title' => 'คุณต้องการลบรายการนี้ใช่หรือไม่?',
     'destroy_ok' => 'ตกลง',
@@ -108,6 +110,9 @@ return [
     'project_target_group' => 'กลุ่มเป้าหมาย',
     'project_problem' => 'ปัญหา',
     'project_solotion_problem' => 'วิธีการแก้ปัญหา',
+    'project_status_draff' => 'ร่าง',
+    'project_status_publish' => 'เผยแพร่',
+    'project_status_unpublish' => 'ยกเลิกเผยแพร่',
 
     'title_manage_project' => 'จัดการข้อมูลโครงการ',
     'tab_project_main' => 'ข้อมูลโครงการ',

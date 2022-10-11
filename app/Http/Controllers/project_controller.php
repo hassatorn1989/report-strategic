@@ -40,19 +40,72 @@ class project_controller extends Controller
     public function lists(Request $request)
     {
         $year = tbl_year::where('year_status', 'active')->first();
-        $q = view_project::where('year_id', $year->id);
+        $q = view_project::with(
+            [
+                'get_project_responsible_person',
+                'get_project_target_group',
+                'get_project_problem',
+                'get_project_problem_solution',
+                'get_project_quantitative_indicators',
+                'get_project_qualitative_indicators',
+                'get_project_output',
+                'get_project_outcome',
+                'get_project_location',
+                'get_year_strategic_detail',
+            ]
+        )->where('year_id', $year->id);
         return DataTables::eloquent($q)
             ->filter(function ($q) use ($request) {
                 if ($request->filter_project_name != '') {
                     $q->whereRaw("project_name like '%{$request->filter_project_name}%'");
                 }
             })
+            ->addColumn('project_status', function ($q) {
+                $data = '';
+                switch ($q->project_status) {
+                    case 'draff':
+                        $data = '<span class="badge badge-warning">' . __('msg.project_status_draff') . '</span>';
+                        break;
+                    case 'publish':
+                        $data = '<span class="badge badge-success">' . __('msg.project_status_publish') . '</span>';
+                        break;
+                    case 'unpublish':
+                        $data = '<span class="badge badge-danger">' . __('msg.project_status_unpublish') . '</span>';
+                        break;
+                }
+                return $data;
+            })
+            ->addColumn('project_percentage', function ($q) {
+                $i = 0;
+                ($q->project_name != '' &&
+                    $q->project_period_start != '' &&
+                    $q->project_period_end != '' &&
+                    $q->project_type_id != '' &&
+                    $q->project_budget != '' &&
+                    $q->year_strategic_id != '' &&
+                    $q->budget_id != '')  ? $i++ : 0;
+                count($q->get_project_responsible_person) > 0  ? $i++ : '';
+                count($q->get_project_target_group) > 0 ? $i++ : '';
+                count($q->get_project_problem) > 0 ? $i++ : '';
+                count($q->get_project_problem_solution) > 0 ? $i++ : '';
+                count($q->get_project_quantitative_indicators) > 0 ? $i++ : '';
+                count($q->get_project_qualitative_indicators) > 0 ? $i++ : '';
+                count($q->get_project_output) > 0 ? $i++ : '';
+                count($q->get_project_outcome) > 0 ? $i++ : '';
+                count($q->get_project_location) > 0 ? $i++ : '';
+                $cal =  ($i * 100) / 10;
+                return '<div class="progress progress-xxs mt-3">
+                <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ' . $cal . '%">
+                <span class="sr-only">60% Complete (warning)</span>
+                </div>
+                </div><small>' . $cal . '%</small>';
+            })
             ->addColumn('action', function ($q) {
                 $action = '<a class="btn btn-info btn-sm waves-effect waves-light" href="' . route('project.manage', ['id' => $q->id]) . '"> <i class="fas fa-sliders-h"></i> ' . __('msg.btn_manage_project') . '</a> ';
                 $action .= '<button class="btn btn-danger btn-sm waves-effect waves-light" onclick="destroy(\'' . $q->id . '\')"> <i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</button> ';
                 return $action;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['project_status', 'project_percentage', 'action'])
             ->make();
     }
 
@@ -145,6 +198,60 @@ class project_controller extends Controller
         }
     }
 
+    public function check_publish(Request $request)
+    {
+        $project = view_project::with(
+            [
+                'get_project_responsible_person',
+                'get_project_target_group',
+                'get_project_problem',
+                'get_project_problem_solution',
+                'get_project_quantitative_indicators',
+                'get_project_qualitative_indicators',
+                'get_project_output',
+                'get_project_outcome',
+                'get_project_location',
+                'get_year_strategic_detail',
+            ]
+        )->find($request->id);
+        echo ($project->project_name != '' &&
+            $project->project_period_start != '' &&
+            $project->project_period_end != '' &&
+            $project->project_type_id != '' &&
+            $project->project_budget != '' &&
+            $project->year_strategic_id != '' &&
+            $project->budget_id != '' &&
+            count($project->get_project_responsible_person) > 0 &&
+            count($project->get_project_target_group) > 0 &&
+            count($project->get_project_problem) > 0 &&
+            count($project->get_project_problem_solution) > 0 &&
+            count($project->get_project_quantitative_indicators) > 0 &&
+            count($project->get_project_qualitative_indicators) > 0 &&
+            count($project->get_project_output) > 0 &&
+            count($project->get_project_outcome) > 0 &&
+            count($project->get_project_location) > 0
+        ) ? 'true' : 'false';
+    }
+
+    public function publish(Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
+            'project_status' => 'required',
+        ]);
+        DB::beginTransaction();
+        try {
+            $q = tbl_project::find($request->id);
+            $q->project_status = $request->project_status;
+            $q->save();
+            DB::commit();
+            return redirect()->back()->with(['message' => __('msg.msg_create_success')]);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return back()->withError($e->getMessage())->withInput();
+        }
+    }
+
     public function manage(Request $request)
     {
         $project = view_project::with(
@@ -181,12 +288,29 @@ class project_controller extends Controller
                 'get_year_strategic_detail',
             ]
         )->find($request->id);
-        // dd($project);
+        $i = 0;
+        ($project->project_name != '' &&
+            $project->project_period_start != '' &&
+            $project->project_period_end != '' &&
+            $project->project_type_id != '' &&
+            $project->project_budget != '' &&
+            $project->year_strategic_id != '' &&
+            $project->budget_id != '')  ? $i++ : 0;
+        count($project->get_project_responsible_person) > 0  ? $i++ : '';
+        count($project->get_project_target_group) > 0 ? $i++ : '';
+        count($project->get_project_problem) > 0 ? $i++ : '';
+        count($project->get_project_problem_solution) > 0 ? $i++ : '';
+        count($project->get_project_quantitative_indicators) > 0 ? $i++ : '';
+        count($project->get_project_qualitative_indicators) > 0 ? $i++ : '';
+        count($project->get_project_output) > 0 ? $i++ : '';
+        count($project->get_project_outcome) > 0 ? $i++ : '';
+        count($project->get_project_location) > 0 ? $i++ : '';
+        $cal =  ($i * 100) / 10;
         $year_strategic = view_year_strategic::with('get_year_strategic_detail')->select('id', 'strategic_name', 'count_year_strategic_detail')->where('year_id', $project->year_id)->get();
         $budget = tbl_budget::all();
         $project_type = tbl_project_type::all();
         $province = view_location::selectRaw("DISTINCT(pcode), pname")->orderBy('pcode', 'ASC')->get();
-        return view('project_manage', compact('project', 'year_strategic', 'budget', 'project_type', 'province'));
+        return view('project_manage', compact('project', 'year_strategic', 'budget', 'project_type', 'province', 'cal'));
     }
 
 
@@ -233,7 +357,7 @@ class project_controller extends Controller
             'mcode' => 'required',
         ]);
 
-
+        // dd($request->all());
         DB::beginTransaction();
         try {
             $q = tbl_project_location::find($request->id);

@@ -67,11 +67,14 @@
                                         </div>
                                     </div>
                                 </form>
+
                                 <table id="example1" class="table table-hover table-sm table-striped">
                                     <thead class="thead-light">
                                         <tr>
                                             <th width="5%">#</th>
-                                            <th width="70%">{{ __('msg.project_name') }}</th>
+                                            <th width="30%">{{ __('msg.project_name') }}</th>
+                                            <th width="20%">{{ __('msg.project_name') }}</th>
+                                            <th width="20%">{{ __('msg.project_name') }}</th>
                                             <th width="25%">{{ __('msg.action') }}</th>
                                         </tr>
                                     </thead>

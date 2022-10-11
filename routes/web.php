@@ -95,6 +95,8 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/project/destroy', [project_controller::class, 'destroy'])->name('project.destroy');
 
         Route::get('/project/manage/{id}', [project_controller::class, 'manage'])->name('project.manage');
+        Route::post('/project/manage/check-publish', [project_controller::class, 'check_publish'])->name('project.manage.check-publish');
+        Route::post('/project/manage/publish', [project_controller::class, 'publish'])->name('project.manage.publish');
 
         Route::post('/project/manage/responsible-person-store', [project_controller::class, 'manage_responsible_person_store'])->name('project.manage.responsible-person-store');
         Route::post('/project/manage/responsible-person-edit', [project_controller::class, 'manage_responsible_person_edit'])->name('project.manage.responsible-person-edit');

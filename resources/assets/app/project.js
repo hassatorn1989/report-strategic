@@ -16,6 +16,8 @@ var table = $("#example1").DataTable({
     columns: [
         { data: null, sortable: false, searchable: false, className: "text-center" },
         { data: "project_name", name: "project_name" },
+        { data: "project_status", name: "project_status" },
+        { data: "project_percentage", name: "project_percentage" },
         { data: "action", name: "action", orderable: false, searchable: false, className: "text-center" }
     ],
     fnRowCallback: function (nRow, aData, iDisplayIndex) {

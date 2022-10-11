@@ -121,6 +121,7 @@ class project_controller extends Controller
             $q = new tbl_project();
             $q->project_name = $request->project_name;
             $q->year_id = $request->year_id;
+            $q->faculty_id = auth()->user()->faculty_id;
             $q->project_status = 'draff';
             $q->save();
             DB::commit();
@@ -151,7 +152,6 @@ class project_controller extends Controller
 
         DB::beginTransaction();
         try {
-            // dd($request->all());
             $project_period = explode(' - ', $request->project_period);
             $project_period_start = date('Y-m-d', strtotime(str_replace('/', '-', $project_period[0])));
             $project_period_end = date('Y-m-d', strtotime(str_replace('/', '-', $project_period[1])));
@@ -254,6 +254,7 @@ class project_controller extends Controller
 
     public function manage(Request $request)
     {
+        // dd(auth()->user()->faculty_id);
         $project = view_project::with(
             [
                 'get_project_responsible_person' => function ($q) {

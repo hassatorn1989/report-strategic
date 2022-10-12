@@ -51,6 +51,7 @@ class project_controller extends Controller
                 'get_project_output',
                 'get_project_outcome',
                 'get_project_location',
+                'get_project_impact',
                 'get_year_strategic_detail',
             ]
         )->where('year_id', $year->id);
@@ -93,12 +94,13 @@ class project_controller extends Controller
                 count($q->get_project_output) > 0 ? $i++ : '';
                 count($q->get_project_outcome) > 0 ? $i++ : '';
                 count($q->get_project_location) > 0 ? $i++ : '';
-                $cal =  ($i * 100) / 10;
+                count($q->get_project_impact) > 0 ? $i++ : '';
+                $cal =  number_format(($i * 100) / 11, 2);
                 return '<div class="progress progress-xxs mt-3">
                 <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ' . $cal . '%">
                 <span class="sr-only">60% Complete (warning)</span>
                 </div>
-                </div><small>' . $cal . '%</small>';
+                </div><small>'.__('msg.project_percentage') .' : ' . $cal . '%</small>';
             })
             ->addColumn('action', function ($q) {
                 $action = '<a class="btn btn-info btn-sm waves-effect waves-light" href="' . route('project.manage', ['id' => $q->id]) . '"> <i class="fas fa-sliders-h"></i> ' . __('msg.btn_manage_project') . '</a> ';
@@ -229,7 +231,8 @@ class project_controller extends Controller
             count($project->get_project_qualitative_indicators) > 0 &&
             count($project->get_project_output) > 0 &&
             count($project->get_project_outcome) > 0 &&
-            count($project->get_project_location) > 0
+            count($project->get_project_location) > 0 &&
+            count($project->get_project_impact) > 0
         ) ? 'true' : 'false';
     }
 
@@ -277,13 +280,97 @@ class project_controller extends Controller
                 },
                 'get_project_output' => function ($q) {
                     $q->selectRaw("*,
+                    IF (
+                    (
+                        tbl_project_output.indicators_type = 'quantitative'
+                    ),
+                    (
+                        SELECT
+                            tbl_project_quantitative_indicators.project_quantitative_indicators_value
+                        FROM
+                            `tbl_project_quantitative_indicators`
+                        WHERE
+                            tbl_project_quantitative_indicators.id = tbl_project_output.indicators_id
+                    ),
+                    (
+                        SELECT
+                            tbl_project_qualitative_indicators.project_qualitative_indicators_value
+                        FROM
+                            `tbl_project_qualitative_indicators`
+                        WHERE
+                            tbl_project_qualitative_indicators.id = tbl_project_output.indicators_id
+                    ) ) AS indicators_value,
+                    IF (
+                        (
+                            tbl_project_output.indicators_type = 'quantitative'
+                        ),
+                        (
+                            SELECT
+                                tbl_project_quantitative_indicators.project_quantitative_indicators_unit
+                            FROM
+                                `tbl_project_quantitative_indicators`
+                            WHERE
+                                tbl_project_quantitative_indicators.id = tbl_project_output.indicators_id
+                        ),
+                        (
+                            SELECT
+                                tbl_project_qualitative_indicators.project_qualitative_indicators_unit
+                            FROM
+                                `tbl_project_qualitative_indicators`
+                            WHERE
+                                tbl_project_qualitative_indicators.id = tbl_project_output.indicators_id
+                    )) AS indicators_unit,
                     (select count(*) from tbl_project_output_gallery where tbl_project_output_gallery.project_output_id = tbl_project_output.id) as total_gallery")
                         ->orderBy('id', 'DESC');
                 },
                 'get_project_outcome' => function ($q) {
-                    $q->orderBy('id', 'DESC');
+                    $q->selectRaw("*,
+                    IF (
+                    (
+                        tbl_project_outcome.indicators_type = 'quantitative'
+                    ),
+                    (
+                        SELECT
+                            tbl_project_quantitative_indicators.project_quantitative_indicators_value
+                        FROM
+                            `tbl_project_quantitative_indicators`
+                        WHERE
+                            tbl_project_quantitative_indicators.id = tbl_project_outcome.indicators_id
+                    ),
+                    (
+                        SELECT
+                            tbl_project_qualitative_indicators.project_qualitative_indicators_value
+                        FROM
+                            `tbl_project_qualitative_indicators`
+                        WHERE
+                            tbl_project_qualitative_indicators.id = tbl_project_outcome.indicators_id
+                    ) ) AS indicators_value,
+                    IF (
+                        (
+                            tbl_project_outcome.indicators_type = 'quantitative'
+                        ),
+                        (
+                            SELECT
+                                tbl_project_quantitative_indicators.project_quantitative_indicators_unit
+                            FROM
+                                `tbl_project_quantitative_indicators`
+                            WHERE
+                                tbl_project_quantitative_indicators.id = tbl_project_outcome.indicators_id
+                        ),
+                        (
+                            SELECT
+                                tbl_project_qualitative_indicators.project_qualitative_indicators_unit
+                            FROM
+                                `tbl_project_qualitative_indicators`
+                            WHERE
+                                tbl_project_qualitative_indicators.id = tbl_project_outcome.indicators_id
+                    )) AS indicators_unit")
+                        ->orderBy('id', 'DESC');
                 },
                 'get_project_location' => function ($q) {
+                    $q->orderBy('id', 'DESC');
+                },
+                'get_project_impact' => function ($q) {
                     $q->orderBy('id', 'DESC');
                 },
                 'get_year_strategic_detail',
@@ -306,7 +393,8 @@ class project_controller extends Controller
         count($project->get_project_output) > 0 ? $i++ : '';
         count($project->get_project_outcome) > 0 ? $i++ : '';
         count($project->get_project_location) > 0 ? $i++ : '';
-        $cal =  ($i * 100) / 10;
+        count($project->get_project_impact) > 0 ? $i++ : '';
+        $cal =  number_format(($i * 100) / 11, 2);
         $year_strategic = view_year_strategic::with('get_year_strategic_detail')->select('id', 'strategic_name', 'count_year_strategic_detail')->where('year_id', $project->year_id)->get();
         $budget = tbl_budget::all();
         $project_type = tbl_project_type::all();
@@ -830,12 +918,16 @@ class project_controller extends Controller
         $request->validate([
             'project_id' => 'required',
             'project_output_detail' => 'required',
+            'indicators_output_type' => 'required',
+            'indicators_output_id' => 'required',
         ]);
 
         DB::beginTransaction();
         try {
             $q = new tbl_project_output();
             $q->project_output_detail = $request->project_output_detail;
+            $q->indicators_type = $request->indicators_output_type;
+            $q->indicators_id = $request->indicators_output_id;
             $q->project_id = $request->project_id;
             $q->save();
             DB::commit();
@@ -848,8 +940,13 @@ class project_controller extends Controller
 
     public function manage_output_edit(Request $request)
     {
-        $q = tbl_project_output::find($request->id);
-        return response()->json($q);
+        $output = tbl_project_output::find($request->id);
+        if ($output->indicators_type == 'quantitative') {
+            $indicators = tbl_project_quantitative_indicators::selectRaw("id, project_quantitative_indicators_value as indicators_value, project_quantitative_indicators_unit as indicators_unit")->where('project_id', $request->project_id)->get();
+        } else if ($output->indicators_type == 'qualitative') {
+            $indicators = tbl_project_qualitative_indicators::selectRaw("id, project_qualitative_indicators_value as indicators_value, project_qualitative_indicators_unit as indicators_unit")->where('project_id', $request->project_id)->get();
+        }
+        return response()->json(compact('output', 'indicators'));
     }
 
     public function manage_output_update(Request $request)
@@ -858,6 +955,8 @@ class project_controller extends Controller
             'id' => 'required',
             'project_id' => 'required',
             'project_output_detail' => 'required',
+            'indicators_output_type' => 'required',
+            'indicators_output_id' => 'required',
         ]);
 
 
@@ -865,6 +964,8 @@ class project_controller extends Controller
         try {
             $q = tbl_project_output::find($request->id);
             $q->project_output_detail = $request->project_output_detail;
+            $q->indicators_type = $request->indicators_output_type;
+            $q->indicators_id = $request->indicators_output_id;
             $q->project_id = $request->project_id;
             $q->save();
             DB::commit();
@@ -950,12 +1051,16 @@ class project_controller extends Controller
         $request->validate([
             'project_id' => 'required',
             'project_outcome_detail' => 'required',
+            'indicators_outcome_type' => 'required',
+            'indicators_outcome_id' => 'required',
         ]);
 
         DB::beginTransaction();
         try {
             $q = new tbl_project_outcome();
             $q->project_outcome_detail = $request->project_outcome_detail;
+            $q->indicators_type = $request->indicators_outcome_type;
+            $q->indicators_id = $request->indicators_outcome_id;
             $q->project_id = $request->project_id;
             $q->save();
             DB::commit();
@@ -968,8 +1073,13 @@ class project_controller extends Controller
 
     public function manage_outcome_edit(Request $request)
     {
-        $q = tbl_project_outcome::find($request->id);
-        return response()->json($q);
+        $outcome = tbl_project_outcome::find($request->id);
+        if ($outcome->indicators_type == 'quantitative') {
+            $indicators = tbl_project_quantitative_indicators::selectRaw("id, project_quantitative_indicators_value as indicators_value, project_quantitative_indicators_unit as indicators_unit")->where('project_id', $request->project_id)->get();
+        } else if ($outcome->indicators_type == 'qualitative') {
+            $indicators = tbl_project_qualitative_indicators::selectRaw("id, project_qualitative_indicators_value as indicators_value, project_qualitative_indicators_unit as indicators_unit")->where('project_id', $request->project_id)->get();
+        }
+        return response()->json(compact('outcome', 'indicators'));
     }
 
     public function manage_outcome_update(Request $request)
@@ -978,6 +1088,8 @@ class project_controller extends Controller
             'id' => 'required',
             'project_id' => 'required',
             'project_outcome_detail' => 'required',
+            'indicators_outcome_type' => 'required',
+            'indicators_outcome_id' => 'required',
         ]);
 
 
@@ -985,6 +1097,8 @@ class project_controller extends Controller
         try {
             $q = tbl_project_outcome::find($request->id);
             $q->project_outcome_detail = $request->project_outcome_detail;
+            $q->indicators_type = $request->indicators_outcome_type;
+            $q->indicators_id = $request->indicators_outcome_id;
             $q->project_id = $request->project_id;
             $q->save();
             DB::commit();
@@ -1046,8 +1160,6 @@ class project_controller extends Controller
             'project_id' => 'required',
             'project_impact_detail' => 'required',
         ]);
-
-
         DB::beginTransaction();
         try {
             $q = tbl_project_impact::find($request->id);
@@ -1077,5 +1189,15 @@ class project_controller extends Controller
             DB::rollBack();
             return response()->json(['status' => 'error']);
         }
+    }
+
+    public function get_project_indicators(Request $request)
+    {
+        if ($request->indicators_type == 'quantitative') {
+            $q = tbl_project_quantitative_indicators::selectRaw("id, project_quantitative_indicators_value as indicators_value, project_quantitative_indicators_unit as indicators_unit")->where('project_id', $request->project_id)->get();
+        } else if ($request->indicators_type == 'qualitative') {
+            $q = tbl_project_qualitative_indicators::selectRaw("id, project_qualitative_indicators_value as indicators_value, project_qualitative_indicators_unit as indicators_unit")->where('project_id', $request->project_id)->get();
+        }
+        return response()->json($q);
     }
 }

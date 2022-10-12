@@ -137,6 +137,8 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/project/manage/output-gallery-show', [project_controller::class, 'manage_output_gallery_show'])->name('project.manage.output-gallery-show');
         Route::post('/project/manage/output-gallery-destroy', [project_controller::class, 'manage_output_gallery_destroy'])->name('project.manage.output-gallery-destroy');
 
+        Route::post('/project/manage/get-project-indicators', [project_controller::class, 'get_project_indicators'])->name('project.manage.get-project-indicators');
+
         Route::post('/project/manage/outcome-store', [project_controller::class, 'manage_outcome_store'])->name('project.manage.outcome-store');
         Route::post('/project/manage/outcome-edit', [project_controller::class, 'manage_outcome_edit'])->name('project.manage.outcome-edit');
         Route::post('/project/manage/outcome-update', [project_controller::class, 'manage_outcome_update'])->name('project.manage.outcome-update');

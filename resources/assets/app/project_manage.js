@@ -1,3 +1,21 @@
+function validate_number(evt) {
+    var theEvent = evt || window.event;
+
+    // Handle paste
+    if (theEvent.type === 'paste') {
+        key = event.clipboardData.getData('text/plain');
+    } else {
+        // Handle key press
+        var key = theEvent.keyCode || theEvent.which;
+        key = String.fromCharCode(key);
+    }
+    var regex = /[0-9]|\./;
+    if (!regex.test(key)) {
+        theEvent.returnValue = false;
+        if (theEvent.preventDefault) theEvent.preventDefault();
+    }
+}
+
 
 $('#form_publish').validate({
     ignore: ".ignore",
@@ -866,6 +884,12 @@ $('#form-project-output').validate({
         project_output_detail: {
             required: true,
         },
+        indicators_output_type: {
+            required: true,
+        },
+        indicators_output_id: {
+            required: true,
+        },
     },
     errorElement: 'span',
     errorPlacement: function (error, element) {
@@ -879,32 +903,63 @@ $('#form-project-output').validate({
         $(element).removeClass('is-invalid');
     },
     submitHandler: function (form) {
-        $('#btn_save_project_output').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>').attr('disabled', true);
+        $('#btn_save_project_output').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> ' + lang_action.btn_saving).attr('disabled', true);
         form.submit();
     }
 });
 
+$('input[name="indicators_output_type"]').on('change', function () {
+    $.ajax({
+        type: "POST",
+        url: myurl + '/project/manage/get-project-indicators',
+        data: {
+            indicators_type: $(this).val(),
+            project_id: project_id
+        },
+        dataType: "json",
+        success: function (response) {
+            var option = '<option value="">' + lang_action.select + '</option>';
+            $.each(response, function (index, value) {
+                option += '<option value="' + value.id + '">' + value.indicators_value + ' (' + value.indicators_unit + ')</option>';
+            });
+            $('select[name="indicators_output_id"]').empty().append(option);
+        }
+    });
+});
+
 function add_data_project_output() {
     $('#form-project-output').attr('action', myurl + '/project/manage/output-store');
-    $('#form-project-output input[type="text"]').removeClass('is-invalid').val('');
-    $('#project_output_mode').text('เพิ่มข้อมูล');
+    $('#form-project-output input[type="text"], #form-project-output select').removeClass('is-invalid').val('');
+    $("#modal-project-output .modal-title").text('เพิ่มข้อมูลผลผลิต');
+    $('#form-project-output input[name="indicators_output_type"]').prop('checked', false);
 }
 
 function edit_data_project_output(id) {
     $('#form-project-output').attr('action', myurl + '/project/manage/output-update');
-    $('#form-project-output input[type="text"]').removeClass('is-invalid');
-    $('#project_output_mode').text('แก้ไขข้อมูล');
+    $('#form-project-output input[type="text"], #form-project-output select').removeClass('is-invalid');
+    $("#modal-project-output .modal-title").text('แก้ไขข้อมูลผลผลิต');
     $.ajax({
         type: "POST",
         url: myurl + '/project/manage/output-edit',
         data: {
-            id: id
+            id: id,
+            project_id: project_id
         },
         dataType: "json",
         success: function (response) {
-            console.log(response);
-            $('#form-project-output input[name="id"]').val(response.id);
-            $('#form-project-output input[name="project_output_detail"]').val(response.project_output_detail);
+            $('#form-project-output input[name="id"]').val(response.output.id);
+            $('#form-project-output input[name="project_output_detail"]').val(response.output.project_output_detail);
+            if (response.output.indicators_type == 'qualitative') {
+                $('#form-project-output input[name="indicators_output_type"][value="qualitative"]').prop('checked', true);
+            } else {
+                $('#form-project-output input[name="indicators_output_type"][value="quantitative"]').prop('checked', true);
+            }
+            var option = '<option value="">' + lang_action.select + '</option>';
+            $.each(response.indicators, function (index, value) {
+                option += '<option value="' + value.id + '">' + value.indicators_value + ' (' + value.indicators_unit + ')</option>';
+            });
+            $('select[name="indicators_output_id"]').empty().append(option);
+            $('#form-project-output select[name="indicators_output_id"]').val(response.output.indicators_id)
         }
     });
 }
@@ -1012,54 +1067,7 @@ $(".show_gallery").on('click', '.remove_row_output', function () {
         $(this).closest('.col-md-4').remove();
     });
 
-    // console.log();
-    // if ($(this).closest('table').find('tbody tr').length > 1) {
-    //     $(this).closest('tr').remove();
-    // } else {
-    //     Swal.fire(
-    //         'แจ้งเตือน!',
-    //         'คุณต้องมีข้อมูลอย่างน้อย 1 แถว',
-    //         'warning'
-    //     )
-    // }
 });
-
-// function manage_output_gallery_destroy(id) {
-//     Swal.fire({
-//         title: lang_action.destroy_title,
-//         icon: 'question',
-//         showCancelButton: true,
-//         cancelButtonColor: '#d33',
-//         confirmButtonText: lang_action.destroy_ok,
-//         cancelButtonText: lang_action.destroy_cancle
-//     }).then((result) => {
-//         if (result.value) {
-//             $.ajax({
-//                 type: "POST",
-//                 url: myurl + "/project/manage/output-gallery-destroy",
-//                 data: {
-//                     id: id
-//                 },
-//                 success: function (data) {
-
-//                     // $("#tb_sub").on('click', '.remove_row', function () {
-//                     //     // console.log();
-//                     //     if ($(this).closest('table').find('tbody tr').length > 1) {
-//                     //         $(this).closest('tr').remove();
-//                     //     } else {
-//                     //         Swal.fire(
-//                     //             'แจ้งเตือน!',
-//                     //             'คุณต้องมีข้อมูลอย่างน้อย 1 แถว',
-//                     //             'warning'
-//                     //         )
-//                     //     }
-//                     // });
-//                 }
-//             });
-//             $('.remove_row_output').closest('tr').remove();
-//         }
-//     });
-// }
 //------------------------------end-project-output------------------------
 
 //------------------------------project-outcome------------------------
@@ -1068,6 +1076,12 @@ $('#form-project-outcome').validate({
     ignore: ".ignore",
     rules: {
         project_outcome_detail: {
+            required: true,
+        },
+        indicators_outcome_type: {
+            required: true,
+        },
+        indicators_outcome_id: {
             required: true,
         },
     },
@@ -1083,32 +1097,64 @@ $('#form-project-outcome').validate({
         $(element).removeClass('is-invalid');
     },
     submitHandler: function (form) {
-        $('#btn_save_project_outcome').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>').attr('disabled', true);
+        $('#btn_save_project_outcome').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> ' + lang_action.btn_saving).attr('disabled', true);
         form.submit();
     }
 });
 
+
+$('input[name="indicators_outcome_type"]').on('change', function () {
+    $.ajax({
+        type: "POST",
+        url: myurl + '/project/manage/get-project-indicators',
+        data: {
+            indicators_type: $(this).val(),
+            project_id: project_id
+        },
+        dataType: "json",
+        success: function (response) {
+            var option = '<option value="">' + lang_action.select + '</option>';
+            $.each(response, function (index, value) {
+                option += '<option value="' + value.id + '">' + value.indicators_value + ' (' + value.indicators_unit + ')</option>';
+            });
+            $('select[name="indicators_outcome_id"]').empty().append(option);
+        }
+    });
+});
+
 function add_data_project_outcome() {
     $('#form-project-outcome').attr('action', myurl + '/project/manage/outcome-store');
-    $('#form-project-outcome input[type="text"]').removeClass('is-invalid').val('');
-    $('#project_outcome_mode').text('เพิ่มข้อมูล');
+    $('#form-project-outcome input[type="text"], #form-project-outcome select').removeClass('is-invalid');
+    $('#form-project-outcome input[name="indicators_outcome_type"]').prop('checked', false);
+    $("#modal-project-outcome .modal-title").text('เพิ่มข้อมูลผลลัพธ์');
 }
 
 function edit_data_project_outcome(id) {
     $('#form-project-outcome').attr('action', myurl + '/project/manage/outcome-update');
-    $('#form-project-outcome input[type="text"]').removeClass('is-invalid');
-    $('#project_outcome_mode').text('แก้ไขข้อมูล');
+    $('#form-project-outcome input[type="text"], #form-project-outcome select').removeClass('is-invalid');
+    $("#modal-project-outcome .modal-title").text('แก้ไขข้อมูลผลลัพธ์');
     $.ajax({
         type: "POST",
         url: myurl + '/project/manage/outcome-edit',
         data: {
-            id: id
+            id: id,
+            project_id: project_id
         },
         dataType: "json",
         success: function (response) {
-            console.log(response);
-            $('#form-project-outcome input[name="id"]').val(response.id);
-            $('#form-project-outcome input[name="project_outcome_detail"]').val(response.project_outcome_detail);
+            $('#form-project-outcome input[name="id"]').val(response.outcome.id);
+            $('#form-project-outcome input[name="project_outcome_detail"]').val(response.outcome.project_outcome_detail);
+            if (response.outcome.indicators_type == 'qualitative') {
+                $('#form-project-outcome input[name="indicators_outcome_type"][value="qualitative"]').prop('checked', true);
+            } else {
+                $('#form-project-outcome input[name="indicators_outcome_type"][value="quantitative"]').prop('checked', true);
+            }
+            var option = '<option value="">' + lang_action.select + '</option>';
+            $.each(response.indicators, function (index, value) {
+                option += '<option value="' + value.id + '">' + value.indicators_value + ' (' + value.indicators_unit + ')</option>';
+            });
+            $('select[name="indicators_outcome_id"]').empty().append(option);
+            $('#form-project-outcome select[name="indicators_outcome_id"]').val(response.outcome.indicators_id)
         }
     });
 }

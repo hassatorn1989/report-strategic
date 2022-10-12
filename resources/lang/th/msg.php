@@ -115,6 +115,7 @@ return [
     'project_status_unpublish' => 'ยกเลิกเผยแพร่',
     'project_status' => 'สถานะ',
     'project_percentage' => 'ความคืบหน้า',
+    'project_indicator' => 'ตัวชี้วัด',
 
     'title_manage_project' => 'จัดการข้อมูลโครงการ',
     'tab_project_main' => 'ข้อมูลโครงการ',
@@ -125,9 +126,9 @@ return [
     'tab_project_problem_solution' => 'วิธีการแก้ปัญหา',
     'tab_project_quantitative_indicators'  => 'ตัวชี้วัดเชิงปริมาณ',
     'tab_project_qualitative_indicators'  => 'ตัวชี้วัดเชิงคุณภาพ',
-    'tab_project_output' => 'ผลผลิต',
-    'tab_project_outcome' => 'ผลลัพธ์',
-    'tab_project_impact' => 'ผลกระทบ',
+    'tab_project_output' => 'ผลผลิต (Output)',
+    'tab_project_outcome' => 'ผลลัพธ์ (Outcome)',
+    'tab_project_impact' => 'ผลกระทบ (Impact)',
 
     'project_responsible_person_name'  => 'ชื่อผู้รับผิดชอบโครงการ',
     'project_responsible_person_tel'  => 'เบอร์โทร',

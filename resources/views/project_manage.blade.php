@@ -31,6 +31,7 @@
                 end: '{{ date('d/m/Y', strtotime($project->project_period_end)) }}',
             };
         @endif
+        var project_id = '{{ $project->id }}';
     </script>
     <script src="{{ url('resources/assets') }}/app/project_manage.js?q={{ time() }}"></script>
 @endpush
@@ -113,11 +114,12 @@
                             <div class="card-body">
                                 <div class="progress progress-sm active">
                                     <div class="progress-bar bg-primary progress-bar-striped" role="progressbar"
-                                        aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: {{ $cal }}%">
+                                        aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"
+                                        style="width: {{ $cal }}%">
                                         <span class="sr-only">20% Complete</span>
                                     </div>
                                 </div>
-                                <small>{{ $cal }}%</small>
+                                <small>{{ __('msg.project_percentage') . ' : ' . $cal }}%</small>
                                 <div class="row mt-3">
                                     <div class="col-5 col-sm-3">
                                         <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist"
@@ -405,7 +407,7 @@
                                                                     name="project_responsible_person_tel"
                                                                     id="project_responsible_person_tel"
                                                                     placeholder="{{ __('msg.placeholder') . __('msg.project_responsible_person_tel') }}"
-                                                                    autocomplete="off" value="">
+                                                                    autocomplete="off" value="" onkeypress="validate_number(event)">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">
@@ -953,36 +955,6 @@
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-output" role="tabpanel"
                                                 aria-labelledby="vert-tabs-project-output-tab">
-                                                <form action="{{ route('project.manage.output-store') }}" method="post"
-                                                    id="form-project-output">
-                                                    @csrf
-                                                    <div class="row">
-                                                        <div class="col-md-10">
-                                                            <div class="form-group">
-                                                                <input type="hidden" name="id" id="id">
-                                                                <input type="hidden" name="project_id" id="project_id"
-                                                                    value="{{ Request::segment(3) }}">
-                                                                <input type="text" class="form-control"
-                                                                    name="project_output_detail"
-                                                                    id="project_output_detail"
-                                                                    placeholder="{{ __('msg.placeholder') . __('msg.project_output_detail') }}"
-                                                                    autocomplete="off" value="">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <button type="submit" class="btn btn-primary btn-block"
-                                                                id="btn_save_project_output"><i class="fas fa-save"></i>
-                                                                {{ __('msg.btn_save') }}</button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <small class="text-danger">{{ __('msg.msg_mode') }} :
-                                                                <u><span
-                                                                        id="project_output_mode">เพิ่มข้อมูล</span></u></small>
-                                                        </div>
-                                                    </div>
-                                                </form>
                                                 <table class="table table-hover table-sm table-striped">
                                                     <thead class="thead-light">
                                                         <tr>
@@ -991,7 +963,8 @@
                                                             <th>{{ __('msg.project_output_detail_gallery') }}</th>
                                                             <th>
                                                                 <div style="text-align: center;">
-                                                                    <a href="#"
+                                                                    <a href="#" data-toggle="modal"
+                                                                        data-target="#modal-project-output"
                                                                         onclick="add_data_project_output()"><i
                                                                             class="fa fa-plus-circle"></i>
                                                                         {{ __('msg.btn_add') }}</a>
@@ -1004,7 +977,13 @@
                                                             @foreach ($project->get_project_output as $key => $item)
                                                                 <tr>
                                                                     <td scope="row">{{ $key + 1 }}</td>
-                                                                    <td>{{ $item->project_output_detail }}</td>
+                                                                    <td>{{ $item->project_output_detail }} <br>
+                                                                        <small><u>
+                                                                                {{ $item->indicators_type == 'qualitative' ? __('msg.tab_project_qualitative_indicators') : __('msg.tab_project_quantitative_indicators') }}
+                                                                            </u> : {{ $item->indicators_value }}
+                                                                            ({{ $item->indicators_unit }})
+                                                                        </small>
+                                                                    </td>
                                                                     <td>
                                                                         <span id="count_image_{{ $item->id }}">
                                                                             @if ($item->total_gallery > 0)
@@ -1027,6 +1006,8 @@
                                                                             <i class="fas fa-images"></i></button>
                                                                         <button
                                                                             class="btn btn-warning btn-sm waves-effect waves-light"
+                                                                            data-toggle="modal"
+                                                                            data-target="#modal-project-output"
                                                                             onclick="edit_data_project_output('{{ $item->id }}')">
                                                                             <i class="fas fa-edit"></i>
                                                                         </button>
@@ -1051,36 +1032,6 @@
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-outcome" role="tabpanel"
                                                 aria-labelledby="vert-tabs-project-outcome-tab">
-                                                <form action="{{ route('project.manage.outcome-store') }}"
-                                                    method="post" id="form-project-outcome">
-                                                    @csrf
-                                                    <div class="row">
-                                                        <div class="col-md-10">
-                                                            <div class="form-group">
-                                                                <input type="hidden" name="id" id="id">
-                                                                <input type="hidden" name="project_id" id="project_id"
-                                                                    value="{{ Request::segment(3) }}">
-                                                                <input type="text" class="form-control"
-                                                                    name="project_outcome_detail"
-                                                                    id="project_outcome_detail"
-                                                                    placeholder="{{ __('msg.placeholder') . __('msg.project_outcome_detail') }}"
-                                                                    autocomplete="off" value="">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <button type="submit" class="btn btn-primary btn-block"
-                                                                id="btn_save_project_outcome"><i class="fas fa-save"></i>
-                                                                {{ __('msg.btn_save') }}</button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <small class="text-danger">{{ __('msg.msg_mode') }} :
-                                                                <u><span
-                                                                        id="project_outcome_mode">เพิ่มข้อมูล</span></u></small>
-                                                        </div>
-                                                    </div>
-                                                </form>
                                                 <table class="table table-hover table-sm table-striped">
                                                     <thead class="thead-light">
                                                         <tr>
@@ -1088,7 +1039,8 @@
                                                             <th>{{ __('msg.project_outcome_detail') }}</th>
                                                             <th>
                                                                 <div style="text-align: center;">
-                                                                    <a href="#"
+                                                                    <a href="#" data-toggle="modal"
+                                                                        data-target="#modal-project-outcome"
                                                                         onclick="add_data_project_outcome()"><i
                                                                             class="fa fa-plus-circle"></i>
                                                                         {{ __('msg.btn_add') }}</a>
@@ -1101,10 +1053,18 @@
                                                             @foreach ($project->get_project_outcome as $key => $item)
                                                                 <tr>
                                                                     <td scope="row">{{ $key + 1 }}</td>
-                                                                    <td>{{ $item->project_outcome_detail }}</td>
+                                                                    <td>{{ $item->project_outcome_detail }} <br>
+                                                                        <small><u>
+                                                                                {{ $item->indicators_type == 'qualitative' ? __('msg.tab_project_qualitative_indicators') : __('msg.tab_project_quantitative_indicators') }}
+                                                                            </u> : {{ $item->indicators_value }}
+                                                                            ({{ $item->indicators_unit }})
+                                                                        </small>
+                                                                    </td>
                                                                     <td width="20%" align="center">
                                                                         <button
                                                                             class="btn btn-warning btn-sm waves-effect waves-light"
+                                                                            data-toggle="modal"
+                                                                            data-target="#modal-project-outcome"
                                                                             onclick="edit_data_project_outcome('{{ $item->id }}')">
                                                                             <i class="fas fa-edit"></i>
                                                                         </button>
@@ -1335,6 +1295,130 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal"> <i
                                 class="fas fa-times-circle"></i> {{ __('msg.btn_close') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-project-output" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{{ route('project.manage.output-store') }}" method="post" id="form-project-output">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="hidden" name="id" id="id">
+                                    <input type="hidden" name="project_id" id="project_id"
+                                        value="{{ Request::segment(3) }}">
+                                    <input type="text" class="form-control" name="project_output_detail"
+                                        id="project_output_detail"
+                                        placeholder="{{ __('msg.placeholder') . __('msg.project_output_detail') }}"
+                                        autocomplete="off" value="">
+                                </div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="indicators_output_type"
+                                            name="indicators_output_type" value="quantitative">
+                                        <label for="indicators_output_type"
+                                            class="custom-control-label">{{ __('msg.tab_project_quantitative_indicators') }}</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="indicators_output_type2"
+                                            name="indicators_output_type" value="qualitative">
+                                        <label for="indicators_output_type2"
+                                            class="custom-control-label">{{ __('msg.tab_project_qualitative_indicators') }}</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="indicators_output_id">{{ __('msg.project_indicator') }}</label>
+                                    <select class="custom-select" name="indicators_output_id" id="indicators_output_id">
+                                        <option value="">{{ __('msg.select') }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="btn_save_project_output"><i
+                                class="fas fa-save"></i>
+                            {{ __('msg.btn_save') }}</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> <i
+                                class="fas fa-times-circle"></i>
+                            {{ __('msg.btn_close') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-project-outcome" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{{ route('project.manage.outcome-store') }}" method="post" id="form-project-outcome">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="hidden" name="id" id="id">
+                                    <input type="hidden" name="project_id" id="project_id"
+                                        value="{{ Request::segment(3) }}">
+                                    <input type="text" class="form-control" name="project_outcome_detail"
+                                        id="project_outcome_detail"
+                                        placeholder="{{ __('msg.placeholder') . __('msg.project_outcome_detail') }}"
+                                        autocomplete="off" value="">
+                                </div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="indicators_outcome_type"
+                                            name="indicators_outcome_type" value="quantitative">
+                                        <label for="indicators_outcome_type"
+                                            class="custom-control-label">{{ __('msg.tab_project_quantitative_indicators') }}</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="indicators_outcome_type2"
+                                            name="indicators_outcome_type" value="qualitative">
+                                        <label for="indicators_outcome_type2"
+                                            class="custom-control-label">{{ __('msg.tab_project_qualitative_indicators') }}</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="indicators_outcome_id">{{ __('msg.project_indicator') }}</label>
+                                    <select class="custom-select" name="indicators_outcome_id"
+                                        id="indicators_outcome_id">
+                                        <option value="">{{ __('msg.select') }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="btn_save_project_outcome"><i
+                                class="fas fa-save"></i>
+                            {{ __('msg.btn_save') }}</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> <i
+                                class="fas fa-times-circle"></i>
+                            {{ __('msg.btn_close') }}</button>
                     </div>
                 </form>
             </div>

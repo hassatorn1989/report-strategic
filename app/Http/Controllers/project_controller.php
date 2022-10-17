@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\tbl_budget;
+use App\Models\tbl_faculty;
 use App\Models\tbl_location;
 use App\Models\tbl_project;
 use App\Models\tbl_project_impact;
@@ -34,7 +35,8 @@ class project_controller extends Controller
     public function index(Request $request)
     {
         $year = tbl_year::where('year_status', 'active')->first();
-        return view('project', compact('year'));
+        $faculty = tbl_faculty::all();
+        return view('project', compact('year', 'faculty'));
     }
 
     public function lists(Request $request)
@@ -55,6 +57,9 @@ class project_controller extends Controller
                 'get_year_strategic_detail',
             ]
         )->where('year_id', $year->id);
+        if(auth()->user()->user_role == 'user'){
+            $q->where('faculty_id', auth()->user()->faculty_id);
+        }
         return DataTables::eloquent($q)
             ->filter(function ($q) use ($request) {
                 if ($request->filter_project_name != '') {
@@ -100,7 +105,7 @@ class project_controller extends Controller
                 <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ' . $cal . '%">
                 <span class="sr-only">60% Complete (warning)</span>
                 </div>
-                </div><small>'.__('msg.project_percentage') .' : ' . $cal . '%</small>';
+                </div><small>' . __('msg.project_percentage') . ' : ' . $cal . '%</small>';
             })
             ->addColumn('action', function ($q) {
                 $action = '<a class="btn btn-info btn-sm waves-effect waves-light" href="' . route('project.manage', ['id' => $q->id]) . '"> <i class="fas fa-sliders-h"></i> ' . __('msg.btn_manage_project') . '</a> ';
@@ -123,8 +128,9 @@ class project_controller extends Controller
             $q = new tbl_project();
             $q->project_name = $request->project_name;
             $q->year_id = $request->year_id;
-            $q->faculty_id = auth()->user()->faculty_id;
+            $q->faculty_id = (auth()->user()->user_role == 'admin') ? $request->faculty_id : auth()->user()->faculty_id;
             $q->project_status = 'draff';
+            $q->user_created = auth()->user()->id;
             $q->save();
             DB::commit();
             return redirect()->route('project.manage', ['id' => $q->id])->with(['message' => __('msg.msg_create_success')]);
@@ -168,6 +174,7 @@ class project_controller extends Controller
             $q->year_strategic_detail_id = (!empty($request->year_strategic_detail_id)) ? $request->year_strategic_detail_id : null;
             $q->budget_id = $request->budget_id;
             $q->budget_specify_other = (!empty($request->budget_specify_other))  ? $request->budget_specify_other : null;
+            $q->user_updated = auth()->user()->id;
             $q->save();
             DB::commit();
             return redirect()->back()->with(['message' => __('msg.msg_update_success')]);

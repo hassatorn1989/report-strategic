@@ -39,6 +39,6 @@ class auth_controller extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('auth.index');
     }
 }

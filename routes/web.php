@@ -5,8 +5,11 @@ use App\Http\Controllers\budget_controller;
 use App\Http\Controllers\change_password_controller;
 use App\Http\Controllers\dashboard_controller;
 use App\Http\Controllers\faculty_controller;
+use App\Http\Controllers\home_controller;
 use App\Http\Controllers\project_type_controller;
 use App\Http\Controllers\project_controller;
+use App\Http\Controllers\project_main_controller;
+use App\Http\Controllers\project_main_type_controller;
 use App\Http\Controllers\result_analysis_controller;
 use App\Http\Controllers\strategic_controller;
 use App\Http\Controllers\test_controller;
@@ -26,7 +29,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [auth_controller::class, 'index'])->name('auth.index');
+Route::get('/', [home_controller::class, 'index'])->name('home.index');
+
+
+Route::get('/signin', [auth_controller::class, 'index'])->name('auth.index');
 Route::post('/login', [auth_controller::class, 'login'])->name('auth.login');
 Route::get('/logout', [auth_controller::class, 'logout'])->name('auth.logout');
 
@@ -86,6 +92,21 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/setting/project-type/edit', [project_type_controller::class, 'edit'])->name('setting.project-type.edit');
         Route::post('/setting/project-type/update', [project_type_controller::class, 'update'])->name('setting.project-type.update');
         Route::post('/setting/project-type/destroy', [project_type_controller::class, 'destroy'])->name('setting.project-type.destroy');
+
+        Route::get('/setting-project/project-main-type', [project_main_type_controller::class, 'index'])->name('setting-project.project-main-type.index');
+        Route::post('/setting-project/project-main-type/lists', [project_main_type_controller::class, 'lists'])->name('setting-project.project-main-type.lists');
+        Route::post('/setting-project/project-main-type/store', [project_main_type_controller::class, 'store'])->name('setting-project.project-main-type.store');
+        Route::post('/setting-project/project-main-type/edit', [project_main_type_controller::class, 'edit'])->name('setting-project.project-main-type.edit');
+        Route::post('/setting-project/project-main-type/update', [project_main_type_controller::class, 'update'])->name('setting-project.project-main-type.update');
+        Route::post('/setting-project/project-main-type/destroy', [project_main_type_controller::class, 'destroy'])->name('setting-project.project-main-type.destroy');
+
+        Route::get('/setting-project/project-main', [project_main_controller::class, 'index'])->name('setting-project.project-main.index');
+        Route::post('/setting-project/project-main/lists', [project_main_controller::class, 'lists'])->name('setting-project.project-main.lists');
+        Route::post('/setting-project/project-main/store', [project_main_controller::class, 'store'])->name('setting-project.project-main.store');
+        Route::post('/setting-project/project-main/edit', [project_main_controller::class, 'edit'])->name('setting-project.project-main.edit');
+        Route::post('/setting-project/project-main/update', [project_main_controller::class, 'update'])->name('setting-project.project-main.update');
+        Route::post('/setting-project/project-main/destroy', [project_main_controller::class, 'destroy'])->name('setting-project.project-main.destroy');
+        Route::post('/setting-project/project-main/get-faculty', [project_main_controller::class, 'get_faculty'])->name('setting-project.project-main.get-faculty');
 
         Route::get('/project', [project_controller::class, 'index'])->name('project.index');
         Route::post('/project/lists', [project_controller::class, 'lists'])->name('project.lists');

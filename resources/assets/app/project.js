@@ -35,6 +35,9 @@ $('#form').validate({
         project_name: {
             required: true,
         },
+        faculty_id: {
+            required: true,
+        },
     },
     errorElement: 'span',
     errorPlacement: function (error, element) {

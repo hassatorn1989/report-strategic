@@ -1,10 +1,13 @@
 <?php
 return [
+    'system_uni_en' => 'Phetchabun Rajabhat University',
     'system_name_en' => 'Strategic Report',
     'system_name_th' => 'ระบบรายงานยุทธศาสตร์',
     'system_version' => '1.0.0',
     'system_owner' => 'Phetchabun Rajabhat University',
     'system_copyright' => 'Copyright © 2022',
+
+    'report_menu_home' => 'หน้าหลัก',
 
     'menu_dashboard' => 'แดชบอร์ด',
     'menu_setting' => 'ตั้งค่า',
@@ -18,6 +21,10 @@ return [
     'menu_project' => 'บันทึกผลโครงการ',
     'menu_change_password' => 'เปลี่ยนรหัสผ่าน',
     'menu_logout' => 'ออกจากระบบ',
+
+    'menu_setting_project' => 'ตั้งค่าโครงการ',
+    'menu_setting_project_main_type' => 'ประเภทโครงการหลัก',
+    'menu_setting_project_main' => 'โครงการหลัก',
 
     'btn_login' => 'เข้าสู่ระบบ',
     'btn_logining' => 'กำลังเข้าสู่ระบบ...',
@@ -68,8 +75,8 @@ return [
 
     'title_add_faculty' => 'เพิ่มหน่วยงาน',
     'title_edit_faculty' => 'แก้ไขหน่วยงาน',
-    'filter_faculty_name' =>  'ค้นหาชื่อหน่วยงาน',
-    'faculty_name' => 'ชื่อหน่วยงาน',
+    'filter_faculty_name' =>  'ค้นหาหน่วยงาน',
+    'faculty_name' => 'หน่วยงาน',
 
     'title_add_budget' => 'เพิ่มงบประมาณ',
     'title_edit_budget' => 'แก้ไขงบประมาณ',
@@ -81,17 +88,32 @@ return [
 
     'title_add_project_type' => 'เพิ่มประเภทโครงการ',
     'title_edit_project_type' => 'แก้ไขประเภทโครงการ',
-    'filter_project_type_name' =>  'ค้นหาชื่อประเภทโครงการ',
-    'project_type_name' => 'ชื่อประเภทโครงการ',
+    'filter_project_type_name' =>  'ค้นหาประเภทโครงการ',
+    'project_type_name' => 'ประเภทโครงการ',
+
+
+    'title_add_project_main_type' => 'เพิ่มประเภทโครงการหลัก',
+    'title_edit_project_main_type' => 'แก้ไขประเภทโครงการหลัก',
+    'filter_project_main_type_name' =>  'ค้นหาประเภทโครงการหลัก',
+    'project_main_type_name' => 'ประเภทโครงการหลัก',
+    'project_main_type_budget' => 'งบประมาณ',
+    'project_main_guidelines' => 'แนวทางการดำเนินงาน',
+    'project_main_target' => 'เป้าหมายของโครงการ',
+
+    'title_add_project_main' => 'เพิ่มโครงการหลัก',
+    'title_edit_project_main' => 'แก้ไขโครงการหลัก',
+    'filter_project_main_name' => 'ค้นหาโครงการหลัก',
+    'project_main_name' => 'โครงการหลัก',
+    'project_main_budget' => 'งบประมาณ',
 
     'title_add_user' => 'เพิ่มผู้ใช้งาน',
     'title_edit_user' => 'แก้ไขผู้ใช้งาน',
-    'filter_user_name' => 'ค้นหาชื่อผู้ใช้งาน',
+    'filter_user_name' => 'ค้นหาผู้ใช้งาน',
     'user_prefix' => 'คำนำหน้า',
-    'user_name' => 'ชื่อ',
+    'user_name' => '',
     'user_last' => 'นามสกุล',
-    'full_name' => 'ชื่อ-นามสกุล',
-    'username' => 'ชื่อผู้ใช้งาน',
+    'full_name' => '-นามสกุล',
+    'username' => 'ผู้ใช้งาน',
     'password' => 'รหัสผ่าน',
     'confirm_password' => 'ยืนยันรหัสผ่าน',
     'current_password' => 'รหัสผ่านเก่า',
@@ -103,8 +125,8 @@ return [
 
     'title_add_project' => 'เพิ่มโครงการ',
     'title_edit_project' => 'แก้ไขโครงการ',
-    'filter_project_name' =>  'ค้นหาชื่อโครงการ',
-    'project_name' => 'ชื่อโครงการ',
+    'filter_project_name' =>  'ค้นหาโครงการ',
+    'project_name' => 'โครงการ',
     'project_budget' => 'งบประมาณที่ได้รับ',
     'project_period' =>  'ระยะเวลาดำเนินโครงการ',
     'project_target_group' => 'กลุ่มเป้าหมาย',
@@ -130,7 +152,7 @@ return [
     'tab_project_outcome' => 'ผลลัพธ์ (Outcome)',
     'tab_project_impact' => 'ผลกระทบ (Impact)',
 
-    'project_responsible_person_name'  => 'ชื่อผู้รับผิดชอบโครงการ',
+    'project_responsible_person_name'  => 'ผู้รับผิดชอบโครงการ',
     'project_responsible_person_tel'  => 'เบอร์โทร',
 
     'project_target_group_detail' => 'รายละเอียดกลุ่มเป้าหมาย',
@@ -157,17 +179,23 @@ return [
     'tow_wt' => 'กลยุทธ์เชิงแก้ไข (WT)',
 
     'msg_list' => 'รายการ',
-    'msg_username_used' => 'ชื่อผู้ใช้งานนี้ถูกใช้งานแล้ว',
+    'msg_username_used' => 'ผู้ใช้งานนี้ถูกใช้งานแล้ว',
     'msg_password_minlength' => 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร',
     'msg_no_data' => 'ไม่พบข้อมูล',
     'admin_university' => 'ผู้ดูแลระบบมหาวิทยาลัย',
-    'msg_login_false' => 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง',
+    'msg_login_false' => 'ผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง',
     'msg_mode' => 'สถานะทำรายการ',
 
     'pname' => 'จังหวัด',
     'aname' => 'อำเภอ',
     'tname' => 'ตำบล',
     'mname' => 'หมู่บ้าน',
+
+    'msg_project' => 'โครงการ',
+    'msg_budget' => 'งบประมาณ',
+    'msg_faculty' => 'หน่วยงาน',
+    'msg_faculty_main' => 'หน่วยงานหลัก',
+    'msg_faculty_join' => 'หน่วยงานร่วม',
 
 
 ];

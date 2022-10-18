@@ -14,6 +14,7 @@ use App\Http\Controllers\result_analysis_controller;
 use App\Http\Controllers\strategic_controller;
 use App\Http\Controllers\test_controller;
 use App\Http\Controllers\user_controller;
+use App\Http\Controllers\work_controller;
 use App\Http\Controllers\year_controller;
 use App\Http\Middleware\AuthCheck;
 use Illuminate\Support\Facades\Route;
@@ -107,6 +108,7 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/setting-project/project-main/update', [project_main_controller::class, 'update'])->name('setting-project.project-main.update');
         Route::post('/setting-project/project-main/destroy', [project_main_controller::class, 'destroy'])->name('setting-project.project-main.destroy');
         Route::post('/setting-project/project-main/get-faculty', [project_main_controller::class, 'get_faculty'])->name('setting-project.project-main.get-faculty');
+        Route::post('/setting-project/project-main/check-budget', [project_main_controller::class, 'check_budget'])->name('setting-project.project-main.check-budget');
 
         Route::get('/project', [project_controller::class, 'index'])->name('project.index');
         Route::post('/project/lists', [project_controller::class, 'lists'])->name('project.lists');
@@ -184,6 +186,12 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/result-analysis/edit', [result_analysis_controller::class, 'edit'])->name('result-analysis.edit');
         Route::post('/result-analysis/update', [result_analysis_controller::class, 'update'])->name('result-analysis.update');
         Route::post('/result-analysis/destroy', [result_analysis_controller::class, 'destroy'])->name('result-analysis.destroy');
+
+        Route::get('/work', [work_controller::class, 'index'])->name('work.index');
+        Route::post('/work/store', [work_controller::class, 'store'])->name('work.store');
+        Route::post('/work/edit', [work_controller::class, 'edit'])->name('work.edit');
+        Route::post('/work/update', [work_controller::class, 'update'])->name('work.update');
+        Route::post('/work/destroy', [work_controller::class, 'destroy'])->name('work.destroy');
 
         Route::post('/change-password/update', [change_password_controller::class, 'update'])->name('change-password.update');
         Route::post('/change-password/check', [change_password_controller::class, 'check'])->name('change-password.check');

@@ -19,6 +19,7 @@ return [
     'menu_setting_project_type' => 'ประเภทโครงการ',
     'menu_result_analysis' => 'บันทึกผลการวิเคราะห์',
     'menu_project' => 'บันทึกผลโครงการ',
+    'menu_work' => 'บันทึกผลกระบวนการปฏิบัติงาน',
     'menu_change_password' => 'เปลี่ยนรหัสผ่าน',
     'menu_logout' => 'ออกจากระบบ',
 
@@ -145,7 +146,7 @@ return [
     'tab_project_location' => 'พื้นที่ดำเนินการ',
     'tab_project_target_group' => 'กลุ่มเป้าหมาย',
     'tab_project_problem' => 'ปัญหา',
-    'tab_project_problem_solution' => 'วิธีการแก้ปัญหา',
+    'tab_project_problem_solution' => 'ขั้นตอนการทำงาน/การแก้ไขปัญหา',
     'tab_project_quantitative_indicators'  => 'ตัวชี้วัดเชิงปริมาณ',
     'tab_project_qualitative_indicators'  => 'ตัวชี้วัดเชิงคุณภาพ',
     'tab_project_output' => 'ผลผลิต (Output)',
@@ -196,6 +197,8 @@ return [
     'msg_faculty' => 'หน่วยงาน',
     'msg_faculty_main' => 'หน่วยงานหลัก',
     'msg_faculty_join' => 'หน่วยงานร่วม',
+    'msg_specify' => 'ระบุ',
+    'msg_specify_budget' => 'ระบุงบประมาณ',
 
 
 ];

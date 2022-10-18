@@ -72,9 +72,10 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th width="5%">#</th>
-                                            <th width="35%">{{ __('msg.project_main_type_name') }}</th>
-                                            <th width="35%">{{ __('msg.project_main_type_budget') }}</th>
-                                            <th width="25%">{{ __('msg.action') }}</th>
+                                            <th width="25%">{{ __('msg.project_main_type_name') }}</th>
+                                            <th width="25%">{{ __('msg.project_main_type_budget') }}</th>
+                                            <th width="25%">{{ __('msg.budget_name') }}</th>
+                                            <th width="20%">{{ __('msg.action') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -129,7 +130,27 @@
                                 id="project_main_type_budget" placeholder="{{ __('msg.placeholder') }}"
                                 autocomplete="off">
                         </div>
-
+                        <div class="form-group">
+                            <label for="budget_id">{{ __('msg.budget_name') }}</label>
+                            <select class="custom-select" name="budget_id" id="budget_id">
+                                <option value="">{{ __('msg.select') }}</option>
+                                @if (!empty($budget))
+                                    @foreach ($budget as $item)
+                                        <option value="{{ $item->id }}"
+                                            data-budget_specify_status="{{ $item->budget_specify_status }}">
+                                            {{ $item->budget_name }}</option>
+                                    @endforeach
+                                @endif
+                                <option value="no" data-budget_specify_status="inactive">
+                                    {{ __('msg.budget_not_specified') }}</option>
+                            </select>
+                        </div>
+                       <div class="form-group">
+                                <label for="budget_specify_other">{{ __('msg.msg_specify') }}</label>
+                                <input type="text" class="form-control" name="budget_specify_other"
+                                    id="budget_specify_other" placeholder="{{ __('msg.placeholder') }}"
+                                    value="" autocomplete="off" disabled>
+                            </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="btn_save"><i class="fas fa-save"></i>

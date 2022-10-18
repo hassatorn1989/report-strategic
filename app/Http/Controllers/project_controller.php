@@ -22,6 +22,7 @@ use App\Models\tbl_year;
 use App\Models\view_location;
 use App\Models\view_project;
 use App\Models\view_project_location;
+use App\Models\view_project_main;
 use App\Models\view_project_output_gallery;
 use App\Models\view_year_strategic;
 use Illuminate\Http\Request;
@@ -88,7 +89,6 @@ class project_controller extends Controller
                     $q->project_period_end != '' &&
                     $q->project_type_id != '' &&
                     $q->project_budget != '' &&
-                    $q->year_strategic_id != '' &&
                     $q->budget_id != '')  ? $i++ : 0;
                 count($q->get_project_responsible_person) > 0  ? $i++ : '';
                 count($q->get_project_target_group) > 0 ? $i++ : '';
@@ -154,8 +154,7 @@ class project_controller extends Controller
             'project_type_id' => 'required',
             'project_budget' => 'required',
             'project_period' => 'required',
-            'year_strategic_id' => 'required',
-            'budget_id' => 'required',
+            'project_main_id' => 'required'
         ]);
 
         DB::beginTransaction();
@@ -170,10 +169,10 @@ class project_controller extends Controller
             $q->project_budget = $request->project_budget;
             $q->project_period_start = $project_period_start;
             $q->project_period_end = $project_period_end;
-            $q->year_strategic_id = $request->year_strategic_id;
-            $q->year_strategic_detail_id = (!empty($request->year_strategic_detail_id)) ? $request->year_strategic_detail_id : null;
-            $q->budget_id = $request->budget_id;
-            $q->budget_specify_other = (!empty($request->budget_specify_other))  ? $request->budget_specify_other : null;
+            $q->project_main_id = $request->project_main_id;
+            // $q->year_strategic_detail_id = (!empty($request->year_strategic_detail_id)) ? $request->year_strategic_detail_id : null;
+            // $q->budget_id = $request->budget_id;
+            // $q->budget_specify_other = (!empty($request->budget_specify_other))  ? $request->budget_specify_other : null;
             $q->user_updated = auth()->user()->id;
             $q->save();
             DB::commit();
@@ -228,7 +227,6 @@ class project_controller extends Controller
             $project->project_period_end != '' &&
             $project->project_type_id != '' &&
             $project->project_budget != '' &&
-            $project->year_strategic_id != '' &&
             $project->budget_id != '' &&
             count($project->get_project_responsible_person) > 0 &&
             count($project->get_project_target_group) > 0 &&
@@ -264,7 +262,6 @@ class project_controller extends Controller
 
     public function manage(Request $request)
     {
-        // dd(auth()->user()->faculty_id);
         $project = view_project::with(
             [
                 'get_project_responsible_person' => function ($q) {
@@ -389,7 +386,6 @@ class project_controller extends Controller
             $project->project_period_end != '' &&
             $project->project_type_id != '' &&
             $project->project_budget != '' &&
-            $project->year_strategic_id != '' &&
             $project->budget_id != '')  ? $i++ : 0;
         count($project->get_project_responsible_person) > 0  ? $i++ : '';
         count($project->get_project_target_group) > 0 ? $i++ : '';
@@ -406,7 +402,13 @@ class project_controller extends Controller
         $budget = tbl_budget::all();
         $project_type = tbl_project_type::all();
         $province = view_location::selectRaw("DISTINCT(pcode), pname")->orderBy('pcode', 'ASC')->get();
-        return view('project_manage', compact('project', 'year_strategic', 'budget', 'project_type', 'province', 'cal'));
+        if (auth()->user()->faculty_id == 'other') {
+            $project_main = view_project_main::all();
+        } else {
+            $project_main = view_project_main::where('faculty_id', auth()->user()->faculty_id)->get();
+        }
+
+        return view('project_manage', compact('project', 'year_strategic', 'budget', 'project_type', 'province', 'cal', 'project_main'));
     }
 
 

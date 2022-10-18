@@ -97,6 +97,9 @@ $('#form_update').validate({
         budget_specify_other: {
             required: true,
         },
+        project_main_id: {
+            required: true,
+        },
     },
     errorElement: 'span',
     errorPlacement: function (error, element) {

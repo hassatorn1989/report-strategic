@@ -293,87 +293,21 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label
-                                                                    for="strategic_id">{{ __('msg.strategic_name') }}</label>
-                                                                <select class="custom-select" name="year_strategic_id"
-                                                                    id="year_strategic_id">
-                                                                    <option value=""
-                                                                        data-year_strategic_detail_count="0"
-                                                                        data-year_strategic_detail="[]">
-                                                                        {{ __('msg.select') }}</option>
-                                                                    @if (!empty($year_strategic))
-                                                                        @foreach ($year_strategic as $item)
-                                                                            <option value="{{ $item->id }}"
-                                                                                {{ $item->id == $project->year_strategic_id ? 'selected' : '' }}
-                                                                                data-year_strategic_detail_count="{{ $item->count_year_strategic_detail }}"
-                                                                                data-year_strategic_detail="{{ json_encode($item->get_year_strategic_detail) }}">
-                                                                                {{ $item->strategic_name }}</option>
-                                                                            >
-                                                                            {{ $item->strategic_name }}</option>
-                                                                        @endforeach
-                                                                    @endif
-                                                                    <option value="no"
-                                                                        data-year_strategic_detail_count="0"
-                                                                        data-year_strategic_detail="[]">
-                                                                        {{ __('msg.strategic_not_specified') }}</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label
-                                                                    for="strategic_id">{{ __('msg.sub_strategic') }}</label>
-
-                                                                <select class="custom-select"
-                                                                    name="year_strategic_detail_id"
-                                                                    id="year_strategic_detail_id"
-                                                                    {{ $project->year_strategic_detail_id == '' ? 'disabled' : '' }}>
+                                                                    for="project_main_id">{{ __('msg.project_main_name') }}</label>
+                                                                <select class="custom-select" name="project_main_id"
+                                                                    id="project_main_id">
                                                                     <option value="">{{ __('msg.select') }}</option>
-                                                                    @if (count($project->get_year_strategic_detail) > 0)
-                                                                        @foreach ($project->get_year_strategic_detail as $item)
+                                                                    @if (!empty($project_main))
+                                                                        @foreach ($project_main as $item)
                                                                             <option value="{{ $item->id }}"
-                                                                                {{ $item->id == $project->year_strategic_detail_id ? 'selected' : '' }}>
-                                                                                {{ $item->year_strategic_detail_detail }}
-                                                                            </option>
+                                                                                {{ $item->id == $project->project_main_id ? 'selected' : '' }}>
+                                                                                {{ $item->project_main_name }}</option>
                                                                         @endforeach
                                                                     @endif
                                                                 </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="budget_id">{{ __('msg.budget_name') }}</label>
-                                                                <select class="custom-select" name="budget_id"
-                                                                    id="budget_id">
-                                                                    <option value="">{{ __('msg.select') }}</option>
-                                                                    @if (!empty($budget))
-                                                                        @foreach ($budget as $item)
-                                                                            <option value="{{ $item->id }}"
-                                                                                {{ $item->id == $project->budget_id ? 'selected' : '' }}
-                                                                                data-budget_specify_status="{{ $item->budget_specify_status }}">
-                                                                                {{ $item->budget_name }}</option>
-                                                                        @endforeach
-                                                                    @endif
-                                                                    <option value="no"
-                                                                        data-budget_specify_status="inactive">
-                                                                        {{ __('msg.budget_not_specified') }}</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label
-                                                                    for="budget_specify_other">{{ __('msg.sub_strategic') }}</label>
-                                                                <input type="text" class="form-control"
-                                                                    name="budget_specify_other" id="budget_specify_other"
-                                                                    placeholder="{{ __('msg.placeholder') }}"
-                                                                    value="{{ $project->budget_specify_other }}"
-                                                                    autocomplete="off"
-                                                                    {{ $project->budget_specify_other == '' ? 'disabled' : '' }}>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -407,7 +341,8 @@
                                                                     name="project_responsible_person_tel"
                                                                     id="project_responsible_person_tel"
                                                                     placeholder="{{ __('msg.placeholder') . __('msg.project_responsible_person_tel') }}"
-                                                                    autocomplete="off" value="" onkeypress="validate_number(event)">
+                                                                    autocomplete="off" value=""
+                                                                    onkeypress="validate_number(event)">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">

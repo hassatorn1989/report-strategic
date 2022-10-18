@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class view_project_main extends Model
 {
     use HasFactory;
+    protected $table = 'view_project_main';
 }

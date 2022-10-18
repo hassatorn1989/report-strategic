@@ -20,6 +20,8 @@ var table = $("#example1").DataTable({
         { data: null, sortable: false, searchable: false, className: "text-center" },
         { data: "project_main_name", name: "project_main_name" },
         { data: "project_main_budget", name: "project_main_budget" },
+        { data: "year_name", name: "year_name" },
+        { data: "strategic_name", name: "strategic_name" },
         { data: "action", name: "action", orderable: false, searchable: false, className: "text-center" }
     ],
     fnRowCallback: function (nRow, aData, iDisplayIndex) {
@@ -73,8 +75,27 @@ $('#form').validate({
     submitHandler: function (form) {
         console.log();
         if ($('#faculty_join_id :selected').length > 0) {
-            $('#btn_save').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> ' + lang_action.btn_saving).attr('disabled', true);
-            form.submit();
+            $.ajax({
+                type: "POST",
+                url: myurl + "/setting-project/project-main/check-budget",
+                data: {
+                    project_main_budget: $('input[name="project_main_budget"]').val(),
+                    id: $('select[name="project_main_type_id"]').val(),
+                },
+                success: function (response) {
+                    if (response == 'true') {
+                        $('#btn_save').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> ' + lang_action.btn_saving).attr('disabled', true);
+                        form.submit();
+                    } else {
+                        Swal.fire(
+                            'แจ้งเตือน!',
+                            'งบประมาณไม่เพียงพอ',
+                            'warning'
+                        )
+                    }
+                }
+            });
+
         } else {
             Swal.fire(
                 'แจ้งเตือน!',
@@ -101,14 +122,13 @@ $('select[name="year_strategic_id"]').on('change', function () {
 function add_data() {
     $("#modal-default .modal-title").text(lang.title_add);
     $('#modal-default #form').attr('action', myurl + '/setting-project/project-main/store');
-    $('#modal-default #form input[type="text"], #modal-default #form input[type="number"]').removeClass('is-invalid');
-    $('#modal-default #form input[type="text"]:input[type="year_name"], #modal-default #form input[type="number"]:input[type="year_name"]').val('');
+    $('#modal-default #form input[type="text"], #modal-default #form input[type="number"], #modal-default #form select, #modal-default #form textarea').removeClass('is-invalid');
+    $('#modal-default #form input[type="text"], #modal-default #form input[type="number"], #modal-default #form select, #modal-default #form textarea').val('');
     $.ajax({
         type: "POST",
         url: myurl + '/setting-project/project-main/get-faculty',
         dataType: "json",
         success: function (response) {
-            console.log(response);
             var option = '';
             $.each(response, function (index, item) {
                 option += '<option value="' + item.id + '">' + item.faculty_name + '</option>';
@@ -121,7 +141,7 @@ function add_data() {
 function edit_data(id) {
     $('#modal-default .modal-title').text(lang.title_edit);
     $('#modal-default #form').attr('action', myurl + '/setting-project/project-main/update');
-    $('#modal-default #form input[type="text"], #modal-default #form input[type="number"]').removeClass('is-invalid');
+    $('#modal-default #form input[type="text"], #modal-default #form input[type="number"], #modal-default #form select, #modal-default #form textarea').removeClass('is-invalid');
     $.ajax({
         type: "POST",
         url: myurl + '/setting-project/project-main/edit',
@@ -130,14 +150,36 @@ function edit_data(id) {
         },
         dataType: "json",
         success: function (response) {
-            console.log(response);
-            $('input[name="id"]').val(response.id);
-            $('input[name="project_main_name"]').val(response.project_main_name);
-            $('input[name="project_main_budget"]').val(response.project_main_budget);
-            $('textarea[name="project_main_guidelines"]').val(response.project_main_guidelines);
-            $('textarea[name="project_main_target"]').val(response.project_main_target);
-            $('select[name="faculty_id"]').val(response.faculty_id);
-            $('select[name="project_main_type_id"]').val(response.project_main_type_id);
+            $('input[name="id"]').val(response.project_main.id);
+            $('input[name="project_main_name"]').val(response.project_main.project_main_name);
+            $('input[name="project_main_budget"]').val(response.project_main.project_main_budget);
+            $('textarea[name="project_main_guidelines"]').val(response.project_main.project_main_guidelines);
+            $('textarea[name="project_main_target"]').val(response.project_main.project_main_target);
+            $('select[name="faculty_id"]').val(response.project_main.faculty_id);
+            $('select[name="project_main_type_id"]').val(response.project_main.project_main_type_id);
+            $('select[name="year_strategic_id"]').val(response.project_main.year_strategic_id);
+
+            if (response.project_main.get_year_strategic_detail.length > 0) {
+                var option = `<option value="">${lang_action.select}</option>`;
+                $.each(response.project_main.get_year_strategic_detail, function (index, item) {
+                    option += '<option value="' + item.id + '" ' + selected + '>' + item.year_strategic_detail_detail + '</option>';
+                });
+                $('select[name="year_strategic_detail_id"]').empty().append(option).attr('disabled', false);
+
+            } else {
+                $('select[name="year_strategic_detail_id"]').empty().append(option).attr('disabled', true);
+            }
+
+            $('select[name="year_strategic_detail_id"]').val(response.project_main.year_strategic_detail_id);
+
+            var option = '';
+            var selected = `<option value="">${lang_action.select}</option>`;
+            $.each(response.faculty, function (index, item) {
+                selected = (item.faculty_join > 0) ? 'selected' : '';
+                option += '<option value="' + item.id + '" ' + selected + '>' + item.faculty_name + '</option>';
+            });
+            $('select[name="faculty_join_id[]"]').empty().append(option).bootstrapDualListbox('refresh', true);
+
         }
     });
 }

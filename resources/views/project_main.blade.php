@@ -74,8 +74,10 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th width="5%">#</th>
-                                            <th width="35%">{{ __('msg.project_main_name') }}</th>
-                                            <th width="35%">{{ __('msg.project_main_budget') }}</th>
+                                            <th width="20%">{{ __('msg.project_main_name') }}</th>
+                                            <th width="10%">{{ __('msg.project_main_budget') }}</th>
+                                            <th width="15%">{{ __('msg.year_name') }}</th>
+                                            <th width="20%">{{ __('msg.strategic_name') }}</th>
                                             <th width="25%">{{ __('msg.action') }}</th>
                                         </tr>
                                     </thead>
@@ -125,21 +127,12 @@
                                 <div class="form-group">
                                     <label for="project_main_name">{{ __('msg.project_main_name') }}</label>
                                     <input type="hidden" name="id" id="id">
+                                    <input type="hidden" name="year_id" id="year_id" value="{{ $year->id }}">
                                     <input type="text" class="form-control" name="project_main_name"
                                         id="project_main_name" placeholder="{{ __('msg.placeholder') }}"
                                         autocomplete="off">
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="project_main_budget">{{ __('msg.project_main_budget') }}</label>
-                                    <input type="number" class="form-control" name="project_main_budget"
-                                        id="project_main_budget" placeholder="{{ __('msg.placeholder') }}"
-                                        autocomplete="off">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="project_main_type_id">{{ __('msg.project_main_type_name') }}</label>
@@ -154,6 +147,8 @@
                                     </select>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="faculty_id">{{ __('msg.msg_faculty_main') }}</label>
@@ -165,6 +160,14 @@
                                             @endforeach
                                         @endif
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="project_main_budget">{{ __('msg.project_main_budget') }}</label>
+                                    <input type="number" class="form-control" name="project_main_budget"
+                                        id="project_main_budget" placeholder="{{ __('msg.placeholder') }}"
+                                        autocomplete="off">
                                 </div>
                             </div>
                         </div>
@@ -212,25 +215,17 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="strategic_id">{{ __('msg.sub_strategic') }}</label>
-                                    {{-- {{ $project->year_strategic_detail_id == '' ? 'disabled' : '' }} --}}
                                     <select class="custom-select" name="year_strategic_detail_id"
                                         id="year_strategic_detail_id" disabled>
                                         <option value="">{{ __('msg.select') }}</option>
-                                        {{-- @if (count($project->get_year_strategic_detail) > 0)
-                                            @foreach ($project->get_year_strategic_detail as $item)
-                                                <option value="{{ $item->id }}"
-                                                    {{ $item->id == $project->year_strategic_detail_id ? 'selected' : '' }}>
-                                                    {{ $item->year_strategic_detail_detail }}
-                                                </option>
-                                            @endforeach
-                                        @endif --}}
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>{{ __('msg.msg_faculty_join') }}</label>
-                            <select class="duallistbox" multiple="multiple" id="faculty_join_id" name="faculty_join_id[]">
+                            <select class="duallistbox" multiple="multiple" id="faculty_join_id"
+                                name="faculty_join_id[]">
                             </select>
                         </div>
                     </div>

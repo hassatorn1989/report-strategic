@@ -102,7 +102,8 @@
                 @endif
                 @if (auth()->user()->user_role == 'admin')
                     <li class="nav-item {{ Request::segment(1) == 'setting-project' ? 'menu-open' : '' }}">
-                        <a href="#" class="nav-link {{ Request::segment(1) == 'setting-project' ? 'active' : '' }}">
+                        <a href="#"
+                            class="nav-link {{ Request::segment(1) == 'setting-project' ? 'active' : '' }}">
                             <i class="nav-icon fas fa-cogs"></i>
                             <p>
                                 {{ __('msg.menu_setting_project') }}
@@ -142,14 +143,23 @@
                 </li>
                 @if (auth()->user()->user_role == 'admin')
                     <li class="nav-item">
-                    <a href="{{ route('result-analysis.index') }}"
-                        class="nav-link {{ Request::segment(1) == 'result-analysis' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-file-alt"></i>
-                        <p>
-                            {{ __('msg.menu_result_analysis') }}
-                        </p>
-                    </a>
-                </li>
+                        <a href="{{ route('result-analysis.index') }}"
+                            class="nav-link {{ Request::segment(1) == 'result-analysis' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-file-alt"></i>
+                            <p>
+                                {{ __('msg.menu_result_analysis') }}
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('work.index') }}"
+                            class="nav-link {{ Request::segment(1) == 'work' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-warehouse"></i>
+                            <p>
+                                <small>{{ __('msg.menu_work') }}</small>
+                            </p>
+                        </a>
+                    </li>
                 @endif
                 <li class="nav-item">
                     <a href="#!" class="nav-link" data-toggle="modal" data-target="#modal-chang-password">

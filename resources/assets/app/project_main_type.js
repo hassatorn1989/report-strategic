@@ -17,6 +17,7 @@ var table = $("#example1").DataTable({
         { data: null, sortable: false, searchable: false, className: "text-center" },
         { data: "project_main_type_name", name: "project_main_type_name" },
         { data: "project_main_type_budget", name: "project_main_type_budget" },
+        { data: "budget_name", name: "budget_name" },
         { data: "action", name: "action", orderable: false, searchable: false, className: "text-center" }
     ],
     fnRowCallback: function (nRow, aData, iDisplayIndex) {
@@ -28,6 +29,15 @@ var table = $("#example1").DataTable({
     }
 });
 
+$('select[name="budget_id"]').on('change', function () {
+    // var option = `<option value="">${lang_action.select}</option>`;
+    if ($(this).find(':selected').data('budget_specify_status') == 'active') {
+        $('input[name="budget_specify_other"]').prop('disabled', false).val('');
+    } else {
+        $('input[name="budget_specify_other"]').prop('disabled', true).val('');
+    }
+});
+
 $('#form').validate({
     ignore: ".ignore",
     rules: {
@@ -35,6 +45,12 @@ $('#form').validate({
             required: true,
         },
         project_main_type_budget: {
+            required: true,
+        },
+        budget_id: {
+            required: true,
+        },
+        budget_specify_other: {
             required: true,
         },
     },
@@ -55,18 +71,17 @@ $('#form').validate({
     }
 });
 
-
 function add_data() {
     $("#modal-default .modal-title").text(lang.title_add);
     $('#modal-default #form').attr('action', myurl + '/setting-project/project-main-type/store');
-    $('#modal-default #form input[type="text"], #modal-default #form input[type="number"]').removeClass('is-invalid');
-    $('#modal-default #form input[type="text"]:input[type="year_name"], #modal-default #form input[type="number"]:input[type="year_name"]').val('');
+    $('#modal-default #form input[type="text"], #modal-default #form input[type="number"], #modal-default #form select').removeClass('is-invalid');
+    $('#modal-default #form input[type="text"]:input[type="year_name"], #modal-default #form input[type="number"]:input[type="year_name"], #modal-default #form select:input[type="year_name"]').val('');
 }
 
 function edit_data(id) {
     $('#modal-default .modal-title').text(lang.title_edit);
     $('#modal-default #form').attr('action', myurl + '/setting-project/project-main-type/update');
-    $('#modal-default #form input[type="text"], #modal-default #form input[type="number"]').removeClass('is-invalid');
+    $('#modal-default #form input[type="text"], #modal-default #form input[type="number"], #modal-default #form select').removeClass('is-invalid');
     $.ajax({
         type: "POST",
         url: myurl + '/setting-project/project-main-type/edit',
@@ -76,9 +91,15 @@ function edit_data(id) {
         dataType: "json",
         success: function (response) {
             console.log(response);
-            $('input[name="id"]').val(response.id);
-            $('input[name="project_main_type_name"]').val(response.project_main_type_name);
-            $('input[name="project_main_type_budget"]').val(response.project_main_type_budget);
+            $('input[name="id"]').val(response.project_main_type.id);
+            $('input[name="project_main_type_name"]').val(response.project_main_type.project_main_type_name);
+            $('input[name="project_main_type_budget"]').val(response.project_main_type.project_main_type_budget);
+            $('select[name="budget_id"]').val(response.project_main_type.budget_id);
+            if (response.budget.budget_specify_status == 'active') {
+                $('input[name="budget_specify_other"]').prop('disabled', false).val(response.project_main_type.budget_specify_other);
+            } else {
+                $('input[name="budget_specify_other"]').prop('disabled', true).val('');
+            }
         }
     });
 }

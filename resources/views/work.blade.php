@@ -6,11 +6,11 @@
 @push('script')
     <script>
         var lang = {
-            title_add: '{{ __('msg.title_add_project_main_type') }}',
-            title_edit: '{{ __('msg.title_edit_project_main_type') }}',
+            title_add: '{{ __('msg.title_add_work') }}',
+            title_edit: '{{ __('msg.title_edit_work') }}',
         };
     </script>
-    <script src="{{ url('resources/assets') }}/app/project_main_type.js?q={{ time() }}"></script>
+    <script src="{{ url('resources/assets') }}/app/work.js?q={{ time() }}"></script>
 @endpush
 
 @section('content')
@@ -46,21 +46,7 @@
                             <div class="card-body">
                                 <form action="" method="post" id="search-form">
                                     <div class="row mb-2">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <input type="search" class="form-control"
-                                                    name="filter_project_main_type_name" id="filter_project_main_type_name"
-                                                    placeholder="{{ __('msg.filter_project_main_type_name') }}"
-                                                    autocomplete="off">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <button type="submit" name="" id=""
-                                                class="btn btn-info btn-block">
-                                                <i class="fas fa-search"></i>
-                                            </button>
-                                        </div>
-                                        <div class="col-md-2 offset-md-6">
+                                        <div class="col-md-2 offset-md-10">
                                             <button type="button" class="btn btn-primary btn-block" data-toggle="modal"
                                                 data-target="#modal-default" onclick="add_data()">
                                                 <i class="fas fa-plus-circle"></i> {{ __('msg.btn_add') }}
@@ -68,19 +54,47 @@
                                         </div>
                                     </div>
                                 </form>
-                                <table id="example1" class="table table-hover table-sm table-striped">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th width="5%">#</th>
-                                            <th width="25%">{{ __('msg.project_main_type_name') }}</th>
-                                            <th width="25%">{{ __('msg.project_main_type_budget') }}</th>
-                                            <th width="25%">{{ __('msg.budget_name') }}</th>
-                                            <th width="20%">{{ __('msg.action') }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                                <div class="row">
+                                    @if (!empty($work))
+                                        @foreach ($work as $key => $item)
+                                            <div class="col-md-12">
+                                                <div class="card card-danger">
+                                                    <div class="card-header">
+                                                        <h5 class="card-title m-0">{{ $item->project_name }}</h5>
+                                                        <div class="card-tools">
+                                                            <button type="button" class="btn btn-tool" data-toggle="modal"
+                                                                data-target="#modal-default"
+                                                                onclick="edit_data('{{ $item->id }}')">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-tool"
+                                                                onclick="destroy('{{ $item->id }}')">
+                                                                <i class="fas
+                                                                fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <h6 class="card-title"><u>ปี {{ $item->year_name }}</u></h6>
+                                                        <p class="card-text">
+                                                            {!! $item->work_detail !!}
+                                                        </p>
+                                                        <h6 class="card-title"><u>ปี {{ $item->year_name_compare }}</u>
+                                                        </h6>
+                                                        <p class="card-text">
+                                                            {!! $item->work_detail_compare !!}
+                                                        </p>
+                                                        <h6 class="card-title"><u>{{ __('msg.work_change') }}</u></h6>
+                                                        <p class="card-text">
+                                                            {!! $item->work_change !!}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                    @endif
+                                </div>
                             </div>
                             <!-- /.card-body -->
                         </div>
@@ -100,7 +114,7 @@
     <!-- Modal -->
     <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
         aria-hidden="true" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <form action="" method="post" id="form">
                     @csrf
@@ -111,46 +125,80 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        {{-- <div class="form-group">
-                            <label for="year_name">{{ __('msg.year_name') }}</label>
+                        <div class="form-group">
+                            <label for="project_id">{{ __('msg.project_name') }}</label>
                             <input type="hidden" name="id" id="id">
                             <input type="hidden" name="year_id" id="year_id" value="{{ $year->id }}">
-                            <input type="text" class="form-control" name="year_name" id="year_name"
-                                placeholder="{{ __('msg.placeholder') }}" autocomplete="off"
-                                value="{{ $year->year_name }}" readonly>
-                        </div> --}}
-                        <div class="form-group">
-                            <label for="project_main_type_name">{{ __('msg.project_main_type_name') }}</label>
-                            <input type="text" class="form-control" name="project_main_type_name"
-                                id="project_main_type_name" placeholder="{{ __('msg.placeholder') }}" autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label for="project_main_type_budget">{{ __('msg.project_main_type_budget') }}</label>
-                            <input type="number" class="form-control" name="project_main_type_budget"
-                                id="project_main_type_budget" placeholder="{{ __('msg.placeholder') }}"
-                                autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label for="budget_id">{{ __('msg.budget_name') }}</label>
-                            <select class="custom-select" name="budget_id" id="budget_id">
+                            <select class="custom-select" name="project_id" id="project_id">
                                 <option value="">{{ __('msg.select') }}</option>
-                                @if (!empty($budget))
-                                    @foreach ($budget as $item)
-                                        <option value="{{ $item->id }}"
-                                            data-budget_specify_status="{{ $item->budget_specify_status }}">
-                                            {{ $item->budget_name }}</option>
+                                @if (!empty($project))
+                                    @foreach ($project as $item)
+                                        <option value="{{ $item->id }}">{{ $item->project_name }}</option>
                                     @endforeach
                                 @endif
-                                <option value="no" data-budget_specify_status="inactive">
-                                    {{ __('msg.budget_not_specified') }}</option>
                             </select>
                         </div>
-                       <div class="form-group">
-                                <label for="budget_specify_other">{{ __('msg.msg_specify') }}</label>
-                                <input type="text" class="form-control" name="budget_specify_other"
-                                    id="budget_specify_other" placeholder="{{ __('msg.placeholder') }}"
-                                    value="" autocomplete="off" disabled>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="year_now_id">{{ __('msg.year_now') }}</label>
+                                            <select class="custom-select" name="year_now_id" id="year_now_id">
+                                                <option value="">{{ __('msg.select') }}</option>
+                                                @if (!empty($year_all))
+                                                    @foreach ($year_all as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->year_name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="work_detail">{{ __('msg.work_detail') }}</label>
+                                            <textarea class="form-control" name="work_detail" id="work_detail" rows="4"
+                                                placeholder="{{ __('msg.placeholder') }}"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="year_id_compare">{{ __('msg.year_compare') }}</label>
+                                            <select class="custom-select" name="year_id_compare" id="year_id_compare">
+                                                <option value="">{{ __('msg.select') }}</option>
+                                                @if (!empty($year_all))
+                                                    @foreach ($year_all as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->year_name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="work_detail_compare">{{ __('msg.work_detail') }}</label>
+                                            <textarea class="form-control" name="work_detail_compare" id="work_detail_compare" rows="4"
+                                                placeholder="{{ __('msg.placeholder') }}"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="work_change">{{ __('msg.work_change') }}</label>
+                                    <textarea class="form-control" name="work_change" id="work_change" rows="4"
+                                        placeholder="{{ __('msg.placeholder') }}"></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="btn_save"><i class="fas fa-save"></i>

@@ -168,6 +168,13 @@ return [
     'project_outcome_detail' => 'รายละเอียดผลลัพธ์',
     'project_impact_detail' => 'รายละเอียดผลกระทบ',
 
+    'title_add_work' => 'เพิ่มผลกระบวนการปฏิบัติงาน',
+    'title_edit_work' => 'แก้ไขผลกระบวนการปฏิบัติงาน',
+    'work_detail' => 'กระบวนการทำงาน',
+    'work_change' => 'การเปลี่ยนแปลง',
+    'year_compare' => 'ปีงบประมาณเปรียบเทียบ',
+    'year_now' => 'ปีงบประมาณปัจจุบัน',
+
     'swot_title' => 'SWOT Analysis',
     'swot_strength' => 'จุดแข็ง (Strength)',
     'swot_weakness' => 'จุดอ่อน (Weakness)',

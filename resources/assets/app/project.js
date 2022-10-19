@@ -60,7 +60,7 @@ $('#form').validate({
 function add_data() {
     $("#modal-default .modal-title").text(lang.title_add);
     $('#modal-default #form').attr('action', myurl + '/project/store');
-    $('#modal-default #form input[type="text"]').removeClass('is-invalid');
+    $('#modal-default #form input[type="text"], #modal-default #form select').removeClass('is-invalid');
     $('#modal-default #form input[type="text"]:input[type="year_name"]').val('');
 }
 

@@ -104,7 +104,8 @@
                     <li class="nav-item {{ Request::segment(1) == 'setting-project' ? 'menu-open' : '' }}">
                         <a href="#"
                             class="nav-link {{ Request::segment(1) == 'setting-project' ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-cogs"></i>
+                            {{-- <i class="fas fa-cogs"></i> --}}
+                            <i class="nav-icon fas fa-list"></i>
                             <p>
                                 {{ __('msg.menu_setting_project') }}
                                 <i class="fas fa-angle-left right"></i>

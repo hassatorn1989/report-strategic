@@ -131,9 +131,7 @@
                                                 $project->project_period_start != '' &&
                                                 $project->project_period_end != '' &&
                                                 $project->project_type_id != '' &&
-                                                $project->project_budget != '' &&
-                                                $project->year_strategic_id != '' &&
-                                                $project->budget_id != '')
+                                                $project->project_budget != '')
                                                 @php
                                                     $flag_update_data = true;
                                                 @endphp
@@ -1253,6 +1251,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
+                                    <label for="project_output_upgrading">{{ __('msg.project_output_detail') }}</label>
                                     <input type="hidden" name="id" id="id">
                                     <input type="hidden" name="project_id" id="project_id"
                                         value="{{ Request::segment(3) }}">
@@ -1280,6 +1279,12 @@
                                     <select class="custom-select" name="indicators_output_id" id="indicators_output_id">
                                         <option value="">{{ __('msg.select') }}</option>
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label
+                                        for="project_output_upgrading">{{ __('msg.project_output_upgrading') }}</label>
+                                    <textarea class="form-control" name="project_output_upgrading" id="project_output_upgrading" rows="3"
+                                        placeholder="{{ __('msg.placeholder') }}"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -1314,6 +1319,7 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
+                                <label for="project_output_upgrading">{{ __('msg.project_outcome_detail') }}</label>
                                 <div class="form-group">
                                     <input type="hidden" name="id" id="id">
                                     <input type="hidden" name="project_id" id="project_id"

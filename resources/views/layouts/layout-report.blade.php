@@ -36,10 +36,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
             <div class="container">
-                <a href="{{ url('resources/assets') }}/index3.html" class="navbar-brand">
+                <a href="{{ route('home.index') }}" class="navbar-brand">
                     <img src="{{ url('resources/assets') }}/dist/img/AdminLTELogo.png" alt="AdminLTE Logo"
-                        class="brand-image img-circle" style="opacity: .8">
-                    <span class="brand-text font-weight-light">AdminLTE 3</span>
+                        class="brand-image img-circle">
+                    <span
+                        class="brand-text font-weight-light"><i><strong>{{ __('msg.system_name_en_full') }}</strong></i></span>
                 </a>
 
                 <button class="navbar-toggler order-1" type="button" data-toggle="collapse"
@@ -51,15 +52,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="collapse navbar-collapse order-3" id="navbarCollapse">
                     <!-- Left navbar links -->
                     <ul class="navbar-nav">
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="index3.html" class="nav-link">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Contact</a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item dropdown">
                             <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false" class="nav-link dropdown-toggle">Dropdown</a>
+                                aria-expanded="false" class="nav-link dropdown-toggle">{{ __('msg.menu2_report') }}</a>
                             <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                                 <li><a href="#" class="dropdown-item">Some action </a></li>
                                 <li><a href="#" class="dropdown-item">Some other action</a></li>
@@ -93,13 +91,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <li><a href="#" class="dropdown-item">level 2</a></li>
                                     </ul>
                                 </li>
+
                                 <!-- End Level two -->
                             </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Contact</a>
                         </li>
                     </ul>
 
                     <!-- SEARCH FORM -->
-                    <form class="form-inline ml-0 ml-md-3">
+                    {{-- <form class="form-inline ml-0 ml-md-3">
                         <div class="input-group input-group-sm">
                             <input class="form-control form-control-navbar" type="search" placeholder="Search"
                                 aria-label="Search">
@@ -109,13 +111,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </button>
                             </div>
                         </div>
-                    </form>
+                    </form> --}}
                 </div>
 
                 <!-- Right navbar links -->
                 <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
                     <!-- Messages Dropdown Menu -->
-                    <li class="nav-item dropdown">
+                    {{-- <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#">
                             <i class="fas fa-comments"></i>
                             <span class="badge badge-danger navbar-badge">3</span>
@@ -207,11 +209,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <div class="dropdown-divider"></div>
                             <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                         </div>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
-                        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"
-                            role="button">
-                            <i class="fas fa-th-large"></i>
+                        <a class="nav-link" href="{{ route('auth.index') }}">
+                            <i class="fas fa-user"></i> {{ __('msg.btn_login') }}
                         </a>
                     </li>
                 </ul>
@@ -231,7 +232,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     Anything you want
                 </div> --}}
                 <!-- Default to the left -->
-                <strong>Copyright &copy; {{ date('Y') }} <a href="https://www.pcru.ac.th/" target="_blank">{{ __('msg.system_uni_en') }}</a>.</strong> All rights
+                <strong>Copyright &copy; {{ date('Y') }} <a href="https://www.pcru.ac.th/"
+                        target="_blank">{{ __('msg.system_uni_en') }}</a>.</strong> All rights
                 reserved.
             </div>
         </footer>

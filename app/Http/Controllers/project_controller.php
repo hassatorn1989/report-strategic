@@ -401,7 +401,7 @@ class project_controller extends Controller
         $year_strategic = view_year_strategic::with('get_year_strategic_detail')->select('id', 'strategic_name', 'count_year_strategic_detail')->where('year_id', $project->year_id)->get();
         $budget = tbl_budget::all();
         $project_type = tbl_project_type::all();
-        $province = view_location::selectRaw("DISTINCT(pcode), pname")->orderBy('pcode', 'ASC')->get();
+        $province = view_location::selectRaw("DISTINCT(pcode), pname")->whereIn('pcode', ['67', '66'])->orderBy('pcode', 'ASC')->get();
         if (auth()->user()->faculty_id == 'other') {
             $project_main = view_project_main::all();
         } else {
@@ -935,6 +935,7 @@ class project_controller extends Controller
         try {
             $q = new tbl_project_output();
             $q->project_output_detail = $request->project_output_detail;
+            $q->project_output_upgrading = nl2br($request->project_output_upgrading);
             $q->indicators_type = $request->indicators_output_type;
             $q->indicators_id = $request->indicators_output_id;
             $q->project_id = $request->project_id;
@@ -973,6 +974,7 @@ class project_controller extends Controller
         try {
             $q = tbl_project_output::find($request->id);
             $q->project_output_detail = $request->project_output_detail;
+            $q->project_output_upgrading = nl2br($request->project_output_upgrading);
             $q->indicators_type = $request->indicators_output_type;
             $q->indicators_id = $request->indicators_output_id;
             $q->project_id = $request->project_id;

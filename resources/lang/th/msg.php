@@ -2,6 +2,7 @@
 return [
     'system_uni_en' => 'Phetchabun Rajabhat University',
     'system_name_en' => 'Strategic Report',
+    'system_name_en_full' => 'Report Strategic PCRU',
     'system_name_th' => 'ระบบรายงานยุทธศาสตร์',
     'system_version' => '1.0.0',
     'system_owner' => 'Phetchabun Rajabhat University',
@@ -79,12 +80,12 @@ return [
     'filter_faculty_name' =>  'ค้นหาหน่วยงาน',
     'faculty_name' => 'หน่วยงาน',
 
-    'title_add_budget' => 'เพิ่มงบประมาณ',
-    'title_edit_budget' => 'แก้ไขงบประมาณ',
-    'filter_budget_name' => 'ค้นหางบประมาณ',
-    'budget_name' => 'งบประมาณ',
+    'title_add_budget' => 'เพิ่มประเภทงบประมาณ',
+    'title_edit_budget' => 'แก้ไขประเภทงบประมาณ',
+    'filter_budget_name' => 'ค้นหาประเภทงบประมาณ',
+    'budget_name' => 'ประเภทงบประมาณ',
     'budget_specify_status' => 'สถานะการระบุข้อมูล',
-    'budget_not_specified' => '*ไม่ระบุงบประมาณ',
+    'budget_not_specified' => '*ไม่ระบุประเภทงบประมาณ',
 
 
     'title_add_project_type' => 'เพิ่มประเภทโครงการ',
@@ -164,6 +165,7 @@ return [
     'project_qualitative_indicators_value' => 'ค่าตัวชี้วัดเชิงคุณภาพ',
     'project_qualitative_indicators_unit' => 'หน่วยวัด',
     'project_output_detail' => 'รายละเอียดผลผลิต',
+    'project_output_upgrading' =>  'การยกระดับ',
     'project_output_detail_gallery' => 'อัลบั้มภาพผลผลิต',
     'project_outcome_detail' => 'รายละเอียดผลลัพธ์',
     'project_impact_detail' => 'รายละเอียดผลกระทบ',
@@ -207,5 +209,5 @@ return [
     'msg_specify' => 'ระบุ',
     'msg_specify_budget' => 'ระบุงบประมาณ',
 
-
+    'menu2_report' => 'รายงาน',
 ];

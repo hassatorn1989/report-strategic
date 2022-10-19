@@ -932,14 +932,14 @@ $('input[name="indicators_output_type"]').on('change', function () {
 
 function add_data_project_output() {
     $('#form-project-output').attr('action', myurl + '/project/manage/output-store');
-    $('#form-project-output input[type="text"], #form-project-output select').removeClass('is-invalid').val('');
+    $('#form-project-output input[type="text"], #form-project-output select, #form-project-output textarea').removeClass('is-invalid').val('');
     $("#modal-project-output .modal-title").text('เพิ่มข้อมูลผลผลิต');
     $('#form-project-output input[name="indicators_output_type"]').prop('checked', false);
 }
 
 function edit_data_project_output(id) {
     $('#form-project-output').attr('action', myurl + '/project/manage/output-update');
-    $('#form-project-output input[type="text"], #form-project-output select').removeClass('is-invalid');
+    $('#form-project-output input[type="text"], #form-project-output select, #form-project-output textarea').removeClass('is-invalid');
     $("#modal-project-output .modal-title").text('แก้ไขข้อมูลผลผลิต');
     $.ajax({
         type: "POST",
@@ -963,6 +963,7 @@ function edit_data_project_output(id) {
             });
             $('select[name="indicators_output_id"]').empty().append(option);
             $('#form-project-output select[name="indicators_output_id"]').val(response.output.indicators_id)
+            $('#form-project-output textarea[name="project_output_upgrading"]').val(response.output.project_output_upgrading)
         }
     });
 }

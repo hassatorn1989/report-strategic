@@ -161,6 +161,15 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('driven.index') }}"
+                            class="nav-link {{ Request::segment(1) == 'driven' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-warehouse"></i>
+                            <p>
+                                <small>{{ __('msg.menu_driven') }}</small>
+                            </p>
+                        </a>
+                    </li>
                 @endif
                 <li class="nav-item">
                     <a href="#!" class="nav-link" data-toggle="modal" data-target="#modal-chang-password">

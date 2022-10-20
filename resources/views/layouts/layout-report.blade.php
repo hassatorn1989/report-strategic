@@ -8,7 +8,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Top Navigation</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ __('msg.system_name_en') }} | Top Navigation</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -222,6 +223,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <!-- Content Wrapper. Contains page content -->
         @yield('content')
+        @yield('modal')
         <!-- /.content-wrapper -->
 
         <!-- Main Footer -->
@@ -248,7 +250,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ url('resources/assets') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="{{ url('resources/assets') }}/dist/js/adminlte.min.js"></script>
-
+    <script>
+         $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        var myurl = '{{ url('') }}';
+    </script>
     @stack('script')
 </body>
 

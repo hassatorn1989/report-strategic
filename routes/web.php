@@ -4,6 +4,7 @@ use App\Http\Controllers\auth_controller;
 use App\Http\Controllers\budget_controller;
 use App\Http\Controllers\change_password_controller;
 use App\Http\Controllers\dashboard_controller;
+use App\Http\Controllers\driven_controller;
 use App\Http\Controllers\faculty_controller;
 use App\Http\Controllers\home_controller;
 use App\Http\Controllers\project_type_controller;
@@ -31,6 +32,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [home_controller::class, 'index'])->name('home.index');
+Route::post('/home/get-project', [home_controller::class, 'get_project'])->name('home.get-project');
+Route::post('/home/get-project-detail', [home_controller::class, 'get_project_detail'])->name('home.get-project-detail');
 
 
 Route::get('/signin', [auth_controller::class, 'index'])->name('auth.index');
@@ -192,6 +195,12 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/work/edit', [work_controller::class, 'edit'])->name('work.edit');
         Route::post('/work/update', [work_controller::class, 'update'])->name('work.update');
         Route::post('/work/destroy', [work_controller::class, 'destroy'])->name('work.destroy');
+
+        Route::get('/driven', [driven_controller::class, 'index'])->name('driven.index');
+        Route::post('/driven/store', [driven_controller::class, 'store'])->name('driven.store');
+        Route::post('/driven/edit', [driven_controller::class, 'edit'])->name('driven.edit');
+        Route::post('/driven/update', [driven_controller::class, 'update'])->name('driven.update');
+        Route::post('/driven/destroy', [driven_controller::class, 'destroy'])->name('driven.destroy');
 
         Route::post('/change-password/update', [change_password_controller::class, 'update'])->name('change-password.update');
         Route::post('/change-password/check', [change_password_controller::class, 'check'])->name('change-password.check');

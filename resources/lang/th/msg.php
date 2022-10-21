@@ -218,6 +218,10 @@ return [
     'msg_faculty_join' => 'หน่วยงานร่วม',
     'msg_specify' => 'ระบุ',
     'msg_specify_budget' => 'ระบุงบประมาณ',
+    'msg_product' => 'ผลิตภัณฑ์',
+    'msg_process' => 'กระบวนการ',
 
     'menu2_report' => 'รายงาน',
+    'menu2_report_project_stractegic' => 'รายงานโครงการตามยุทธศาสตร์การยกระดับคุณภาพการศึกษา',
+    'menu2_report_project' => 'รายงานโครงการตามยุทธศาสตร์',
 ];

@@ -11,6 +11,8 @@ use App\Http\Controllers\project_type_controller;
 use App\Http\Controllers\project_controller;
 use App\Http\Controllers\project_main_controller;
 use App\Http\Controllers\project_main_type_controller;
+use App\Http\Controllers\report\report_project_controller;
+use App\Http\Controllers\report\report_project_stractegic_controller;
 use App\Http\Controllers\result_analysis_controller;
 use App\Http\Controllers\strategic_controller;
 use App\Http\Controllers\test_controller;
@@ -34,6 +36,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [home_controller::class, 'index'])->name('home.index');
 Route::post('/home/get-project', [home_controller::class, 'get_project'])->name('home.get-project');
 Route::post('/home/get-project-detail', [home_controller::class, 'get_project_detail'])->name('home.get-project-detail');
+
+
+Route::get('/report/project-stractegic', [report_project_stractegic_controller::class, 'index'])->name('report.project-stractegic');
+Route::post('/report/project-stractegic/lists', [report_project_stractegic_controller::class, 'lists'])->name('report.project-stractegic.lists');
+
+Route::get('/report/project', [report_project_controller::class, 'index'])->name('report.project');
+Route::post('/report/project/lists', [report_project_controller::class, 'lists'])->name('report.project.lists');
 
 
 Route::get('/signin', [auth_controller::class, 'index'])->name('auth.index');

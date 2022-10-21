@@ -1,4 +1,5 @@
 @extends('layouts.layout-report')
+@section('title', __('msg.report_menu_home'))
 @push('css')
 @endpush
 @push('script')
@@ -115,7 +116,7 @@
             <div class="container">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">{{ __('msg.report_menu_home') }}</h1>
+                        <h5 class="m-0">{{ __('msg.report_menu_home') }}</h5>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">

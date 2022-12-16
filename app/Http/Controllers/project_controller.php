@@ -85,11 +85,7 @@ class project_controller extends Controller
             ->addColumn('project_percentage', function ($q) {
                 $i = 0;
                 ($q->project_name != '' &&
-                    $q->project_period_start != '' &&
-                    $q->project_period_end != '' &&
-                    $q->project_type_id != '' &&
-                    $q->project_budget != '' &&
-                    $q->budget_id != '')  ? $i++ : 0;
+                    $q->project_period_start != '')  ? $i++ : 0;
                 count($q->get_project_responsible_person) > 0  ? $i++ : '';
                 count($q->get_project_target_group) > 0 ? $i++ : '';
                 count($q->get_project_problem) > 0 ? $i++ : '';
@@ -224,10 +220,6 @@ class project_controller extends Controller
         )->find($request->id);
         echo ($project->project_name != '' &&
             $project->project_period_start != '' &&
-            $project->project_period_end != '' &&
-            $project->project_type_id != '' &&
-            $project->project_budget != '' &&
-            $project->budget_id != '' &&
             count($project->get_project_responsible_person) > 0 &&
             count($project->get_project_target_group) > 0 &&
             count($project->get_project_problem) > 0 &&

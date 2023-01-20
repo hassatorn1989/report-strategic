@@ -100,40 +100,36 @@
                         </ul>
                     </li>
                 @endif
-                @if (auth()->user()->user_role == 'admin')
-                    <li class="nav-item {{ Request::segment(1) == 'setting-project' ? 'menu-open' : '' }}">
-                        <a href="#"
-                            class="nav-link {{ Request::segment(1) == 'setting-project' ? 'active' : '' }}">
-                            {{-- <i class="fas fa-cogs"></i> --}}
-                            <i class="nav-icon fas fa-list"></i>
-                            <p>
-                                {{ __('msg.menu_setting_project') }}
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
+                <li class="nav-item {{ Request::segment(1) == 'setting-project' ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ Request::segment(1) == 'setting-project' ? 'active' : '' }}">
+                        {{-- <i class="fas fa-cogs"></i> --}}
+                        <i class="nav-icon fas fa-list"></i>
+                        <p>
+                            {{ __('msg.menu_setting_project') }}
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        @if (auth()->user()->user_role == 'admin')
                             <li class="nav-item">
-                                <small>
-                                    <a href="{{ route('setting-project.project-main-type.index') }}"
-                                        class="nav-link {{ Request::segment(1) == 'setting-project' && Request::segment(2) == 'project-main-type' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>{{ __('msg.menu_setting_project_main_type') }}</p>
-                                    </a>
-                                </small>
+                                <a href="{{ route('setting-project.project-main-type.index') }}"
+                                    class="nav-link {{ Request::segment(1) == 'setting-project' && Request::segment(2) == 'project-main-type' ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>{{ __('msg.menu_setting_project_main_type') }}</p>
+                                </a>
                             </li>
-                            <li class="nav-item">
-                                <small>
-                                    <a href="{{ route('setting-project.project-main.index') }}"
-                                        class="nav-link {{ Request::segment(1) == 'setting-project' && Request::segment(2) == 'project-main' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>{{ __('msg.menu_setting_project_main') }}</p>
-                                    </a>
-                                </small>
-                            </li>
-                        </ul>
-                    </li>
-                @endif
-                <li class="nav-item">
+                        @endif
+                        <li class="nav-item">
+                            <a href="{{ route('setting-project.project-main.index') }}"
+                                class="nav-link {{ Request::segment(1) == 'setting-project' && Request::segment(2) == 'project-main' ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>{{ __('msg.menu_setting_project_main') }}</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                {{-- <li class="nav-item">
                     <a href="{{ route('project.index') }}"
                         class="nav-link {{ Request::segment(1) == 'project' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-folder-open"></i>
@@ -141,7 +137,7 @@
                             {{ __('msg.menu_project') }}
                         </p>
                     </a>
-                </li>
+                </li> --}}
                 @if (auth()->user()->user_role == 'admin')
                     <li class="nav-item">
                         <a href="{{ route('result-analysis.index') }}"

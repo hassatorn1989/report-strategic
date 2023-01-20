@@ -25,14 +25,15 @@ return [
     'menu_change_password' => 'เปลี่ยนรหัสผ่าน',
     'menu_logout' => 'ออกจากระบบ',
 
-    'menu_setting_project' => 'ตั้งค่าโครงการ',
+    'menu_setting_project' => 'จัดการโครงการ',
     'menu_setting_project_main_type' => 'ประเภทโครงการหลัก',
-    'menu_setting_project_main' => 'โครงการหลัก',
+    'menu_setting_project_main' => 'บันทึกผลโครงการ',
 
     'btn_login' => 'เข้าสู่ระบบ',
     'btn_logining' => 'กำลังเข้าสู่ระบบ...',
     'btn_logout' => 'ออกจากระบบ',
     'btn_add' => 'เพิ่มรายการ',
+    'btn_short_add' => 'เพิ่ม',
     'btn_edit' => 'แก้ไข',
     'btn_delete' => 'ลบ',
     'btn_save' => 'บันทึก',

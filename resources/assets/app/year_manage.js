@@ -11,6 +11,7 @@ var table = $("#example1").DataTable({
         type: "POST",
         data: function (d) {
             d.filter_year_name = $('input[name="filter_year_name"]').val();
+            d.year_id = year_id;
         }
     },
     columns: [

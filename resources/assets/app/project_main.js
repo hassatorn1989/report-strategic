@@ -73,28 +73,32 @@ $('#form').validate({
         $(element).removeClass('is-invalid');
     },
     submitHandler: function (form) {
-        console.log();
         if ($('#faculty_join_id :selected').length > 0) {
-            $.ajax({
-                type: "POST",
-                url: myurl + "/setting-project/project-main/check-budget",
-                data: {
-                    project_main_budget: $('input[name="project_main_budget"]').val(),
-                    id: $('select[name="project_main_type_id"]').val(),
-                },
-                success: function (response) {
-                    if (response == 'true') {
-                        $('#btn_save').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> ' + lang_action.btn_saving).attr('disabled', true);
-                        form.submit();
-                    } else {
-                        Swal.fire(
-                            'แจ้งเตือน!',
-                            'งบประมาณไม่เพียงพอ',
-                            'warning'
-                        )
+            if ($('input[name="mode"]').val() == 'add') {
+                $.ajax({ 
+                    type: "POST",
+                    url: myurl + "/setting-project/project-main/check-budget",
+                    data: {
+                        project_main_budget: $('input[name="project_main_budget"]').val(),
+                        id: $('select[name="project_main_type_id"]').val(),
+                    },
+                    success: function (response) {
+                        if (response == 'true') {
+                            $('#btn_save').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> ' + lang_action.btn_saving).attr('disabled', true);
+                            form.submit();
+                        } else {
+                            Swal.fire(
+                                'แจ้งเตือน!',
+                                'งบประมาณไม่เพียงพอ',
+                                'warning'
+                            )
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                $('#btn_save').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> ' + lang_action.btn_saving).attr('disabled', true);
+                form.submit();
+            }
 
         } else {
             Swal.fire(
@@ -103,7 +107,6 @@ $('#form').validate({
                 'warning'
             )
         }
-
     }
 });
 
@@ -124,6 +127,7 @@ function add_data() {
     $('#modal-default #form').attr('action', myurl + '/setting-project/project-main/store');
     $('#modal-default #form input[type="text"], #modal-default #form input[type="number"], #modal-default #form select, #modal-default #form textarea').removeClass('is-invalid');
     $('#modal-default #form input[type="text"], #modal-default #form input[type="number"], #modal-default #form select, #modal-default #form textarea').val('');
+    $('#modal-default #form input[name="mode"]').val('add');
     $.ajax({
         type: "POST",
         url: myurl + '/setting-project/project-main/get-faculty',
@@ -142,6 +146,7 @@ function edit_data(id) {
     $('#modal-default .modal-title').text(lang.title_edit);
     $('#modal-default #form').attr('action', myurl + '/setting-project/project-main/update');
     $('#modal-default #form input[type="text"], #modal-default #form input[type="number"], #modal-default #form select, #modal-default #form textarea').removeClass('is-invalid');
+    $('#modal-default #form input[name="mode"]').val('edit');
     $.ajax({
         type: "POST",
         url: myurl + '/setting-project/project-main/edit',
@@ -153,8 +158,8 @@ function edit_data(id) {
             $('input[name="id"]').val(response.project_main.id);
             $('input[name="project_main_name"]').val(response.project_main.project_main_name);
             $('input[name="project_main_budget"]').val(response.project_main.project_main_budget);
-            $('textarea[name="project_main_guidelines"]').val(response.project_main.project_main_guidelines);
-            $('textarea[name="project_main_target"]').val(response.project_main.project_main_target);
+            $('textarea[name="project_main_guidelines"]').val(response.project_main.project_main_guidelines.replace(/<br\s*[\/]?>/gi, ""));
+            $('textarea[name="project_main_target"]').val(response.project_main.project_main_target.replace(/<br\s*[\/]?>/gi, ""));
             $('select[name="faculty_id"]').val(response.project_main.faculty_id);
             $('select[name="project_main_type_id"]').val(response.project_main.project_main_type_id);
             $('select[name="year_strategic_id"]').val(response.project_main.year_strategic_id);

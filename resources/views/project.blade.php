@@ -9,6 +9,7 @@
             title_add: '{{ __('msg.title_add_project') . __('msg.year_name') . ' ' . $year->year_name }}',
             title_edit: '{{ __('msg.title_edit_project') . __('msg.year_name') . ' ' . $year->year_name }}',
         };
+        var project_main_id = '{{ Request::segment(3) }}';
     </script>
     <script src="{{ url('resources/assets') }}/app/project.js?q={{ time() }}"></script>
 @endpush
@@ -25,6 +26,8 @@
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a
                                     href="{{ route('dashboard.index') }}">{{ __('msg.menu_dashboard') }}</a></li>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('setting-project.project-main.index') }}">{{ __('msg.menu_setting_project_main') }}</a></li>
                             <li class="breadcrumb-item active">
                                 {{ __('msg.menu_project') . __('msg.year_name') . ' ' . $year->year_name }}</li>
                         </ol>
@@ -117,6 +120,7 @@
                             <label for="year_name">{{ __('msg.year_name') }}</label>
                             <input type="hidden" name="id" id="id">
                             <input type="hidden" name="year_id" id="year_id" value="{{ $year->id }}">
+                            <input type="hidden" name="project_main_id" id="project_main_id" value="{{ Request::segment(3) }}">
                             <input type="text" class="form-control" name="year_name" id="year_name"
                                 placeholder="{{ __('msg.placeholder') }}" autocomplete="off"
                                 value="{{ $year->year_name }}" readonly>

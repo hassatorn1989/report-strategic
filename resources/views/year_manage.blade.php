@@ -9,6 +9,7 @@
             title_add: '{{ __('msg.title_add_strategic_of_year') . ' ' . $year->year_name }}',
             title_edit: '{{ __('msg.title_edit_strategic_of_year') . ' ' . $year->year_name }}',
         };
+        let year_id = '{{ Request::segment(4) }}'
     </script>
     <script src="{{ url('resources/assets') }}/app/year_manage.js?q={{ time() }}"></script>
 @endpush

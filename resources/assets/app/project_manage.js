@@ -35,7 +35,7 @@ $('#form_publish').validate({
     submitHandler: function (form) {
         $.ajax({
             type: "POST",
-            url: myurl + "/project/manage/check-publish",
+            url: myurl + "/setting-project/project/manage/check-publish",
             data: {
                 id: $('#form_publish input[name="id"]').val()
             },
@@ -143,7 +143,7 @@ $('select[name="budget_id"]').on('change', function () {
 
 
 $("div#myDropzone").dropzone({
-    url: myurl + '/project/manage/output-gallery-store',
+    url: myurl + '/setting-project/project/manage/output-gallery-store',
     autoProcessQueue: false,
     uploadMultiple: true,
     parallelUploads: 5,
@@ -236,7 +236,7 @@ $('input[name="project_period"]').daterangepicker({
 $('select[name="pcode"]').on('change', function () {
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/get-location-district',
+        url: myurl + '/setting-project/project/manage/get-location-district',
         data: {
             pcode: $(this).val(),
         },
@@ -256,7 +256,7 @@ $('select[name="pcode"]').on('change', function () {
 $('select[name="acode"]').on('change', function () {
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/get-location-subdistrict',
+        url: myurl + '/setting-project/project/manage/get-location-subdistrict',
         data: {
             acode: $(this).val(),
         },
@@ -275,7 +275,7 @@ $('select[name="acode"]').on('change', function () {
 $('select[name="tcode"]').on('change', function () {
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/get-location-village',
+        url: myurl + '/setting-project/project/manage/get-location-village',
         data: {
             tcode: $(this).val(),
         },
@@ -324,7 +324,8 @@ $('#form-project-location').validate({
 });
 
 function add_data_project_location() {
-    $('#form-project-location').attr('action', myurl + '/project/manage/location-store');
+    $('#modal-manage-project-location .modal-title').text('เพิ่มข้อมูลดำเนินการ');
+    $('#form-project-location').attr('action', myurl + '/setting-project/project/manage/location-store');
     $('#form-project-location select').removeClass('is-invalid').val('');
     $('#form-project-location select[name="acode"]').empty().append(`<option value="">${lang_action.select}</option>`);
     $('#form-project-location select[name="tcode"]').empty().append(`<option value="">${lang_action.select}</option>`);
@@ -332,12 +333,12 @@ function add_data_project_location() {
 }
 
 function edit_data_project_location(id) {
-    $('#form-project-location').attr('action', myurl + '/project/manage/location-update');
+    $('#form-project-location').attr('action', myurl + '/setting-project/project/manage/location-update');
     $('#form-project-location input[type="text"]').removeClass('is-invalid');
-    // $('#project_location_mode').text('แก้ไขข้อมูล');
+    $('#modal-manage-project-location .modal-title').text('แก้ไขข้อมูลพื้นที่ดำเนินการ');
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/location-edit',
+        url: myurl + '/setting-project/project/manage/location-edit',
         data: {
             id: id
         },
@@ -383,7 +384,7 @@ function destroy_project_location(id) {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                url: myurl + "/project/manage/location-destroy",
+                url: myurl + "/setting-project/project/manage/location-destroy",
                 data: {
                     id: id
                 },
@@ -427,18 +428,18 @@ $('#form-project-responsible-person').validate({
 });
 
 function add_data_project_responsible_person() {
-    $('#form-project-responsible-person').attr('action', myurl + '/project/manage/responsible-person-store');
+    $('#form-project-responsible-person').attr('action', myurl + '/setting-project/project/manage/responsible-person-store');
     $('#form-project-responsible-person input[type="text"]').removeClass('is-invalid').val('');
     $('#project_responsible_person_mode').text('เพิ่มข้อมูล');
 }
 
 function edit_data_project_responsible_person(id) {
-    $('#form-project-responsible-person').attr('action', myurl + '/project/manage/responsible-person-update');
+    $('#form-project-responsible-person').attr('action', myurl + '/setting-project/project/manage/responsible-person-update');
     $('#form-project-responsible-person input[type="text"]').removeClass('is-invalid');
     $('#project_responsible_person_mode').text('แก้ไขข้อมูล');
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/responsible-person-edit',
+        url: myurl + '/setting-project/project/manage/responsible-person-edit',
         data: {
             id: id
         },
@@ -466,7 +467,7 @@ function destroy_project_responsible_person(id) {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                url: myurl + "/project/manage/responsible-person-destroy",
+                url: myurl + "/setting-project/project/manage/responsible-person-destroy",
                 data: {
                     id: id
                 },
@@ -508,18 +509,18 @@ $('#form-project-target-group').validate({
 });
 
 function add_data_project_target_group() {
-    $('#form-project-target-group').attr('action', myurl + '/project/manage/target-group-store');
+    $('#form-project-target-group').attr('action', myurl + '/setting-project/project/manage/target-group-store');
     $('#form-project-target-group input[type="text"]').removeClass('is-invalid').val('');
     $('#project_target_group_mode').text('เพิ่มข้อมูล');
 }
 
 function edit_data_project_target_group(id) {
-    $('#form-project-target-group').attr('action', myurl + '/project/manage/target-group-update');
+    $('#form-project-target-group').attr('action', myurl + '/setting-project/project/manage/target-group-update');
     $('#form-project-target-group input[type="text"]').removeClass('is-invalid');
     $('#project_target_group_mode').text('แก้ไขข้อมูล');
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/target-group-edit',
+        url: myurl + '/setting-project/project/manage/target-group-edit',
         data: {
             id: id
         },
@@ -543,7 +544,7 @@ function destroy_project_target_group(id) {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                url: myurl + "/project/manage/target-group-destroy",
+                url: myurl + "/setting-project/project/manage/target-group-destroy",
                 data: {
                     id: id
                 },
@@ -586,18 +587,18 @@ $('#form-project-problem').validate({
 });
 
 function add_data_project_problem() {
-    $('#form-project-problem').attr('action', myurl + '/project/manage/problem-store');
+    $('#form-project-problem').attr('action', myurl + '/setting-project/project/manage/problem-store');
     $('#form-project-problem input[type="text"]').removeClass('is-invalid').val('');
     $('#project_problem_mode').text('เพิ่มข้อมูล');
 }
 
 function edit_data_project_problem(id) {
-    $('#form-project-problem').attr('action', myurl + '/project/manage/problem-update');
+    $('#form-project-problem').attr('action', myurl + '/setting-project/project/manage/problem-update');
     $('#form-project-problem input[type="text"]').removeClass('is-invalid');
     $('#project_problem_mode').text('แก้ไขข้อมูล');
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/problem-edit',
+        url: myurl + '/setting-project/project/manage/problem-edit',
         data: {
             id: id
         },
@@ -622,7 +623,7 @@ function destroy_project_problem(id) {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                url: myurl + "/project/manage/problem-destroy",
+                url: myurl + "/setting-project/project/manage/problem-destroy",
                 data: {
                     id: id
                 },
@@ -664,18 +665,18 @@ $('#form-project-problem-solution').validate({
 });
 
 function add_data_project_problem_solution() {
-    $('#form-project-problem-solution').attr('action', myurl + '/project/manage/problem-solution-store');
+    $('#form-project-problem-solution').attr('action', myurl + '/setting-project/project/manage/problem-solution-store');
     $('#form-project-problem-solution input[type="text"]').removeClass('is-invalid').val('');
     $('#project_problem_solution_mode').text('เพิ่มข้อมูล');
 }
 
 function edit_data_project_problem_solution(id) {
-    $('#form-project-problem-solution').attr('action', myurl + '/project/manage/problem-solution-update');
+    $('#form-project-problem-solution').attr('action', myurl + '/setting-project/project/manage/problem-solution-update');
     $('#form-project-problem-solution input[type="text"]').removeClass('is-invalid');
     $('#project_problem_solution_mode').text('แก้ไขข้อมูล');
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/problem-solution-edit',
+        url: myurl + '/setting-project/project/manage/problem-solution-edit',
         data: {
             id: id
         },
@@ -700,7 +701,7 @@ function destroy_project_problem_solution(id) {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                url: myurl + "/project/manage/problem-solution-destroy",
+                url: myurl + "/setting-project/project/manage/problem-solution-destroy",
                 data: {
                     id: id
                 },
@@ -745,18 +746,18 @@ $('#form-project-quantitative-indicators').validate({
 });
 
 function add_data_project_quantitative_indicators() {
-    $('#form-project-quantitative-indicators').attr('action', myurl + '/project/manage/quantitative-indicators-store');
+    $('#form-project-quantitative-indicators').attr('action', myurl + '/setting-project/project/manage/quantitative-indicators-store');
     $('#form-project-quantitative-indicators input[type="text"]').removeClass('is-invalid').val('');
     $('#project_quantitative_indicators_mode').text('เพิ่มข้อมูล');
 }
 
 function edit_data_project_quantitative_indicators(id) {
-    $('#form-project-quantitative-indicators').attr('action', myurl + '/project/manage/quantitative-indicators-update');
+    $('#form-project-quantitative-indicators').attr('action', myurl + '/setting-project/project/manage/quantitative-indicators-update');
     $('#form-project-quantitative-indicators input[type="text"]').removeClass('is-invalid');
     $('#project_quantitative_indicators_mode').text('แก้ไขข้อมูล');
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/quantitative-indicators-edit',
+        url: myurl + '/setting-project/project/manage/quantitative-indicators-edit',
         data: {
             id: id
         },
@@ -782,7 +783,7 @@ function destroy_project_quantitative_indicators(id) {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                url: myurl + "/project/manage/quantitative-indicators-destroy",
+                url: myurl + "/setting-project/project/manage/quantitative-indicators-destroy",
                 data: {
                     id: id
                 },
@@ -827,18 +828,18 @@ $('#form-project-qualitative-indicators').validate({
 });
 
 function add_data_project_qualitative_indicators() {
-    $('#form-project-qualitative-indicators').attr('action', myurl + '/project/manage/qualitative-indicators-store');
+    $('#form-project-qualitative-indicators').attr('action', myurl + '/setting-project/project/manage/qualitative-indicators-store');
     $('#form-project-qualitative-indicators input[type="text"]').removeClass('is-invalid').val('');
     $('#project_qualitative_indicators_mode').text('เพิ่มข้อมูล');
 }
 
 function edit_data_project_qualitative_indicators(id) {
-    $('#form-project-qualitative-indicators').attr('action', myurl + '/project/manage/qualitative-indicators-update');
+    $('#form-project-qualitative-indicators').attr('action', myurl + '/setting-project/project/manage/qualitative-indicators-update');
     $('#form-project-qualitative-indicators input[type="text"]').removeClass('is-invalid');
     $('#project_qualitative_indicators_mode').text('แก้ไขข้อมูล');
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/qualitative-indicators-edit',
+        url: myurl + '/setting-project/project/manage/qualitative-indicators-edit',
         data: {
             id: id
         },
@@ -864,7 +865,7 @@ function destroy_project_qualitative_indicators(id) {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                url: myurl + "/project/manage/qualitative-indicators-destroy",
+                url: myurl + "/setting-project/project/manage/qualitative-indicators-destroy",
                 data: {
                     id: id
                 },
@@ -914,7 +915,7 @@ $('#form-project-output').validate({
 $('input[name="indicators_output_type"]').on('change', function () {
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/get-project-indicators',
+        url: myurl + '/setting-project/project/manage/get-project-indicators',
         data: {
             indicators_type: $(this).val(),
             project_id: project_id
@@ -931,19 +932,19 @@ $('input[name="indicators_output_type"]').on('change', function () {
 });
 
 function add_data_project_output() {
-    $('#form-project-output').attr('action', myurl + '/project/manage/output-store');
+    $('#form-project-output').attr('action', myurl + '/setting-project/project/manage/output-store');
     $('#form-project-output input[type="text"], #form-project-output select, #form-project-output textarea').removeClass('is-invalid').val('');
     $("#modal-project-output .modal-title").text('เพิ่มข้อมูลผลผลิต');
     $('#form-project-output input[name="indicators_output_type"]').prop('checked', false);
 }
 
 function edit_data_project_output(id) {
-    $('#form-project-output').attr('action', myurl + '/project/manage/output-update');
+    $('#form-project-output').attr('action', myurl + '/setting-project/project/manage/output-update');
     $('#form-project-output input[type="text"], #form-project-output select, #form-project-output textarea').removeClass('is-invalid');
     $("#modal-project-output .modal-title").text('แก้ไขข้อมูลผลผลิต');
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/output-edit',
+        url: myurl + '/setting-project/project/manage/output-edit',
         data: {
             id: id,
             project_id: project_id
@@ -980,7 +981,7 @@ function destroy_project_output(id) {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                url: myurl + "/project/manage/output-destroy",
+                url: myurl + "/setting-project/project/manage/output-destroy",
                 data: {
                     id: id
                 },
@@ -1003,7 +1004,7 @@ function manage_output_gallery_show(id) {
     $('#modal-manage-gallery-project-output-view input[name="project_output_id"]').val(id);
     $.ajax({
         type: "POST",
-        url: myurl + "/project/manage/output-gallery-show",
+        url: myurl + "/setting-project/project/manage/output-gallery-show",
         data: {
             id: id
         },
@@ -1057,7 +1058,7 @@ $(".show_gallery").on('click', '.remove_row_output', function () {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                url: myurl + "/project/manage/output-gallery-destroy",
+                url: myurl + "/setting-project/project/manage/output-gallery-destroy",
                 data: {
                     id: $(this).val(),
                     project_output_id: project_output_id
@@ -1110,7 +1111,7 @@ $('#form-project-outcome').validate({
 $('input[name="indicators_outcome_type"]').on('change', function () {
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/get-project-indicators',
+        url: myurl + '/setting-project/project/manage/get-project-indicators',
         data: {
             indicators_type: $(this).val(),
             project_id: project_id
@@ -1127,19 +1128,19 @@ $('input[name="indicators_outcome_type"]').on('change', function () {
 });
 
 function add_data_project_outcome() {
-    $('#form-project-outcome').attr('action', myurl + '/project/manage/outcome-store');
+    $('#form-project-outcome').attr('action', myurl + '/setting-project/project/manage/outcome-store');
     $('#form-project-outcome input[type="text"], #form-project-outcome select').removeClass('is-invalid');
     $('#form-project-outcome input[name="indicators_outcome_type"]').prop('checked', false);
     $("#modal-project-outcome .modal-title").text('เพิ่มข้อมูลผลลัพธ์');
 }
 
 function edit_data_project_outcome(id) {
-    $('#form-project-outcome').attr('action', myurl + '/project/manage/outcome-update');
+    $('#form-project-outcome').attr('action', myurl + '/setting-project/project/manage/outcome-update');
     $('#form-project-outcome input[type="text"], #form-project-outcome select').removeClass('is-invalid');
     $("#modal-project-outcome .modal-title").text('แก้ไขข้อมูลผลลัพธ์');
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/outcome-edit',
+        url: myurl + '/setting-project/project/manage/outcome-edit',
         data: {
             id: id,
             project_id: project_id
@@ -1175,7 +1176,7 @@ function destroy_project_outcome(id) {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                url: myurl + "/project/manage/outcome-destroy",
+                url: myurl + "/setting-project/project/manage/outcome-destroy",
                 data: {
                     id: id
                 },
@@ -1216,18 +1217,18 @@ $('#form-project-impact').validate({
 });
 
 function add_data_project_impact() {
-    $('#form-project-impact').attr('action', myurl + '/project/manage/impact-store');
+    $('#form-project-impact').attr('action', myurl + '/setting-project/project/manage/impact-store');
     $('#form-project-impact input[type="text"]').removeClass('is-invalid').val('');
     $('#project_impact_mode').text('เพิ่มข้อมูล');
 }
 
 function edit_data_project_impact(id) {
-    $('#form-project-impact').attr('action', myurl + '/project/manage/impact-update');
+    $('#form-project-impact').attr('action', myurl + '/setting-project/project/manage/impact-update');
     $('#form-project-impact input[type="text"]').removeClass('is-invalid');
     $('#project_impact_mode').text('แก้ไขข้อมูล');
     $.ajax({
         type: "POST",
-        url: myurl + '/project/manage/impact-edit',
+        url: myurl + '/setting-project/project/manage/impact-edit',
         data: {
             id: id
         },
@@ -1252,7 +1253,7 @@ function destroy_project_impact(id) {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                url: myurl + "/project/manage/impact-destroy",
+                url: myurl + "/setting-project/project/manage/impact-destroy",
                 data: {
                     id: id
                 },

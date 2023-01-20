@@ -7,10 +7,11 @@ var table = $("#example1").DataTable({
     ],
     dom: '<"float-left"><"float-right"f>rt<"row"<"col-sm-4"l><"col-sm-4"i><"col-sm-4"p>>',
     ajax: {
-        url: myurl + "/project/lists",
+        url: myurl + "/setting-project/project/lists",
         type: "POST",
         data: function (d) {
             d.filter_project_name = $('input[name="filter_project_name"]').val();
+            d.project_main_id = project_main_id;
         }
     },
     columns: [
@@ -59,7 +60,7 @@ $('#form').validate({
 
 function add_data() {
     $("#modal-default .modal-title").text(lang.title_add);
-    $('#modal-default #form').attr('action', myurl + '/project/store');
+    $('#modal-default #form').attr('action', myurl + '/setting-project/project/store');
     $('#modal-default #form input[type="text"], #modal-default #form select').removeClass('is-invalid');
     $('#modal-default #form input[type="text"]:input[type="year_name"]').val('');
 }
@@ -81,7 +82,7 @@ function destroy(id) {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                url: myurl + "/project/destroy",
+                url: myurl + "/setting-project/project/destroy",
                 data: {
                     id: id
                 },

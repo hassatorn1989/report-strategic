@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\view_equipment_user;
+use App\Models\view_project_main;
 class test_controller extends Controller
 {
     public function index()
     {
-        $user = view_equipment_manager::where('user_id', '655163')->where('user_password', caesar_encode('655163', '1234', 3))->get();
+        $q = view_project_main::where('year_id', '1')->get();
 
-        // dd($user);
+        dd($q);
 
     }
 }

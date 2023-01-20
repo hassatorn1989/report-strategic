@@ -57,8 +57,10 @@ class project_controller extends Controller
                 'get_project_impact',
                 'get_year_strategic_detail',
             ]
-        )->where('year_id', $year->id);
-        if(auth()->user()->user_role == 'user'){
+        )
+            ->where('year_id', $year->id)
+            ->where('project_main_id', $request->project_main_id);
+        if (auth()->user()->user_role == 'user') {
             $q->where('faculty_id', auth()->user()->faculty_id);
         }
         return DataTables::eloquent($q)
@@ -84,8 +86,7 @@ class project_controller extends Controller
             })
             ->addColumn('project_percentage', function ($q) {
                 $i = 0;
-                ($q->project_name != '' &&
-                    $q->project_period_start != '')  ? $i++ : 0;
+                ($q->project_name != '' && $q->project_period_start != '')  ? $i++ : 0;
                 count($q->get_project_responsible_person) > 0  ? $i++ : '';
                 count($q->get_project_target_group) > 0 ? $i++ : '';
                 count($q->get_project_problem) > 0 ? $i++ : '';
@@ -117,6 +118,7 @@ class project_controller extends Controller
         $request->validate([
             'project_name' => 'required',
             'year_id' => 'required',
+            'project_main_id' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -126,6 +128,7 @@ class project_controller extends Controller
             $q->year_id = $request->year_id;
             $q->faculty_id = (auth()->user()->user_role == 'admin') ? $request->faculty_id : auth()->user()->faculty_id;
             $q->project_status = 'draff';
+            $q->project_main_id = $request->project_main_id;
             $q->user_created = auth()->user()->id;
             $q->save();
             DB::commit();
@@ -150,7 +153,7 @@ class project_controller extends Controller
             'project_type_id' => 'required',
             'project_budget' => 'required',
             'project_period' => 'required',
-            'project_main_id' => 'required'
+            // 'project_main_id' => 'required'
         ]);
 
         DB::beginTransaction();
@@ -165,7 +168,7 @@ class project_controller extends Controller
             $q->project_budget = $request->project_budget;
             $q->project_period_start = $project_period_start;
             $q->project_period_end = $project_period_end;
-            $q->project_main_id = $request->project_main_id;
+            // $q->project_main_id = $request->project_main_id;
             // $q->year_strategic_detail_id = (!empty($request->year_strategic_detail_id)) ? $request->year_strategic_detail_id : null;
             // $q->budget_id = $request->budget_id;
             // $q->budget_specify_other = (!empty($request->budget_specify_other))  ? $request->budget_specify_other : null;
@@ -374,11 +377,7 @@ class project_controller extends Controller
         )->find($request->id);
         $i = 0;
         ($project->project_name != '' &&
-            $project->project_period_start != '' &&
-            $project->project_period_end != '' &&
-            $project->project_type_id != '' &&
-            $project->project_budget != '' &&
-            $project->budget_id != '')  ? $i++ : 0;
+            $project->project_period_start != '')  ? $i++ : 0;
         count($project->get_project_responsible_person) > 0  ? $i++ : '';
         count($project->get_project_target_group) > 0 ? $i++ : '';
         count($project->get_project_problem) > 0 ? $i++ : '';
@@ -413,6 +412,7 @@ class project_controller extends Controller
             'tcode' => 'required',
             'mcode' => 'required',
         ]);
+
 
         DB::beginTransaction();
         try {

@@ -50,7 +50,10 @@
                             <li class="breadcrumb-item"><a
                                     href="{{ route('dashboard.index') }}">{{ __('msg.menu_dashboard') }}</a></li>
                             <li class="breadcrumb-item"><a
-                                    href="{{ route('project.index') }}">{{ __('msg.menu_project') . __('msg.year_name') . ' ' . $project->year_name }}</a>
+                                    href="{{ route('setting-project.project-main.index') }}">{{ __('msg.menu_setting_project_main') }}</a>
+                            </li>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('project.index', ['id' => $project->project_main_id]) }}">{{ __('msg.menu_project') . __('msg.year_name') . ' ' . $project->year_name }}</a>
                             </li>
                             <li class="breadcrumb-item active">{{ __('msg.title_manage_project') }}</li>
                         </ol>
@@ -67,7 +70,7 @@
                         @if ($project->project_status == 'draff' || $project->project_status == 'unpublish')
                             <form action="{{ route('project.manage.publish') }}" method="post" id="form_publish">
                                 @csrf
-                                <input type="hidden" id="id" name="id" value="{{ Request::segment(3) }}">
+                                <input type="hidden" id="id" name="id" value="{{ Request::segment(4) }}">
                                 <input type="hidden" id="project_status" name="project_status" value="publish">
                                 <button type="submit" name="btn_publish" id="btn_publish"
                                     class="btn btn-primary btn-block"><i class="fas fa-paper-plane"></i>
@@ -76,7 +79,7 @@
                         @else
                             <form action="{{ route('project.manage.publish') }}" method="post" id="form_publish">
                                 @csrf
-                                <input type="hidden" id="id" name="id" value="{{ Request::segment(3) }}">
+                                <input type="hidden" id="id" name="id" value="{{ Request::segment(4) }}">
                                 <input type="hidden" id="project_status" name="project_status" value="unpublish">
                                 <button type="submit" name="btn_publish" id="btn_publish"
                                     class="btn btn-danger btn-block"><i class="fas fa-times-circle"></i>
@@ -290,7 +293,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
+                                                    {{-- <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label
@@ -308,7 +311,7 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                     <button type="submit" class="btn btn-primary"
                                                         id="btn_save_project"><i class="fas fa-save"></i>
                                                         {{ __('msg.btn_save') }}</button>
@@ -325,7 +328,7 @@
                                                             <div class="form-group">
                                                                 <input type="hidden" name="id" id="id">
                                                                 <input type="hidden" name="project_id" id="project_id"
-                                                                    value="{{ Request::segment(3) }}">
+                                                                    value="{{ Request::segment(4) }}">
                                                                 <input type="text" class="form-control"
                                                                     name="project_responsible_person_name"
                                                                     id="project_responsible_person_name"
@@ -473,7 +476,7 @@
                                                             <div class="form-group">
                                                                 <input type="hidden" name="id" id="id">
                                                                 <input type="hidden" name="project_id" id="project_id"
-                                                                    value="{{ Request::segment(3) }}">
+                                                                    value="{{ Request::segment(4) }}">
                                                                 <input type="text" class="form-control"
                                                                     name="project_target_group_detail"
                                                                     id="project_target_group_detail"
@@ -506,7 +509,7 @@
                                                                     <a href="#"
                                                                         onclick="add_data_project_target_group()"><i
                                                                             class="fa fa-plus-circle"></i>
-                                                                        {{ __('msg.btn_add') }}</a>
+                                                                        {{ __('msg.btn_short_add') }}</a>
                                                                 </div>
                                                             </th>
                                                         </tr>
@@ -552,7 +555,7 @@
                                                             <div class="form-group">
                                                                 <input type="hidden" name="id" id="id">
                                                                 <input type="hidden" name="project_id" id="project_id"
-                                                                    value="{{ Request::segment(3) }}">
+                                                                    value="{{ Request::segment(4) }}">
                                                                 <input type="text" class="form-control"
                                                                     name="project_problem_detail"
                                                                     id="project_problem_detail"
@@ -584,7 +587,7 @@
                                                                     <a href="#"
                                                                         onclick="add_data_project_problem()"><i
                                                                             class="fa fa-plus-circle"></i>
-                                                                        {{ __('msg.btn_add') }}</a>
+                                                                        {{ __('msg.btn_short_add') }}</a>
                                                                 </div>
                                                             </th>
                                                         </tr>
@@ -630,7 +633,7 @@
                                                             <div class="form-group">
                                                                 <input type="hidden" name="id" id="id">
                                                                 <input type="hidden" name="project_id" id="project_id"
-                                                                    value="{{ Request::segment(3) }}">
+                                                                    value="{{ Request::segment(4) }}">
                                                                 <input type="text" class="form-control"
                                                                     name="project_problem_solution_detail"
                                                                     id="project_problem_solution_detail"
@@ -663,7 +666,7 @@
                                                                     <a href="#"
                                                                         onclick="add_data_project_problem_solution()"><i
                                                                             class="fa fa-plus-circle"></i>
-                                                                        {{ __('msg.btn_add') }}</a>
+                                                                        {{ __('msg.btn_short_add') }}</a>
                                                                 </div>
                                                             </th>
                                                         </tr>
@@ -711,7 +714,7 @@
                                                             <div class="form-group">
                                                                 <input type="hidden" name="id" id="id">
                                                                 <input type="hidden" name="project_id" id="project_id"
-                                                                    value="{{ Request::segment(3) }}">
+                                                                    value="{{ Request::segment(4) }}">
                                                                 <input type="text" class="form-control"
                                                                     name="project_quantitative_indicators_value"
                                                                     id="project_quantitative_indicators_value"
@@ -754,7 +757,7 @@
                                                                     <a href="#"
                                                                         onclick="add_data_project_quantitative_indicators()"><i
                                                                             class="fa fa-plus-circle"></i>
-                                                                        {{ __('msg.btn_add') }}</a>
+                                                                        {{ __('msg.btn_short_add') }}</a>
                                                                 </div>
                                                             </th>
                                                         </tr>
@@ -804,7 +807,7 @@
                                                             <div class="form-group">
                                                                 <input type="hidden" name="id" id="id">
                                                                 <input type="hidden" name="project_id" id="project_id"
-                                                                    value="{{ Request::segment(3) }}">
+                                                                    value="{{ Request::segment(4) }}">
                                                                 <input type="text" class="form-control"
                                                                     name="project_qualitative_indicators_value"
                                                                     id="project_qualitative_indicators_value"
@@ -838,7 +841,7 @@
                                                 </form>
                                                 <table class="table table-hover table-sm table-striped">
                                                     <thead class="thead-light">
-                                                        <tr>
+                                                        <tr> 
                                                             <th>#</th>
                                                             <th>{{ __('msg.project_qualitative_indicators_value') }}</th>
                                                             <th>{{ __('msg.project_qualitative_indicators_unit') }}</th>
@@ -847,7 +850,7 @@
                                                                     <a href="#"
                                                                         onclick="add_data_project_qualitative_indicators()"><i
                                                                             class="fa fa-plus-circle"></i>
-                                                                        {{ __('msg.btn_add') }}</a>
+                                                                        {{ __('msg.btn_short_add') }}</a>
                                                                 </div>
                                                             </th>
                                                         </tr>
@@ -1030,7 +1033,7 @@
                                                             <div class="form-group">
                                                                 <input type="hidden" name="id" id="id">
                                                                 <input type="hidden" name="project_id" id="project_id"
-                                                                    value="{{ Request::segment(3) }}">
+                                                                    value="{{ Request::segment(4) }}">
                                                                 <input type="text" class="form-control"
                                                                     name="project_impact_detail"
                                                                     id="project_impact_detail"
@@ -1062,7 +1065,7 @@
                                                                     <a href="#"
                                                                         onclick="add_data_project_impact()"><i
                                                                             class="fa fa-plus-circle"></i>
-                                                                        {{ __('msg.btn_add') }}</a>
+                                                                        {{ __('msg.btn_short_add') }}</a>
                                                                 </div>
                                                             </th>
                                                         </tr>
@@ -1163,7 +1166,7 @@
                         <div class="form-group">
                             <label for="pcode">{{ __('msg.pname') }}</label>
                             <input type="hidden" name="id" id="id" value="">
-                            <input type="hidden" name="project_id" id="project_id" value="{{ Request::segment(3) }}">
+                            <input type="hidden" name="project_id" id="project_id" value="{{ Request::segment(4) }}">
                             <select class="custom-select" name="pcode" id="pcode">
                                 <option value="">{{ __('msg.select') }}</option>
                                 @if (!empty($province))
@@ -1254,7 +1257,7 @@
                                     <label for="project_output_upgrading">{{ __('msg.project_output_detail') }}</label>
                                     <input type="hidden" name="id" id="id">
                                     <input type="hidden" name="project_id" id="project_id"
-                                        value="{{ Request::segment(3) }}">
+                                        value="{{ Request::segment(4) }}">
                                     <input type="text" class="form-control" name="project_output_detail"
                                         id="project_output_detail"
                                         placeholder="{{ __('msg.placeholder') . __('msg.project_output_detail') }}"
@@ -1323,7 +1326,7 @@
                                 <div class="form-group">
                                     <input type="hidden" name="id" id="id">
                                     <input type="hidden" name="project_id" id="project_id"
-                                        value="{{ Request::segment(3) }}">
+                                        value="{{ Request::segment(4) }}">
                                     <input type="text" class="form-control" name="project_outcome_detail"
                                         id="project_outcome_detail"
                                         placeholder="{{ __('msg.placeholder') . __('msg.project_outcome_detail') }}"

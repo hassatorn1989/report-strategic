@@ -44,8 +44,25 @@ class project_main_controller extends Controller
                 return $data;
             })
             ->addColumn('action', function ($q) {
-                $action = '<button class="btn btn-warning btn-sm waves-effect waves-light" data-toggle="modal" data-target="#modal-default" onclick="edit_data(\'' . $q->id . '\')"> <i class="fas fa-edit"></i> ' . __('msg.btn_edit') . '</button> ';
-                $action .= '<button class="btn btn-danger btn-sm waves-effect waves-light" data-toggle="modal"  onclick="destroy(\'' . $q->id . '\')"> <i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</button> ';
+                // $action = '<a class="btn btn-info btn-sm waves-effect waves-light"  href="' . route('project.index', ['id' => $q->id]) . '"> <i class="fas fa-tasks"></i> ' . __('msg.btn_manage_project') . '</a> ';
+                // if (auth()->user()->user_role == 'admin') {
+                //     $action .= '<button class="btn btn-warning btn-sm waves-effect waves-light" data-toggle="modal" data-target="#modal-default" onclick="edit_data(\'' . $q->id . '\')"> <i class="fas fa-edit"></i> ' . __('msg.btn_edit') . '</button> ';
+                //     $action .= '<button class="btn btn-danger btn-sm waves-effect waves-light" data-toggle="modal"  onclick="destroy(\'' . $q->id . '\')"> <i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</button> ';
+                // }
+                $action = '<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    '. __('msg.action').'
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">';
+                $action .= '<a class="dropdown-item text-info" href="' . route('project.index', ['id' => $q->id]) . '"><i class="fas fa-tasks"></i> ' . __('msg.btn_manage_project') . '</a>';
+                if (auth()->user()->user_role == 'admin') {
+                    $action .= '<a class="dropdown-item text-warning" href="#" data-toggle="modal" data-target="#modal-default" onclick="edit_data(\'' . $q->id . '\')"><i class="fas fa-edit"></i> ' . __('msg.btn_edit') . '</a>';
+                    $action .= '<a class="dropdown-item text-danger" href="#" data-toggle="modal"  onclick="destroy(\'' . $q->id . '\')"><i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</a>';
+                }
+                $action .= '</div>
+                </div>
+                </div>';
                 return $action;
             })
             ->rawColumns(['strategic_name', 'action'])
@@ -185,6 +202,5 @@ class project_main_controller extends Controller
         $q = DB::selectOne($sql);
         $sum = $q->project_main_budget + $request->project_main_budget;
         echo ($sum > $project_main_type->project_main_type_budget) ? 'false' : 'true';
-
     }
 }

@@ -52,7 +52,7 @@ class project_main_controller extends Controller
                 $action = '<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
                     <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    '. __('msg.action').'
+                    ' . __('msg.action') . '
                     </button>
                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">';
                 $action .= '<a class="dropdown-item text-info" href="' . route('project.index', ['id' => $q->id]) . '"><i class="fas fa-tasks"></i> ' . __('msg.btn_manage_project') . '</a>';

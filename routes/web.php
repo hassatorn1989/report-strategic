@@ -8,6 +8,7 @@ use App\Http\Controllers\driven_controller;
 use App\Http\Controllers\faculty_controller;
 use App\Http\Controllers\home_controller;
 use App\Http\Controllers\project_type_controller;
+use App\Http\Controllers\project_sub_type_controller;
 use App\Http\Controllers\project_controller;
 use App\Http\Controllers\project_main_controller;
 use App\Http\Controllers\project_main_type_controller;
@@ -113,6 +114,13 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/setting/project-type/update', [project_type_controller::class, 'update'])->name('setting.project-type.update');
         Route::post('/setting/project-type/destroy', [project_type_controller::class, 'destroy'])->name('setting.project-type.destroy');
 
+        Route::get('/setting/project-sub-type', [project_sub_type_controller::class, 'index'])->name('setting.project-sub-type.index');
+        Route::post('/setting/project-sub-type/lists', [project_sub_type_controller::class, 'lists'])->name('setting.project-sub-type.lists');
+        Route::post('/setting/project-sub-type/store', [project_sub_type_controller::class, 'store'])->name('setting.project-sub-type.store');
+        Route::post('/setting/project-sub-type/edit', [project_sub_type_controller::class, 'edit'])->name('setting.project-sub-type.edit');
+        Route::post('/setting/project-sub-type/update', [project_sub_type_controller::class, 'update'])->name('setting.project-sub-type.update');
+        Route::post('/setting/project-sub-type/destroy', [project_sub_type_controller::class, 'destroy'])->name('setting.project-sub-type.destroy');
+
         Route::get('/setting-project/project-main-type', [project_main_type_controller::class, 'index'])->name('setting-project.project-main-type.index');
         Route::post('/setting-project/project-main-type/lists', [project_main_type_controller::class, 'lists'])->name('setting-project.project-main-type.lists');
         Route::post('/setting-project/project-main-type/store', [project_main_type_controller::class, 'store'])->name('setting-project.project-main-type.store');
@@ -152,6 +160,9 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/setting-project/project/manage/problem-update', [project_controller::class, 'manage_problem_update'])->name('project.manage.problem-update');
         Route::post('/setting-project/project/manage/problem-destroy', [project_controller::class, 'manage_problem_destroy'])->name('project.manage.problem-destroy');
 
+        Route::post('/setting-project/project/manage/get-problem-summary', [project_controller::class, 'manage_get_problem_summary'])->name('project.manage.get-problem-summary');
+        Route::post('/setting-project/project/manage/get-problem-summary-update', [project_controller::class, 'manage_problem_summary_update'])->name('project.manage.get-problem-summary-update');
+
 
         Route::get('/setting-project/project/manage/{id}', [project_controller::class, 'manage'])->name('project.manage');
         Route::post('/setting-project/project/manage/check-publish', [project_controller::class, 'check_publish'])->name('project.manage.check-publish');
@@ -162,6 +173,8 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/setting-project/project/manage/problem-solution-edit', [project_controller::class, 'manage_problem_solution_edit'])->name('project.manage.problem-solution-edit');
         Route::post('/setting-project/project/manage/problem-solution-update', [project_controller::class, 'manage_problem_solution_update'])->name('project.manage.problem-solution-update');
         Route::post('/setting-project/project/manage/problem-solution-destroy', [project_controller::class, 'manage_problem_solution_destroy'])->name('project.manage.problem-solution-destroy');
+        Route::post('/setting-project/project/manage/get-problem-solution-summary', [project_controller::class, 'manage_get_problem_solution_summary'])->name('project.manage.get-problem-solution-summary');
+        Route::post('/setting-project/project/manage/get-problem-solution-summary-update', [project_controller::class, 'manage_problem_solution_summary_update'])->name('project.manage.get-problem-solution-summary-update');
 
         Route::post('/setting-project/project/manage/quantitative-indicators-store', [project_controller::class, 'manage_quantitative_indicators_store'])->name('project.manage.quantitative-indicators-store');
         Route::post('/setting-project/project/manage/quantitative-indicators-edit', [project_controller::class, 'manage_quantitative_indicators_edit'])->name('project.manage.quantitative-indicators-edit');
@@ -192,6 +205,12 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/setting-project/project/manage/impact-edit', [project_controller::class, 'manage_impact_edit'])->name('project.manage.impact-edit');
         Route::post('/setting-project/project/manage/impact-update', [project_controller::class, 'manage_impact_update'])->name('project.manage.impact-update');
         Route::post('/setting-project/project/manage/impact-destroy', [project_controller::class, 'manage_impact_destroy'])->name('project.manage.impact-destroy');
+
+
+        Route::post('/setting-project/project/manage/output-detail-store', [project_controller::class, 'manage_output_detail_store'])->name('project.manage.output-detail-store');
+        Route::post('/setting-project/project/manage/output-detail-edit', [project_controller::class, 'manage_output_detail_edit'])->name('project.manage.output-detail-edit');
+        Route::post('/setting-project/project/manage/output-detail-update', [project_controller::class, 'manage_output_detail_update'])->name('project.manage.output-detail-update');
+        Route::post('/setting-project/project/manage/output-detail-destroy', [project_controller::class, 'manage_output_detail_destroy'])->name('project.manage.output-detail-destroy');
 
 
         Route::post('/setting-project/project/manage/location-store', [project_controller::class, 'manage_location_store'])->name('project.manage.location-store');

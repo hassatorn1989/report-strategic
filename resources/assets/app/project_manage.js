@@ -16,6 +16,9 @@ function validate_number(evt) {
     }
 }
 
+//Bootstrap Duallistbox
+$('.duallistbox').bootstrapDualListbox()
+
 
 $('#form_publish').validate({
     ignore: ".ignore",
@@ -73,6 +76,9 @@ $('#form_publish').validate({
 $('#form_update').validate({
     ignore: ".ignore",
     rules: {
+        project_code: {
+            required: true,
+        },
         project_name: {
             required: true,
         },
@@ -98,6 +104,9 @@ $('#form_update').validate({
             required: true,
         },
         project_main_id: {
+            required: true,
+        },
+        project_sub_type_id: {
             required: true,
         },
     },
@@ -266,6 +275,7 @@ $('select[name="acode"]').on('change', function () {
             $.each(response, function (index, item) {
                 option += `<option value="${item.tcode}">${item.tcode}-${item.tname}</option>`;
             });
+            option += `<option value="no">ไม่ระบุ</option>`;
             $('select[name="tcode"]').empty().append(option);
             $('select[name="mcode"]').empty().append(`<option value="">${lang_action.select}</option>`);
         }
@@ -285,6 +295,7 @@ $('select[name="tcode"]').on('change', function () {
             $.each(response, function (index, item) {
                 option += `<option value="${item.mcode}">${item.mcode}-${item.mname}</option>`;
             });
+            option += `<option value="no">ไม่ระบุ</option>`;
             $('select[name="mcode"]').empty().append(option);
         }
     });
@@ -305,6 +316,9 @@ $('#form-project-location').validate({
         mcode: {
             required: true,
         },
+        // address: {
+        //     required: true,
+        // },
     },
     errorElement: 'span',
     errorPlacement: function (error, element) {
@@ -326,7 +340,7 @@ $('#form-project-location').validate({
 function add_data_project_location() {
     $('#modal-manage-project-location .modal-title').text('เพิ่มข้อมูลดำเนินการ');
     $('#form-project-location').attr('action', myurl + '/setting-project/project/manage/location-store');
-    $('#form-project-location select').removeClass('is-invalid').val('');
+    $('#form-project-location select, #form-project-location input[type="text"]').removeClass('is-invalid').val('');
     $('#form-project-location select[name="acode"]').empty().append(`<option value="">${lang_action.select}</option>`);
     $('#form-project-location select[name="tcode"]').empty().append(`<option value="">${lang_action.select}</option>`);
     $('#form-project-location select[name="mcode"]').empty().append(`<option value="">${lang_action.select}</option>`);
@@ -334,7 +348,7 @@ function add_data_project_location() {
 
 function edit_data_project_location(id) {
     $('#form-project-location').attr('action', myurl + '/setting-project/project/manage/location-update');
-    $('#form-project-location input[type="text"]').removeClass('is-invalid');
+    $('#form-project-location select, #form-project-location input[type="text"]').removeClass('is-invalid');
     $('#modal-manage-project-location .modal-title').text('แก้ไขข้อมูลพื้นที่ดำเนินการ');
     $.ajax({
         type: "POST",
@@ -354,19 +368,22 @@ function edit_data_project_location(id) {
             $.each(response.get_subdistrict, function (index, item) {
                 option += `<option value="${item.tcode}">${item.tcode}-${item.tname}</option>`;
             });
+            option += `<option value="no">ไม่ระบุ</option>`;
             $('select[name="tcode"]').empty().append(option);
 
             var option = `<option value="">${lang_action.select}</option>`;
             $.each(response.get_village, function (index, item) {
                 option += `<option value="${item.mcode}">${item.mcode}-${item.mname}</option>`;
             });
-
+            option += `<option value="no">ไม่ระบุ</option>`;
             $('select[name="mcode"]').empty().append(option);
+
             $('#form-project-location input[name="id"]').val(response.id);
             $('#form-project-location select[name="pcode"]').val(response.pcode);
             $('#form-project-location select[name="acode"]').val(response.acode);
             $('#form-project-location select[name="tcode"]').val(response.tcode);
             $('#form-project-location select[name="mcode"]').val(response.mcode);
+            $('#form-project-location input[name="address"]').val(response.address);
 
         }
     });
@@ -568,6 +585,9 @@ $('#form-project-problem').validate({
         project_problem_detail: {
             required: true,
         },
+        project_problem_sub_detail: {
+            required: true,
+        },
     },
     errorElement: 'span',
     errorPlacement: function (error, element) {
@@ -581,21 +601,23 @@ $('#form-project-problem').validate({
         $(element).removeClass('is-invalid');
     },
     submitHandler: function (form) {
-        $('#btn_save_project_problem').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>').attr('disabled', true);
+        $('#btn_save_project_problem').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> กำลังบันทึก...').attr('disabled', true);
         form.submit();
     }
 });
 
 function add_data_project_problem() {
     $('#form-project-problem').attr('action', myurl + '/setting-project/project/manage/problem-store');
-    $('#form-project-problem input[type="text"]').removeClass('is-invalid').val('');
-    $('#project_problem_mode').text('เพิ่มข้อมูล');
+    $('#form-project-problem input[type="text"], #form-project-problem textarea').removeClass('is-invalid').val('');
+    // $('#project_problem_mode').text('เพิ่มข้อมูล');
+    $("#modal-problem .modal-title").text('เพิ่มข้อมูลปัญหา');
 }
 
 function edit_data_project_problem(id) {
     $('#form-project-problem').attr('action', myurl + '/setting-project/project/manage/problem-update');
     $('#form-project-problem input[type="text"]').removeClass('is-invalid');
-    $('#project_problem_mode').text('แก้ไขข้อมูล');
+    $("#modal-problem .modal-title").text('แก้ไขข้อมูลปัญหา');
+    // $('#project_problem_mode').text('แก้ไขข้อมูล');
     $.ajax({
         type: "POST",
         url: myurl + '/setting-project/project/manage/problem-edit',
@@ -604,9 +626,9 @@ function edit_data_project_problem(id) {
         },
         dataType: "json",
         success: function (response) {
-            console.log(response);
             $('#form-project-problem input[name="id"]').val(response.id);
             $('#form-project-problem input[name="project_problem_detail"]').val(response.project_problem_detail);
+            $('#form-project-problem textarea[name="project_problem_sub_detail"]').val(response.project_problem_sub_detail.replace(/<br\s*\/?>/gi, ""));
         }
     });
 }
@@ -646,6 +668,9 @@ $('#form-project-problem-solution').validate({
         project_problem_solution_detail: {
             required: true,
         },
+        project_problem_solution_sub_detail: {
+            required: true,
+        },
     },
     errorElement: 'span',
     errorPlacement: function (error, element) {
@@ -659,7 +684,7 @@ $('#form-project-problem-solution').validate({
         $(element).removeClass('is-invalid');
     },
     submitHandler: function (form) {
-        $('#btn_save_project_problem_solution').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>').attr('disabled', true);
+        $('#btn_save_project_problem_solution').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> กำลังบันทึก...').attr('disabled', true);
         form.submit();
     }
 });
@@ -667,13 +692,14 @@ $('#form-project-problem-solution').validate({
 function add_data_project_problem_solution() {
     $('#form-project-problem-solution').attr('action', myurl + '/setting-project/project/manage/problem-solution-store');
     $('#form-project-problem-solution input[type="text"]').removeClass('is-invalid').val('');
-    $('#project_problem_solution_mode').text('เพิ่มข้อมูล');
+    // $('#project_problem_solution_mode').text('เพิ่มข้อมูล');
+    $("#modal-problem-solution .modal-title").text('เพิ่มข้อมูลวิธีแก้ไขปัญหา');
 }
 
 function edit_data_project_problem_solution(id) {
     $('#form-project-problem-solution').attr('action', myurl + '/setting-project/project/manage/problem-solution-update');
     $('#form-project-problem-solution input[type="text"]').removeClass('is-invalid');
-    $('#project_problem_solution_mode').text('แก้ไขข้อมูล');
+    $('#modal-problem-solution .modal-title').text('แก้ไขข้อมูลวิธีแก้ไขปัญหา');
     $.ajax({
         type: "POST",
         url: myurl + '/setting-project/project/manage/problem-solution-edit',
@@ -685,6 +711,8 @@ function edit_data_project_problem_solution(id) {
             console.log(response);
             $('#form-project-problem-solution input[name="id"]').val(response.id);
             $('#form-project-problem-solution input[name="project_problem_solution_detail"]').val(response.project_problem_solution_detail);
+            $('#form-project-problem-solution textarea[name="project_problem_solution_sub_detail"]').val(response.project_problem_solution_sub_detail.replace(/<br\s*\/?>/gi, ""));
+
         }
     });
 }
@@ -1122,6 +1150,7 @@ $('input[name="indicators_outcome_type"]').on('change', function () {
             $.each(response, function (index, value) {
                 option += '<option value="' + value.id + '">' + value.indicators_value + ' (' + value.indicators_unit + ')</option>';
             });
+            option += '<option value="N">ไม่ระบุ</option>';
             $('select[name="indicators_outcome_id"]').empty().append(option);
         }
     });
@@ -1266,3 +1295,179 @@ function destroy_project_impact(id) {
 }
 
 //------------------------------end-project-impact------------------------
+
+$('#form-project-output-detail').validate({
+    ignore: ".ignore",
+    rules: {
+        project_output_detail_produce: {
+            required: true,
+        },
+        project_output_detail_elevate: {
+            required: true,
+        },
+        project_output_detail_process: {
+            required: true,
+        },
+        project_output_detail_image: {
+            required: true,
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function (form) {
+        $('#btn_save_project_outout_detail').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> กำลังบันทึก...').attr('disabled', true);
+        form.submit();
+    }
+});
+
+function manage_project_output_detail(id, title) {
+    $("#modal-project-output-detail .modal-title").text('เพิ่มรายละเอียด : ' + title);
+    $('#form-project-output-detail').attr('action', myurl + '/setting-project/project/manage/output-detail-store');
+    $('#form-project-output-detail input[type="text"], #form-project-output-detail input[type="file"], #form-project-output-detail textarea').removeClass('is-invalid').val('');
+    $('#form-project-output-detail input[name="project_output_id2"]').val(id);
+    $('#form-project-output-detail input[name="project_output_detail_image"]').removeClass('ignore');
+
+}
+
+
+function manage_project_output_detail_edit(id, title) {
+    $("#modal-project-output-detail .modal-title").text('แก้ไขรายละเอียด : ' + title);
+    $('#form-project-output-detail').attr('action', myurl + '/setting-project/project/manage/output-detail-update');
+    $('#form-project-output-detail input[name="project_output_detail_image"]').addClass('ignore');
+    $.ajax({
+        type: "POST",
+        url: myurl + "/setting-project/project/manage/output-detail-edit",
+        data: {
+            id: id
+        },
+        dataType: "json",
+        success: function (response) {
+            $('#form-project-output-detail input[name="id"]').val(response.id);
+            $('#form-project-output-detail input[name="project_output_detail_produce"]').val(response.project_output_detail_produce);
+            $('#form-project-output-detail textarea[name="project_output_detail_process"]').val(response.project_output_detail_process.replace(/<br\s*[\/]?>/gi, ""));
+            $('#form-project-output-detail textarea[name="project_output_detail_elevate"]').val(response.project_output_detail_elevate.replace(/<br\s*[\/]?>/gi, ""));
+            if (response.project_output_detail_image != '') {
+                $('#form-project-output-detail .show_image_output_detail').show();
+                $('#form-project-output-detail #project_output_detail_image_show').attr('src', myurl + '/storage/app/' + response.project_output_detail_image);
+            } else {
+                $('#form-project-output-detail .show_image_output_detail').hide();
+                $('#form-project-output-detail #project_output_detail_image_show').attr('src', '');
+            }
+
+        }
+    });
+}
+
+function manage_project_output_detail_destroy(id) {
+    Swal.fire({
+        title: lang_action.destroy_title,
+        icon: 'question',
+        showCancelButton: true,
+        cancelButtonColor: '#d33',
+        confirmButtonText: lang_action.destroy_ok,
+        cancelButtonText: lang_action.destroy_cancle
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: "POST",
+                url: myurl + "/setting-project/project/manage/output-detail-destroy",
+                data: {
+                    id: id
+                },
+                success: function (data) {
+                    window.location.reload();
+                }
+            });
+        }
+    });
+}
+
+function show_image(path) {
+    $('#modal-image #image_show').attr('src', myurl + '/storage/app/' + path);
+}
+
+$('#form-project-problem-summary').validate({
+    ignore: ".ignore",
+    rules: {
+        project_problem_summary: {
+            required: true,
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function (form) {
+        $('#btn_save_problem_summary').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> กำลังบันทึก...').attr('disabled', true);
+        form.submit();
+    }
+});
+
+function get_problem_summary(id) {  
+    $.ajax({
+        type: "POST",
+        url: myurl + "/setting-project/project/manage/get-problem-summary",
+        data: {
+            id: id
+        },
+        dataType: "json",
+        success: function (response) {
+            $('#form-project-problem-summary textarea[name="project_problem_summary"]').val(response.project_problem_summary.replace(/<br\s*\/?>/gi, ""));
+        }
+    });
+}
+
+$('#form-project-problem-solution-summary').validate({
+    ignore: ".ignore",
+    rules: {
+        project_problem_solution_summary: {
+            required: true,
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function (form) {
+        $('#btn_save_problem_solution_summary').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> กำลังบันทึก...').attr('disabled', true);
+        form.submit();
+    }
+});
+
+function get_problem_solution_summary(id) {  
+    $.ajax({
+        type: "POST",
+        url: myurl + "/setting-project/project/manage/get-problem-solution-summary",
+        data: {
+            id: id
+        },
+        dataType: "json",
+        success: function (response) {
+            $('#form-project-problem-solution-summary textarea[name="project_problem_solution_summary"]').val(response.project_problem_solution_summary.replace(/<br\s*\/?>/gi, ""));
+        }
+    });
+}
+

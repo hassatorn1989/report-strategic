@@ -24,6 +24,10 @@ use App\Models\view_project;
 use App\Models\view_project_location;
 use App\Models\view_project_main;
 use App\Models\view_project_output_gallery;
+use App\Models\tbl_project_output_detail;
+use App\Models\tbl_project_sub_type;
+use App\Models\tbl_project_tag;
+use App\Models\tbl_project_project_sub_type;
 use App\Models\view_year_strategic;
 use Illuminate\Http\Request;
 use DataTables;
@@ -37,7 +41,8 @@ class project_controller extends Controller
     {
         $year = tbl_year::where('year_status', 'active')->first();
         $faculty = tbl_faculty::all();
-        return view('project', compact('year', 'faculty'));
+        $project_sub_type = tbl_project_sub_type::all();
+        return view('project', compact('year', 'faculty', 'project_sub_type'));
     }
 
     public function lists(Request $request)
@@ -69,6 +74,9 @@ class project_controller extends Controller
                     $q->whereRaw("project_name like '%{$request->filter_project_name}%'");
                 }
             })
+            ->addColumn('project_code', function ($q) {
+                return ($q->project_code == '') ? '<span class="text-danger">ไม่ระบุ</span>' : $q->project_code;
+            })
             ->addColumn('project_status', function ($q) {
                 $data = '';
                 switch ($q->project_status) {
@@ -82,6 +90,11 @@ class project_controller extends Controller
                         $data = '<span class="badge badge-danger">' . __('msg.project_status_unpublish') . '</span>';
                         break;
                 }
+                return $data;
+            })
+            ->addColumn('project_name', function ($q) {
+                $data = $q->project_name;
+                $data .= ($q->project_sub_type_name != '') ? '<br><small><strong>ประเภท : </strong>' . $q->project_sub_type_name . '</small>' : '';
                 return $data;
             })
             ->addColumn('project_percentage', function ($q) {
@@ -105,32 +118,64 @@ class project_controller extends Controller
                 </div><small>' . __('msg.project_percentage') . ' : ' . $cal . '%</small>';
             })
             ->addColumn('action', function ($q) {
-                $action = '<a class="btn btn-info btn-sm waves-effect waves-light" href="' . route('project.manage', ['id' => $q->id]) . '"> <i class="fas fa-sliders-h"></i> ' . __('msg.btn_manage_project') . '</a> ';
-                $action .= '<button class="btn btn-danger btn-sm waves-effect waves-light" onclick="destroy(\'' . $q->id . '\')"> <i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</button> ';
+                // $action = '<a class="btn btn-info btn-sm waves-effect waves-light" href="' . route('project.manage', ['id' => $q->id]) . '"> <i class="fas fa-sliders-h"></i> ' . __('msg.btn_manage_project') . '</a> ';
+                // $action .= '<button class="btn btn-danger btn-sm waves-effect waves-light" onclick="destroy(\'' . $q->id . '\')"> <i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</button> ';
+
+                $action = '<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ' . __('msg.action') . '
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">';
+                $action .= '<a class="dropdown-item text-info" href="' . route('project.manage', ['id' => $q->id]) . '"><i class="fas fa-sliders-h"></i> ' . __('msg.btn_manage_project') . '</a>';
+                $action .= '<a class="dropdown-item text-danger" href="#" onclick="destroy(\'' . $q->id . '\')"><i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</a>';
+                // if (auth()->user()->user_role == 'admin') {
+                //     $action .= '<a class="dropdown-item text-warning" href="#" data-toggle="modal" data-target="#modal-default" onclick="edit_data(\'' . $q->id . '\')"><i class="fas fa-edit"></i> ' . __('msg.btn_edit') . '</a>';
+                //     $action .= '<a class="dropdown-item text-danger" href="#" data-toggle="modal"  onclick="destroy(\'' . $q->id . '\')"><i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</a>';
+                // }
+                $action .= '</div>
+                </div>
+                </div>';
+
+
                 return $action;
             })
-            ->rawColumns(['project_status', 'project_percentage', 'action'])
+            ->rawColumns(['project_status', 'project_percentage', 'action', 'project_name', 'project_code'])
             ->make();
     }
 
     public function store(Request $request)
     {
         $request->validate([
+            'project_code' => 'required',
             'project_name' => 'required',
             'year_id' => 'required',
             'project_main_id' => 'required',
+            // 'project_sub_type_id' => 'required',
         ]);
 
         DB::beginTransaction();
         try {
             $q = new tbl_project();
+            $q->project_code = $request->project_code;
             $q->project_name = $request->project_name;
             $q->year_id = $request->year_id;
             $q->faculty_id = (auth()->user()->user_role == 'admin') ? $request->faculty_id : auth()->user()->faculty_id;
             $q->project_status = 'draff';
             $q->project_main_id = $request->project_main_id;
+            // $q->project_sub_type_id = $request->project_sub_type_id;
             $q->user_created = auth()->user()->id;
             $q->save();
+
+            if (!empty($request->project_sub_type_id)) {
+                foreach ($request->project_sub_type_id as $key => $value) {
+                    $qtag = new tbl_project_project_sub_type();
+                    $qtag->project_id = $q->id;
+                    $qtag->project_sub_type_id = $value;
+                    $qtag->save();
+                }
+            }
+
             DB::commit();
             return redirect()->route('project.manage', ['id' => $q->id])->with(['message' => __('msg.msg_create_success')]);
         } catch (ModelNotFoundException $e) {
@@ -149,8 +194,10 @@ class project_controller extends Controller
     {
         $request->validate([
             'id' => 'required',
+            'project_code' => 'required',
             'project_name' => 'required',
             'project_type_id' => 'required',
+            // 'project_sub_type_id' => 'required',
             'project_budget' => 'required',
             'project_period' => 'required',
             // 'project_main_id' => 'required'
@@ -158,22 +205,32 @@ class project_controller extends Controller
 
         DB::beginTransaction();
         try {
+            $project_tag_arr =   explode(',', $request->project_tag);
             $project_period = explode(' - ', $request->project_period);
             $project_period_start = date('Y-m-d', strtotime(str_replace('/', '-', $project_period[0])));
             $project_period_end = date('Y-m-d', strtotime(str_replace('/', '-', $project_period[1])));
 
             $q = tbl_project::find($request->id);
+            $q->project_code = $request->project_code;
             $q->project_name = $request->project_name;
             $q->project_type_id = $request->project_type_id;
             $q->project_budget = $request->project_budget;
             $q->project_period_start = $project_period_start;
             $q->project_period_end = $project_period_end;
-            // $q->project_main_id = $request->project_main_id;
-            // $q->year_strategic_detail_id = (!empty($request->year_strategic_detail_id)) ? $request->year_strategic_detail_id : null;
-            // $q->budget_id = $request->budget_id;
-            // $q->budget_specify_other = (!empty($request->budget_specify_other))  ? $request->budget_specify_other : null;
+            // $q->project_sub_type_id = $request->project_sub_type_id;
             $q->user_updated = auth()->user()->id;
             $q->save();
+
+            tbl_project_project_sub_type::where('project_id', $q->id)->delete();
+            if (!empty($request->project_sub_type_id)) {
+                foreach ($request->project_sub_type_id as $key => $value) {
+                    $qtag = new tbl_project_project_sub_type();
+                    $qtag->project_id = $q->id;
+                    $qtag->project_sub_type_id = $value;
+                    $qtag->save();
+                }
+            }
+
             DB::commit();
             return redirect()->back()->with(['message' => __('msg.msg_update_success')]);
         } catch (ModelNotFoundException $e) {
@@ -260,22 +317,22 @@ class project_controller extends Controller
         $project = view_project::with(
             [
                 'get_project_responsible_person' => function ($q) {
-                    $q->orderBy('id', 'DESC');
+                    $q->orderBy('project_responsible_person_name', 'ASC');
                 },
                 'get_project_target_group' => function ($q) {
-                    $q->orderBy('id', 'DESC');
+                    $q->orderBy('project_target_group_detail', 'ASC');
                 },
                 'get_project_problem' => function ($q) {
-                    $q->orderBy('id', 'DESC');
+                    $q->orderBy('project_problem_detail', 'ASC');
                 },
                 'get_project_problem_solution' => function ($q) {
-                    $q->orderBy('id', 'DESC');
+                    $q->orderBy('project_problem_solution_detail', 'ASC');
                 },
                 'get_project_quantitative_indicators' => function ($q) {
-                    $q->orderBy('id', 'DESC');
+                    $q->orderBy('project_quantitative_indicators_value', 'ASC');
                 },
                 'get_project_qualitative_indicators' => function ($q) {
-                    $q->orderBy('id', 'DESC');
+                    $q->orderBy('project_qualitative_indicators_value', 'ASC');
                 },
                 'get_project_output' => function ($q) {
                     $q->selectRaw("*,
@@ -320,7 +377,7 @@ class project_controller extends Controller
                                 tbl_project_qualitative_indicators.id = tbl_project_output.indicators_id
                     )) AS indicators_unit,
                     (select count(*) from tbl_project_output_gallery where tbl_project_output_gallery.project_output_id = tbl_project_output.id) as total_gallery")
-                        ->orderBy('id', 'DESC');
+                        ->orderBy('project_output_detail', 'ASC');
                 },
                 'get_project_outcome' => function ($q) {
                     $q->selectRaw("*,
@@ -344,7 +401,7 @@ class project_controller extends Controller
                         WHERE
                             tbl_project_qualitative_indicators.id = tbl_project_outcome.indicators_id
                     ) ) AS indicators_value,
-                    IF (
+                    IF(indicators_id != 'N', IF (
                         (
                             tbl_project_outcome.indicators_type = 'quantitative'
                         ),
@@ -363,8 +420,8 @@ class project_controller extends Controller
                                 `tbl_project_qualitative_indicators`
                             WHERE
                                 tbl_project_qualitative_indicators.id = tbl_project_outcome.indicators_id
-                    )) AS indicators_unit")
-                        ->orderBy('id', 'DESC');
+                    )), 'ไม่ระบุ') AS indicators_unit")
+                        ->orderBy('project_outcome_detail', 'ASC');
                 },
                 'get_project_location' => function ($q) {
                     $q->orderBy('id', 'DESC');
@@ -373,6 +430,7 @@ class project_controller extends Controller
                     $q->orderBy('id', 'DESC');
                 },
                 'get_year_strategic_detail',
+                'get_project_tag',
             ]
         )->find($request->id);
         $i = 0;
@@ -392,6 +450,9 @@ class project_controller extends Controller
         $year_strategic = view_year_strategic::with('get_year_strategic_detail')->select('id', 'strategic_name', 'count_year_strategic_detail')->where('year_id', $project->year_id)->get();
         $budget = tbl_budget::all();
         $project_type = tbl_project_type::all();
+        // $project_sub_type = tbl_project_sub_type::all();
+        $project_sub_type = tbl_project_sub_type::selectRaw("*, 
+        (select count(id) from tbl_project_project_sub_type where tbl_project_project_sub_type.project_sub_type_id = tbl_project_sub_type.id  and tbl_project_project_sub_type.project_id = '{$request->id}') as project_count")->get();
         $province = view_location::selectRaw("DISTINCT(pcode), pname")->whereIn('pcode', ['67', '66'])->orderBy('pcode', 'ASC')->get();
         if (auth()->user()->faculty_id == 'other') {
             $project_main = view_project_main::all();
@@ -399,7 +460,7 @@ class project_controller extends Controller
             $project_main = view_project_main::where('faculty_id', auth()->user()->faculty_id)->get();
         }
 
-        return view('project_manage', compact('project', 'year_strategic', 'budget', 'project_type', 'province', 'cal', 'project_main'));
+        return view('project_manage', compact('project', 'year_strategic', 'budget', 'project_type', 'province', 'cal', 'project_main', 'project_sub_type'));
     }
 
 
@@ -411,6 +472,7 @@ class project_controller extends Controller
             'acode' => 'required',
             'tcode' => 'required',
             'mcode' => 'required',
+            // 'address' => 'required',
         ]);
 
 
@@ -422,6 +484,7 @@ class project_controller extends Controller
             $q->acode = $request->acode;
             $q->tcode = $request->tcode;
             $q->mcode = $request->mcode;
+            $q->address = $request->address;
             $q->save();
             DB::commit();
             return redirect()->back()->with(['message' => __('msg.msg_create_success')]);
@@ -445,6 +508,7 @@ class project_controller extends Controller
             'acode' => 'required',
             'tcode' => 'required',
             'mcode' => 'required',
+            // 'address' => 'required',
         ]);
 
         // dd($request->all());
@@ -455,6 +519,7 @@ class project_controller extends Controller
             $q->acode = $request->acode;
             $q->tcode = $request->tcode;
             $q->mcode = $request->mcode;
+            $q->address = $request->address;
             $q->save();
             DB::commit();
             return redirect()->back()->with(['message' => __('msg.msg_update_success')]);
@@ -643,12 +708,14 @@ class project_controller extends Controller
         $request->validate([
             'project_id' => 'required',
             'project_problem_detail' => 'required',
+            'project_problem_sub_detail' => 'required',
         ]);
 
         DB::beginTransaction();
         try {
             $q = new tbl_project_problem();
             $q->project_problem_detail = $request->project_problem_detail;
+            $q->project_problem_sub_detail = nl2br($request->project_problem_sub_detail);
             $q->project_id = $request->project_id;
             $q->save();
             DB::commit();
@@ -671,6 +738,7 @@ class project_controller extends Controller
             'id' => 'required',
             'project_id' => 'required',
             'project_problem_detail' => 'required',
+            'project_problem_sub_detail' => 'required',
         ]);
 
 
@@ -678,6 +746,7 @@ class project_controller extends Controller
         try {
             $q = tbl_project_problem::find($request->id);
             $q->project_problem_detail = $request->project_problem_detail;
+            $q->project_problem_sub_detail =    nl2br($request->project_problem_sub_detail);
             $q->project_id = $request->project_id;
             $q->save();
             DB::commit();
@@ -705,17 +774,46 @@ class project_controller extends Controller
         }
     }
 
+
+    public function manage_get_problem_summary(Request $request)
+    {
+        $q = tbl_project::select('project_problem_summary')->find($request->id);
+        return response()->json($q);
+    }
+
+    public function manage_problem_summary_update(Request $request)
+    {
+        $request->validate([
+            'project_id3' => 'required',
+            'project_problem_summary' => 'required',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $q = tbl_project::find($request->project_id3);
+            $q->project_problem_summary = nl2br($request->project_problem_summary);
+            $q->save();
+            DB::commit();
+            return redirect()->back()->with(['message' => __('msg.msg_update_success')]);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return back()->withError($e->getMessage())->withInput();
+        }
+    }
+
     public function manage_problem_solution_store(Request $request)
     {
         $request->validate([
             'project_id' => 'required',
             'project_problem_solution_detail' => 'required',
+            'project_problem_solution_sub_detail' => 'required',
         ]);
 
         DB::beginTransaction();
         try {
             $q = new tbl_project_problem_solution();
             $q->project_problem_solution_detail = $request->project_problem_solution_detail;
+            $q->project_problem_solution_sub_detail = nl2br($request->project_problem_solution_sub_detail);
             $q->project_id = $request->project_id;
             $q->save();
             DB::commit();
@@ -738,6 +836,7 @@ class project_controller extends Controller
             'id' => 'required',
             'project_id' => 'required',
             'project_problem_solution_detail' => 'required',
+            'project_problem_solution_sub_detail' => 'required',
         ]);
 
 
@@ -745,6 +844,7 @@ class project_controller extends Controller
         try {
             $q = tbl_project_problem_solution::find($request->id);
             $q->project_problem_solution_detail = $request->project_problem_solution_detail;
+            $q->project_problem_solution_sub_detail =   nl2br($request->project_problem_solution_sub_detail);
             $q->project_id = $request->project_id;
             $q->save();
             DB::commit();
@@ -769,6 +869,33 @@ class project_controller extends Controller
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
             return response()->json(['status' => 'error']);
+        }
+    }
+
+
+    public function manage_get_problem_solution_summary(Request $request)
+    {
+        $q = tbl_project::select('project_problem_solution_summary')->find($request->id);
+        return response()->json($q);
+    }
+
+    public function manage_problem_solution_summary_update(Request $request)
+    {
+        $request->validate([
+            'project_id4' => 'required',
+            'project_problem_solution_summary' => 'required',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $q = tbl_project::find($request->project_id4);
+            $q->project_problem_solution_summary = nl2br($request->project_problem_solution_summary);
+            $q->save();
+            DB::commit();
+            return redirect()->back()->with(['message' => __('msg.msg_update_success')]);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return back()->withError($e->getMessage())->withInput();
         }
     }
 
@@ -1028,6 +1155,7 @@ class project_controller extends Controller
         return response()->json($q);
     }
 
+
     public function manage_output_gallery_destroy(Request $request)
     {
         $request->validate([
@@ -1043,6 +1171,92 @@ class project_controller extends Controller
             $project_output = tbl_project_output_gallery::selectRaw("count(id) as count_id")->where('project_output_id', $request->project_output_id)->first();
             DB::commit();
             return response()->json(compact('project_output'));
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return response()->json(['status' => 'error']);
+        }
+    }
+
+    public function manage_output_detail_store(Request $request)
+    {
+        $request->validate([
+            'project_output_id2' => 'required',
+            'project_output_detail_produce' => 'required',
+            'project_output_detail_process' => 'required',
+            'project_output_detail_elevate' => 'required',
+            'project_output_detail_image' => 'required',
+        ]);
+        // dd($request->all());
+
+        DB::beginTransaction();
+        try {
+            $q = new tbl_project_output_detail();
+            $q->project_output_detail_produce = $request->project_output_detail_produce;
+            $q->project_output_detail_elevate = nl2br($request->project_output_detail_elevate);
+            $q->project_output_detail_process = nl2br($request->project_output_detail_process);
+            if ($request->has('project_output_detail_image')) {
+                $path =
+                    $request->file('project_output_detail_image')->store('file-output-detail');
+                $q->project_output_detail_image = $path;
+            }
+            $q->project_output_id = $request->project_output_id2;
+            $q->save();
+            DB::commit();
+            return redirect()->back()->with(['message' => __('msg.msg_create_success')]);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return back()->withError($e->getMessage())->withInput();
+        }
+    }
+
+
+    public function manage_output_detail_edit(Request $request)
+    {
+        $q = tbl_project_output_detail::where('id', $request->id)->first();
+        return response()->json($q);
+    }
+
+    public function manage_output_detail_update(Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
+            'project_output_detail_produce' => 'required',
+            'project_output_detail_process' => 'required',
+            'project_output_detail_elevate' => 'required',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $q = tbl_project_output_detail::find($request->id);
+            $q->project_output_detail_produce = $request->project_output_detail_produce;
+            $q->project_output_detail_elevate = nl2br($request->project_output_detail_elevate);
+            $q->project_output_detail_process = nl2br($request->project_output_detail_process);
+            if ($request->has('project_output_detail_image')) {
+                $path =
+                    $request->file('project_output_detail_image')->store('file-output-detail');
+                $q->project_output_detail_image = $path;
+            }
+            $q->save();
+            DB::commit();
+            return redirect()->back()->with(['message' => __('msg.msg_update_success')]);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return back()->withError($e->getMessage())->withInput();
+        }
+    }
+
+    public function manage_output_detail_destroy(Request $request)
+    {
+        $request->validate([
+            'id' => 'required'
+        ]);
+        DB::beginTransaction();
+        try {
+            $q = tbl_project_output_detail::find($request->id);
+            Storage::delete($q->project_output_detail_image);
+            $q->delete();
+            DB::commit();
+            return response()->json(['status' => 'success']);
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
             return response()->json(['status' => 'error']);

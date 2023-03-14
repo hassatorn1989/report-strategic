@@ -18,10 +18,12 @@ return [
     'menu_setting_budget' => 'งบประมาณ',
     'menu_setting_user' => 'ผู้ใช้งาน',
     'menu_setting_project_type' => 'ประเภทโครงการ',
+    'menu_setting_project_sub_type' => 'ประเภทย่อยโครงการ',
     'menu_result_analysis' => 'บันทึกผลการวิเคราะห์',
     'menu_project' => 'บันทึกผลโครงการ',
     'menu_work' => 'บันทึกผลกระบวนการปฏิบัติงาน',
     'menu_driven' => 'บันทึกผลการขับเคลื่อนยุทธศาสตร์',
+    'menu_manage_sub_strategic' => 'กำหนดกลุ่มย่อยยุทธศาสตร์',
     'menu_change_password' => 'เปลี่ยนรหัสผ่าน',
     'menu_logout' => 'ออกจากระบบ',
 
@@ -55,6 +57,9 @@ return [
     'action' => 'จัดการ',
     'btn_action' => 'จัดการ',
     'btn_manage_project' => 'จัดการข้อมูลโครงการ',
+    'btn_manage_sub_strategic' => 'จัดการยุทธศาสตร์ย่อย',
+    'btn_problem_summary' =>  'สรุปปัญหา',
+    'btn_problem_solution_summary'  => 'สรุปขั้นตอนการทำงาน/การแก้ไขปัญหา',
     'placeholder' => 'กรุณากรอกข้อมูล',
     'select' => '--กรุณาเลือก--',
 
@@ -76,6 +81,10 @@ return [
     'title_edit_strategic_of_year' => 'แก้ไขยุทธศาสตร์ปีงบประมาณ',
     'flag_sub' => 'กำหนดกลุ่มย่อยยุทธศาสตร์',
     'sub_strategic' => 'กลุ่มย่อยยุทธศาสตร์',
+    'flag_sub_strategic' => 'กำหนดกลุ่มย่อยยุทธศาสตร์',
+    'flag_sub_strategic_yes' => 'กำหนด',
+    'flag_sub_strategic_no' => 'ไม่กำหนด',
+    'year_strategic_detail_detail' => 'รายละเอียดกลุ่มย่อยยุทธศาสตร์',
 
     'title_add_faculty' => 'เพิ่มหน่วยงาน',
     'title_edit_faculty' => 'แก้ไขหน่วยงาน',
@@ -95,6 +104,10 @@ return [
     'filter_project_type_name' =>  'ค้นหาประเภทโครงการ',
     'project_type_name' => 'ประเภทโครงการ',
 
+    'title_add_project_sub_type' => 'เพิ่มประเภทย่อยโครงการ',
+    'title_edit_project_sub_type' => 'แก้ไขประเภทย่อยโครงการ',
+    'filter_project_sub_type_name' =>  'ค้นหาประเภทย่อยโครงการ',
+    'project_sub_type_name' => 'ประเภทย่อยโครงการ',
 
     'title_add_project_main_type' => 'เพิ่มประเภทโครงการหลัก',
     'title_edit_project_main_type' => 'แก้ไขประเภทโครงการหลัก',
@@ -130,6 +143,7 @@ return [
     'title_add_project' => 'เพิ่มโครงการ',
     'title_edit_project' => 'แก้ไขโครงการ',
     'filter_project_name' =>  'ค้นหาโครงการ',
+    'project_code' => 'รหัสโครงการ',
     'project_name' => 'โครงการ',
     'project_budget' => 'งบประมาณที่ได้รับ',
     'project_period' =>  'ระยะเวลาดำเนินโครงการ',
@@ -139,6 +153,8 @@ return [
     'project_status_draff' => 'ร่าง',
     'project_status_publish' => 'เผยแพร่',
     'project_status_unpublish' => 'ยกเลิกเผยแพร่',
+    'project_problem_summary' => 'สรุปปัญหา',
+    'project_problem_solution_summary' => 'สรุปขั้นตอนการทำงาน/การแก้ไขปัญหา',
     'project_status' => 'สถานะ',
     'project_percentage' => 'ความคืบหน้า',
     'project_indicator' => 'ตัวชี้วัด',
@@ -161,6 +177,8 @@ return [
 
     'project_target_group_detail' => 'รายละเอียดกลุ่มเป้าหมาย',
     'project_problem_detail' => 'รายละเอียดปัญหา',
+    'project_problem_sub_detail' =>  'รายละเอียดปัญหาย่อย',
+    'project_problem_solution_sub_detail' => 'รายละเอียดวิธีการแก้ปัญหาย่อย', 
     'project_problem_solution_detail' => 'รายละเอียดวิธีการแก้ปัญหา',
     'project_quantitative_indicators_value' => 'ค่าตัวชี้วัดเชิงปริมาณ',
     'project_quantitative_indicators_unit'  => 'หน่วยวัด',
@@ -169,6 +187,10 @@ return [
     'project_output_detail' => 'รายละเอียดผลผลิต',
     'project_output_upgrading' =>  'การยกระดับ',
     'project_output_detail_gallery' => 'อัลบั้มภาพผลผลิต',
+    'project_output_detail_process'  => 'กระบวนการ',
+    'project_output_detail_produce'  => 'ผลผลิต',
+    'project_output_detail_elevate'  => 'การยกระดับ',
+    'project_output_detail_image'  => 'ภาพ',
     'project_outcome_detail' => 'รายละเอียดผลลัพธ์',
     'project_impact_detail' => 'รายละเอียดผลกระทบ',
 
@@ -187,6 +209,9 @@ return [
     'driven_type'  => 'ประเภท',
     'year_compare' => 'ปีงบประมาณเปรียบเทียบ',
     'year_now' => 'ปีงบประมาณปัจจุบัน',
+
+    'title_add_year_sub_strategic' => 'เพิ่มกลุ่มย่อยยุทธศาสตร์',
+    'title_edit_year_sub_strategic' => 'แก้ไขกลุ่มย่อยยุทธศาสตร์',
 
     'swot_title' => 'SWOT Analysis',
     'swot_strength' => 'จุดแข็ง (Strength)',
@@ -225,4 +250,6 @@ return [
     'menu2_report' => 'รายงาน',
     'menu2_report_project_stractegic' => 'รายงานโครงการตามยุทธศาสตร์การยกระดับคุณภาพการศึกษา',
     'menu2_report_project' => 'รายงานโครงการตามยุทธศาสตร์',
+
+    'address' => 'หมู่ที่',
 ];

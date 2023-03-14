@@ -2,6 +2,9 @@
 @section('title', __('msg.title_manage_project'))
 @push('css')
     <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+    <link rel="stylesheet" href="{{ url('resources/assets') }}/plugins/taginput/tagsinput.css">
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="{{ url('resources/assets') }}/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
     <style>
         .dropzone {
             border: 2px dashed #CFCFCF;
@@ -32,6 +35,10 @@
             };
         @endif
         var project_id = '{{ $project->id }}';
+    </script>
+    <script src="{{ url('resources/assets') }}/plugins/taginput/tagsinput.js"></script>
+    <!-- Bootstrap4 Duallistbox -->
+    <script src="{{ url('resources/assets') }}/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js">
     </script>
     <script src="{{ url('resources/assets') }}/app/project_manage.js?q={{ time() }}"></script>
 @endpush
@@ -130,11 +137,12 @@
                                             @php
                                                 $flag_update_data = false;
                                             @endphp
-                                            @if ($project->project_name != '' &&
-                                                $project->project_period_start != '' &&
-                                                $project->project_period_end != '' &&
-                                                $project->project_type_id != '' &&
-                                                $project->project_budget != '')
+                                            @if (
+                                                $project->project_name != '' &&
+                                                    $project->project_period_start != '' &&
+                                                    $project->project_period_end != '' &&
+                                                    $project->project_type_id != '' &&
+                                                    $project->project_budget != '')
                                                 @php
                                                     $flag_update_data = true;
                                                 @endphp
@@ -162,8 +170,8 @@
                                                     ? '<small class="text-danger"><i class="fas fa-exclamation-circle"></i></small>'
                                                     : '<small class="text-success"><i class="fas fa-check-circle"></i></small>' !!}
                                             </a>
-                                            <a class="nav-link" id="vert-tabs-project-target-group-tab" data-toggle="pill"
-                                                href="#vert-tabs-project-target-group" role="tab"
+                                            <a class="nav-link" id="vert-tabs-project-target-group-tab"
+                                                data-toggle="pill" href="#vert-tabs-project-target-group" role="tab"
                                                 aria-controls="vert-tabs-project-target-group"
                                                 aria-selected="false">{{ __('msg.tab_project_target_group') }}
                                                 {!! count($project->get_project_target_group) == 0
@@ -239,9 +247,22 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label
-                                                                    for="project_name">{{ __('msg.project_name') }}</label>
+                                                                    for="project_code">{{ __('msg.project_code') }}</label>
                                                                 <input type="hidden" name="id" id="id"
                                                                     value="{{ $project->id }}">
+                                                                <input type="text" class="form-control"
+                                                                    name="project_code" id="project_code"
+                                                                    placeholder="{{ __('msg.placeholder') }}"
+                                                                    autocomplete="off"
+                                                                    value="{{ $project->project_code }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="project_name">{{ __('msg.project_name') }}</label>
                                                                 <input type="text" class="form-control"
                                                                     name="project_name" id="project_name"
                                                                     placeholder="{{ __('msg.placeholder') }}"
@@ -263,6 +284,23 @@
                                                                             <option value="{{ $item->id }}"
                                                                                 {{ $item->id == $project->project_type_id ? 'selected' : '' }}>
                                                                                 {{ $item->project_type_name }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="project_sub_type_id">{{ __('msg.project_sub_type_name') }}</label>
+                                                                <select class="duallistbox" multiple="multiple"
+                                                                    name="project_sub_type_id[]" id="project_sub_type_id">
+                                                                    {{-- <option value="">{{ __('msg.select') }}</option> --}}
+                                                                    @if (!empty($project_sub_type))
+                                                                        @foreach ($project_sub_type as $item)
+                                                                            <option value="{{ $item->id }}"
+                                                                                {{ $item->project_count > 0 ? 'selected' : '' }}>
+                                                                                {{ $item->project_sub_type_name }}</option>
                                                                         @endforeach
                                                                     @endif
                                                                 </select>
@@ -293,6 +331,26 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+
+                                                    {{-- <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="project_tag">{{ __('msg.project_tag') }}</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="project_tag" id="project_tag"
+                                                                    data-role="tagsinput"
+                                                                    value="@if (count($project->get_project_tag) > 0) @foreach ($project->get_project_tag as $key => $item)
+                                                            {{ $item->project_tag }}
+                                                            @if (count($project->get_project_tag) - 1 != $key)
+                                                                , @endif
+                                                        @endforeach
+                                                    @endif"
+                                                                    autocomplete="off">
+                                                            </div>
+                                                        </div>
+                                                    </div> --}}
                                                     {{-- <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="form-group">
@@ -415,6 +473,7 @@
                                                     <thead class="thead-light">
                                                         <tr>
                                                             <th>#</th>
+                                                            <th>{{ __('msg.address') }}</th>
                                                             <th>{{ __('msg.mname') }}</th>
                                                             <th>{{ __('msg.tname') }}</th>
                                                             <th>{{ __('msg.aname') }}</th>
@@ -435,6 +494,7 @@
                                                             @foreach ($project->get_project_location as $key => $item)
                                                                 <tr>
                                                                     <td scope="row">{{ $key + 1 }}</td>
+                                                                    <td>{{ $item->address }}</td>
                                                                     <td>{{ $item->mname }}</td>
                                                                     <td>{{ $item->tname }}</td>
                                                                     <td>{{ $item->aname }}</td>
@@ -547,36 +607,17 @@
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-problem" role="tabpanel"
                                                 aria-labelledby="vert-tabs-project-problem-tab">
-                                                <form action="{{ route('project.manage.problem-store') }}"
-                                                    method="post" id="form-project-problem">
-                                                    @csrf
-                                                    <div class="row">
-                                                        <div class="col-md-10">
-                                                            <div class="form-group">
-                                                                <input type="hidden" name="id" id="id">
-                                                                <input type="hidden" name="project_id" id="project_id"
-                                                                    value="{{ Request::segment(4) }}">
-                                                                <input type="text" class="form-control"
-                                                                    name="project_problem_detail"
-                                                                    id="project_problem_detail"
-                                                                    placeholder="{{ __('msg.placeholder') . __('msg.project_problem_detail') }}"
-                                                                    autocomplete="off" value="">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <button type="submit" class="btn btn-primary btn-block"
-                                                                id="btn_save_project_problem"><i class="fas fa-save"></i>
-                                                                {{ __('msg.btn_save') }}</button>
-                                                        </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-4 offset-md-8">
+                                                        <button type="button" class="btn btn-primary btn-block"
+                                                            data-toggle="modal"
+                                                            data-target="#modal-project-problem-summary"
+                                                            onclick="get_problem_summary('{{ Request::segment(4) }}')">
+                                                            {{ __('msg.btn_problem_summary') }}
+                                                        </button>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <small class="text-danger">{{ __('msg.msg_mode') }} :
-                                                                <u><span
-                                                                        id="project_problem_mode">เพิ่มข้อมูล</span></u></small>
-                                                        </div>
-                                                    </div>
-                                                </form>
+                                                </div>
+
                                                 <table class="table table-hover table-sm table-striped">
                                                     <thead class="thead-light">
                                                         <tr>
@@ -584,8 +625,9 @@
                                                             <th>{{ __('msg.project_problem_detail') }}</th>
                                                             <th>
                                                                 <div style="text-align: center;">
-                                                                    <a href="#"
-                                                                        onclick="add_data_project_problem()"><i
+                                                                    <a href="#" onclick="add_data_project_problem()"
+                                                                        data-toggle="modal"
+                                                                        data-target="#modal-problem"><i
                                                                             class="fa fa-plus-circle"></i>
                                                                         {{ __('msg.btn_short_add') }}</a>
                                                                 </div>
@@ -597,10 +639,16 @@
                                                             @foreach ($project->get_project_problem as $key => $item)
                                                                 <tr>
                                                                     <td scope="row">{{ $key + 1 }}</td>
-                                                                    <td>{{ $item->project_problem_detail }}</td>
+                                                                    <td>{{ $item->project_problem_detail }} <br>
+                                                                        <small>
+                                                                            {!! $item->project_problem_sub_detail !!}
+                                                                        </small>
+                                                                    </td>
                                                                     <td width="20%" align="center">
                                                                         <button
                                                                             class="btn btn-warning btn-sm waves-effect waves-light"
+                                                                            data-toggle="modal"
+                                                                            data-target="#modal-problem"
                                                                             onclick="edit_data_project_problem('{{ $item->id }}')">
                                                                             <i class="fas fa-edit"></i>
                                                                         </button>
@@ -622,40 +670,23 @@
                                                         @endif
                                                     </tbody>
                                                 </table>
+                                                @if ($project->project_problem_summary != '')
+                                                    <h5><u>สรุปปัญหา</u></h5>
+                                                    {!! $project->project_problem_summary !!}
+                                                @endif
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-problem-solution"
                                                 role="tabpanel" aria-labelledby="vert-tabs-project-problem-solution-tab">
-                                                <form action="{{ route('project.manage.problem-solution-store') }}"
-                                                    method="post" id="form-project-problem-solution">
-                                                    @csrf
-                                                    <div class="row">
-                                                        <div class="col-md-10">
-                                                            <div class="form-group">
-                                                                <input type="hidden" name="id" id="id">
-                                                                <input type="hidden" name="project_id" id="project_id"
-                                                                    value="{{ Request::segment(4) }}">
-                                                                <input type="text" class="form-control"
-                                                                    name="project_problem_solution_detail"
-                                                                    id="project_problem_solution_detail"
-                                                                    placeholder="{{ __('msg.placeholder') . __('msg.project_problem_solution_detail') }}"
-                                                                    autocomplete="off" value="">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <button type="submit" class="btn btn-primary btn-block"
-                                                                id="btn_save_project_problem_solution"><i
-                                                                    class="fas fa-save"></i>
-                                                                {{ __('msg.btn_save') }}</button>
-                                                        </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-4 offset-md-8">
+                                                        <button type="button" class="btn btn-primary btn-block"
+                                                            data-toggle="modal"
+                                                            data-target="#modal-project-problem-solution-summary"
+                                                            onclick="get_problem_solution_summary('{{ Request::segment(4) }}')">
+                                                            {{ __('msg.btn_problem_solution_summary') }}
+                                                        </button>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <small class="text-danger">{{ __('msg.msg_mode') }} :
-                                                                <u><span
-                                                                        id="project_problem_solution_mode">เพิ่มข้อมูล</span></u></small>
-                                                        </div>
-                                                    </div>
-                                                </form>
+                                                </div>
                                                 <table class="table table-hover table-sm table-striped">
                                                     <thead class="thead-light">
                                                         <tr>
@@ -663,7 +694,8 @@
                                                             <th>{{ __('msg.project_problem_solution_detail') }}</th>
                                                             <th>
                                                                 <div style="text-align: center;">
-                                                                    <a href="#"
+                                                                    <a href="#" data-toggle="modal"
+                                                                        data-target="#modal-problem-solution"
                                                                         onclick="add_data_project_problem_solution()"><i
                                                                             class="fa fa-plus-circle"></i>
                                                                         {{ __('msg.btn_short_add') }}</a>
@@ -676,10 +708,16 @@
                                                             @foreach ($project->get_project_problem_solution as $key => $item)
                                                                 <tr>
                                                                     <td scope="row">{{ $key + 1 }}</td>
-                                                                    <td>{{ $item->project_problem_solution_detail }}</td>
+                                                                    <td>{{ $item->project_problem_solution_detail }}<br>
+                                                                        <small>
+                                                                            {!! $item->project_problem_solution_sub_detail !!}
+                                                                        </small>
+                                                                    </td>
                                                                     <td width="20%" align="center">
                                                                         <button
                                                                             class="btn btn-warning btn-sm waves-effect waves-light"
+                                                                            data-toggle="modal"
+                                                                            data-target="#modal-problem-solution"
                                                                             onclick="edit_data_project_problem_solution('{{ $item->id }}')">
                                                                             <i class="fas fa-edit"></i>
                                                                         </button>
@@ -701,6 +739,10 @@
                                                         @endif
                                                     </tbody>
                                                 </table>
+                                                @if ($project->project_problem_solution_summary != '')
+                                                    <h5><u>สรุปขั้นตอนการทำงาน/การแก้ไขปัญหา</u></h5>
+                                                    {!! $project->project_problem_solution_summary !!}
+                                                @endif
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-quantitative-indicators"
                                                 role="tabpanel"
@@ -841,7 +883,7 @@
                                                 </form>
                                                 <table class="table table-hover table-sm table-striped">
                                                     <thead class="thead-light">
-                                                        <tr> 
+                                                        <tr>
                                                             <th>#</th>
                                                             <th>{{ __('msg.project_qualitative_indicators_value') }}</th>
                                                             <th>{{ __('msg.project_qualitative_indicators_unit') }}</th>
@@ -891,7 +933,7 @@
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-output" role="tabpanel"
                                                 aria-labelledby="vert-tabs-project-output-tab">
-                                                <table class="table table-hover table-sm table-striped">
+                                                <table class="table table-sm table-striped">
                                                     <thead class="thead-light">
                                                         <tr>
                                                             <th>#</th>
@@ -919,6 +961,7 @@
                                                                             </u> : {{ $item->indicators_value }}
                                                                             ({{ $item->indicators_unit }})
                                                                         </small>
+
                                                                     </td>
                                                                     <td>
                                                                         <span id="count_image_{{ $item->id }}">
@@ -934,6 +977,13 @@
                                                                         </span>
                                                                     </td>
                                                                     <td width="20%" align="center">
+                                                                        <button
+                                                                            class="btn btn-primary btn-sm waves-effect waves-light"
+                                                                            data-toggle="modal"
+                                                                            data-target="#modal-project-output-detail"
+                                                                            onclick="manage_project_output_detail('{{ $item->id }}', '{{ $item->project_output_detail }}')">
+                                                                            <i class="fas fa-plus-circle"></i>
+                                                                        </button>
                                                                         <button
                                                                             class="btn btn-info btn-sm waves-effect waves-light"
                                                                             data-toggle="modal"
@@ -954,6 +1004,54 @@
                                                                         </button>
                                                                     </td>
                                                                 </tr>
+                                                                @if (count($item->get_project_output_detail) > 0)
+                                                                    @foreach ($item->get_project_output_detail as $item2)
+                                                                        <tr>
+                                                                            <td>
+                                                                            </td>
+                                                                            <td colspan="3">
+                                                                                <table class="table">
+                                                                                    <thead>
+                                                                                        <th>ผลิตผล</th>
+                                                                                        <th>การยกระดับ</th>
+                                                                                        <th>กระบวนการ</th>
+                                                                                        <th></th>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        <tr>
+                                                                                            <td>{!! $item2->project_output_detail_produce !!}
+                                                                                            <td>{!! $item2->project_output_detail_elevate !!}
+                                                                                            <td>{!! $item2->project_output_detail_process !!}
+                                                                                            </td>
+                                                                                            <td style="width: 100px">
+                                                                                                <a href="#!"
+                                                                                                    data-toggle="modal"
+                                                                                                    data-target="#modal-image"
+                                                                                                    class="text-primary"
+                                                                                                    onclick="show_image('{{ $item2->project_output_detail_image }}')">
+                                                                                                    <i
+                                                                                                        class="fa fa-image"></i>
+                                                                                                </a>&nbsp;
+                                                                                                <a href="#!"
+                                                                                                    class="text-warning"
+                                                                                                    data-toggle="modal"
+                                                                                                    onclick="manage_project_output_detail_edit('{{ $item2->id }}', '{{ $item->project_output_detail }}')"
+                                                                                                    data-target="#modal-project-output-detail">
+                                                                                                    <i
+                                                                                                        class="fa fa-edit"></i>
+                                                                                                </a>&nbsp;
+                                                                                                <a href="#!"
+                                                                                                    onclick="manage_project_output_detail_destroy('{{ $item2->id }}')"
+                                                                                                    class="text-danger"><i
+                                                                                                        class="fa fa-trash"></i></a>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                @endif
                                                             @endforeach
                                                         @else
                                                             <tr>
@@ -993,7 +1091,7 @@
                                                                         <small><u>
                                                                                 {{ $item->indicators_type == 'qualitative' ? __('msg.tab_project_qualitative_indicators') : __('msg.tab_project_quantitative_indicators') }}
                                                                             </u> : {{ $item->indicators_value }}
-                                                                            ({{ $item->indicators_unit }})
+                                                                            ({{ $item->indicators_id == 'N' ? 'ไม่ระบุ' : $item->indicators_unit }})
                                                                         </small>
                                                                     </td>
                                                                     <td width="20%" align="center">
@@ -1196,6 +1294,11 @@
                                 <option value="">{{ __('msg.select') }}</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="address">{{ __('msg.address') }}</label>
+                            <input type="text" class="form-control" name="address" id="address"
+                                placeholder="{{ __('msg.placeholder') }}" autocomplete="off">
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="btn_save_project_location"><i
@@ -1366,6 +1469,273 @@
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-project-output-detail" tabindex="-1" role="dialog"
+        aria-labelledby="modelTitleId" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="" method="post" id="form-project-output-detail" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="id">
+                        <input type="hidden" name="project_output_id2" id="project_output_id2">
+                        <div class="form-group">
+                            <label
+                                for="project_output_detail_produce">{{ __('msg.project_output_detail_produce') }}</label>
+                            <input type="text" class="form-control" name="project_output_detail_produce"
+                                id="project_output_detail_produce" placeholder="{{ __('msg.placeholder') }}">
+                        </div>
+                        <div class="form-group">
+                            <label
+                                for="project_output_detail_elevate">{{ __('msg.project_output_detail_elevate') }}</label>
+                            <textarea class="form-control" name="project_output_detail_elevate" id="project_output_detail_elevate"
+                                rows="3" placeholder="{{ __('msg.placeholder') }}"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label
+                                for="project_output_detail_process">{{ __('msg.project_output_detail_process') }}</label>
+                            <textarea class="form-control" name="project_output_detail_process" id="project_output_detail_process"
+                                rows="3" placeholder="{{ __('msg.placeholder') }}"></textarea>
+                        </div>
+
+                        <div class="show_image_output_detail">
+                            <img src="" class="img-fluid" id="project_output_detail_image_show"
+                                alt="">
+                        </div>
+                        <div class="form-group">
+                            <label for="project_output_detail_image">{{ __('msg.project_output_detail_image') }}</label>
+                            <input type="file" class="form-control-file" name="project_output_detail_image"
+                                id="project_output_detail_image" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="btn_save_project_outout_detail"><i
+                                class="fas fa-save"></i>
+                            {{ __('msg.btn_save') }}</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> <i
+                                class="fas fa-times-circle"></i>
+                            {{ __('msg.btn_close') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-image" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">รูปภาพ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="" class="img-fluid" id="image_show" alt="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"> <i
+                            class="fas fa-times-circle"></i>
+                        {{ __('msg.btn_close') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    {{-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-project-problem-summary">
+      Launch demo modal
+    </button> --}}
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-project-problem-summary" tabindex="-1" role="dialog"
+        aria-labelledby="modelTitleId" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{{ route('project.manage.get-problem-summary-update') }}" method="post"
+                    id="form-project-problem-summary">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ __('msg.btn_problem_summary') }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="project_id3" id="project_id3"
+                            value="{{ Request::segment(4) }}">
+                        <div class="form-group">
+                            <label for="project_problem_summary">{{ __('msg.project_problem_summary') }}</label>
+                            <textarea class="form-control" name="project_problem_summary" id="project_problem_summary" rows="3"
+                                placeholder="{{ __('msg.placeholder') }}"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="btn_save_problem_summary"><i
+                                class="fas fa-save"></i>
+                            {{ __('msg.btn_save') }}</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> <i
+                                class="fas fa-times-circle"></i>
+                            {{ __('msg.btn_close') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    {{--
+                                                    <div class="row">
+                                                        <div class="col-md-10">
+                                                            
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button type="submit" class="btn btn-primary btn-block"
+                                                                id="btn_save_project_problem"><i class="fas fa-save"></i>
+                                                                {{ __('msg.btn_save') }}</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <small class="text-danger">{{ __('msg.msg_mode') }} :
+                                                                <u><span
+                                                                        id="project_problem_mode">เพิ่มข้อมูล</span></u></small>
+                                                        </div>
+                                                    </div>
+                                                </form> --}}
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-problem" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <form action="{{ route('project.manage.problem-store') }}" method="post" id="form-project-problem">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="hidden" name="id" id="id">
+                            <input type="hidden" name="project_id" id="project_id"
+                                value="{{ Request::segment(4) }}">
+                            <label for="project_problem_detail">{{ __('msg.project_problem_detail') }}</label>
+                            <input type="text" class="form-control" name="project_problem_detail"
+                                id="project_problem_detail"
+                                placeholder="{{ __('msg.placeholder') . __('msg.project_problem_detail') }}"
+                                autocomplete="off" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="project_problem_sub_detail">{{ __('msg.project_problem_sub_detail') }}</label>
+                            <textarea class="form-control" name="project_problem_sub_detail" id="project_problem_sub_detail" rows="5"
+                                placeholder="{{ __('msg.placeholder') }}"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="btn_save_project_problem"><i
+                                class="fas fa-save"></i>
+                            {{ __('msg.btn_save') }}</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> <i
+                                class="fas fa-times-circle"></i>
+                            {{ __('msg.btn_close') }}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modal-project-problem-solution-summary" tabindex="-1" role="dialog"
+        aria-labelledby="modelTitleId" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{{ route('project.manage.get-problem-solution-summary-update') }}" method="post"
+                    id="form-project-problem-solution-summary">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ __('msg.btn_problem_solution_summary') }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="project_id4" id="project_id4"
+                            value="{{ Request::segment(4) }}">
+                        <div class="form-group">
+                            <label for="project_problem_solution_summary">{{ __('msg.project_problem_solution_summary') }}</label>
+                            <textarea class="form-control" name="project_problem_solution_summary" id="project_problem_solution_summary" rows="3"
+                                placeholder="{{ __('msg.placeholder') }}"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="btn_save_problem_solution_summary"><i
+                                class="fas fa-save"></i>
+                            {{ __('msg.btn_save') }}</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> <i
+                                class="fas fa-times-circle"></i>
+                            {{ __('msg.btn_close') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-problem-solution" tabindex="-1" role="dialog"
+        aria-labelledby="modelTitleId" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <form action="{{ route('project.manage.problem-store') }}" method="post"
+                id="form-project-problem-solution">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="hidden" name="id" id="id">
+                            <input type="hidden" name="project_id" id="project_id"
+                                value="{{ Request::segment(4) }}">
+                            <label
+                                for="project_problem_solution_detail">{{ __('msg.project_problem_solution_detail') }}</label>
+                            <input type="text" class="form-control" name="project_problem_solution_detail"
+                                id="project_problem_detail"
+                                placeholder="{{ __('msg.placeholder') . __('msg.project_problem_solution_detail') }}"
+                                autocomplete="off" value="">
+                        </div>
+                        <div class="form-group">
+                            <label
+                                for="project_problem_solution_sub_detail">{{ __('msg.project_problem_solution_sub_detail') }}</label>
+                            <textarea class="form-control" name="project_problem_solution_sub_detail" id="project_problem_solution_sub_detail"
+                                rows="5" placeholder="{{ __('msg.placeholder') }}"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="btn_save_project_problem_solution"><i
+                                class="fas fa-save"></i>
+                            {{ __('msg.btn_save') }}</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> <i
+                                class="fas fa-times-circle"></i>
+                            {{ __('msg.btn_close') }}</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 @endsection

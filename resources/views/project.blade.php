@@ -1,6 +1,9 @@
 @extends('layouts.layout')
 @section('title', __('msg.menu_project'))
 @push('css')
+    <link rel="stylesheet" href="{{ url('resources/assets') }}/plugins/taginput/tagsinput.css">
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="{{ url('resources/assets') }}/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
 @endpush
 
 @push('script')
@@ -11,6 +14,10 @@
         };
         var project_main_id = '{{ Request::segment(3) }}';
     </script>
+    <script src="{{ url('resources/assets') }}/plugins/taginput/tagsinput.js"></script>
+
+    <!-- Bootstrap4 Duallistbox -->
+    <script src="{{ url('resources/assets') }}/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
     <script src="{{ url('resources/assets') }}/app/project.js?q={{ time() }}"></script>
 @endpush
 
@@ -27,7 +34,8 @@
                             <li class="breadcrumb-item"><a
                                     href="{{ route('dashboard.index') }}">{{ __('msg.menu_dashboard') }}</a></li>
                             <li class="breadcrumb-item"><a
-                                    href="{{ route('setting-project.project-main.index') }}">{{ __('msg.menu_setting_project_main') }}</a></li>
+                                    href="{{ route('setting-project.project-main.index') }}">{{ __('msg.menu_setting_project_main') }}</a>
+                            </li>
                             <li class="breadcrumb-item active">
                                 {{ __('msg.menu_project') . __('msg.year_name') . ' ' . $year->year_name }}</li>
                         </ol>
@@ -77,8 +85,9 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th width="5%">#</th>
+                                            <th width="15%">{{ __('msg.project_code') }}</th>
                                             <th width="30%">{{ __('msg.project_name') }}</th>
-                                            <th width="20%">{{ __('msg.project_status') }}</th>
+                                            <th width="10%">{{ __('msg.project_status') }}</th>
                                             <th width="20%">{{ __('msg.project_percentage') }}</th>
                                             <th width="25%">{{ __('msg.action') }}</th>
                                         </tr>
@@ -120,10 +129,16 @@
                             <label for="year_name">{{ __('msg.year_name') }}</label>
                             <input type="hidden" name="id" id="id">
                             <input type="hidden" name="year_id" id="year_id" value="{{ $year->id }}">
-                            <input type="hidden" name="project_main_id" id="project_main_id" value="{{ Request::segment(3) }}">
+                            <input type="hidden" name="project_main_id" id="project_main_id"
+                                value="{{ Request::segment(3) }}">
                             <input type="text" class="form-control" name="year_name" id="year_name"
                                 placeholder="{{ __('msg.placeholder') }}" autocomplete="off"
                                 value="{{ $year->year_name }}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="project_code">{{ __('msg.project_code') }}</label>
+                            <input type="text" class="form-control" name="project_code" id="project_code"
+                                placeholder="{{ __('msg.placeholder') }}" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label for="project_name">{{ __('msg.project_name') }}</label>
@@ -132,17 +147,33 @@
                         </div>
                         @if (auth()->user()->user_role == 'admin')
                             <div class="form-group">
-                            <label for="faculty_id">{{ __('msg.faculty_name') }}</label>
-                            <select class="custom-select" name="faculty_id" id="faculty_id">
-                                <option value="">{{ __('msg.select') }}</option>
-                                @if (!empty($faculty))
-                                    @foreach ($faculty as $item)
-                                        <option value="{{ $item->id }}">{{ $item->faculty_name }}</option>
+                                <label for="faculty_id">{{ __('msg.faculty_name') }}</label>
+                                <select class="custom-select" name="faculty_id" id="faculty_id">
+                                    <option value="">{{ __('msg.select') }}</option>
+                                    @if (!empty($faculty))
+                                        @foreach ($faculty as $item)
+                                            <option value="{{ $item->id }}">{{ $item->faculty_name }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        @endif
+                        <div class="form-group">
+                            <label for="project_sub_type_id">{{ __('msg.project_sub_type_name') }}</label>
+                            <select class="duallistbox" multiple="multiple" name="project_sub_type_id" id="project_sub_type_id">
+                                {{-- <option value="">{{ __('msg.select') }}</option> --}}
+                                @if (!empty($project_sub_type))
+                                    @foreach ($project_sub_type as $item)
+                                        <option value="{{ $item->id }}">{{ $item->project_sub_type_name }}</option>
                                     @endforeach
                                 @endif
                             </select>
                         </div>
-                        @endif
+                        {{-- <div class="form-group">
+                            <label for="project_tag">{{ __('msg.project_tag') }}</label>
+                            <input type="text" class="form-control" name="project_tag" id="project_tag"
+                                data-role="tagsinput" value="" autocomplete="off">
+                        </div> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="btn_save"><i class="fas fa-save"></i>

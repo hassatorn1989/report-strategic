@@ -18,6 +18,7 @@ var table = $("#example1").DataTable({
         { data: null, sortable: false, searchable: false, className: "text-center" },
         { data: "strategic_name", name: "strategic_name" },
         { data: "strategic_detail", name: "strategic_detail" },
+        { data: "flag_sub_strategic", name: "flag_sub_strategic" },
         { data: "action", name: "action", orderable: false, searchable: false, className: "text-center" }
     ],
     fnRowCallback: function (nRow, aData, iDisplayIndex) {
@@ -105,29 +106,29 @@ function edit_data(id) {
             console.log(response);
             $('input[name="id"]').val(response.id);
             $('select[name="strategic_id"]').val(response.strategic_id);
+            $('input[name="flag_sub"]').prop('checked', (response.flag_sub_strategic == 'yes') ? true : false);
+            // if (response.get_year_strategic_detail.length > 0) {
+            //     var row = '';
+            //     $.each(response.get_year_strategic_detail, function (index, value) {
+            //         row += '<tr id="' + index + '">'
+            //         row += '<td>'
+            //         row += '<div class="form-group">'
+            //         row += '<input type="text" class="form-control year_strategic_detail_detail" name="year_strategic_detail_detail[' + index + ']"  id="year_strategic_detail_detail_' + index + '" placeholder="' + lang_action.placeholder + '" autocomplete="off" value="' + value.year_strategic_detail_detail + '">'
+            //         row += '</div>'
+            //         row += '</td>'
+            //         row += '<td><div style="margin-top: 7px">'
+            //         row += '<a href="#" class="remove_row"><i class="fa fa-minus-circle" aria-hidden="true" style="color: red"></i></a>'
+            //         row += '</div></td>'
+            //         row += '</tr>'
+            //     });
 
-            if (response.get_year_strategic_detail.length > 0) {
-                var row = '';
-                $.each(response.get_year_strategic_detail, function (index, value) {
-                    row += '<tr id="' + index + '">'
-                    row += '<td>'
-                    row += '<div class="form-group">'
-                    row += '<input type="text" class="form-control year_strategic_detail_detail" name="year_strategic_detail_detail[' + index + ']"  id="year_strategic_detail_detail_' + index + '" placeholder="' + lang_action.placeholder + '" autocomplete="off" value="' + value.year_strategic_detail_detail + '">'
-                    row += '</div>'
-                    row += '</td>'
-                    row += '<td><div style="margin-top: 7px">'
-                    row += '<a href="#" class="remove_row"><i class="fa fa-minus-circle" aria-hidden="true" style="color: red"></i></a>'
-                    row += '</div></td>'
-                    row += '</tr>'
-                });
-                $('input[name="flag_sub"]').prop('checked', true);
-                $('#tb_sub tbody').empty().html(row);
-                $('.sub_show').show();
-            } else {
-                $('input[name="flag_sub"]').prop('checked', false);
-                $('#tb_sub tbody').empty();
-                $('.sub_show').hide();
-            }
+            //     $('#tb_sub tbody').empty().html(row);
+            //     $('.sub_show').show();
+            // } else {
+            //     $('input[name="flag_sub"]').prop('checked', false);
+            //     $('#tb_sub tbody').empty();
+            //     $('.sub_show').hide();
+            // }
 
         }
     });

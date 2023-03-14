@@ -205,14 +205,29 @@ class year_controller extends Controller
                 return $data;
             })
             ->addColumn('flag_sub_strategic', function ($q) {
-                return $q->flag_sub_strategic == 'Y' ? 'Yes' : 'No';
+                return $q->flag_sub_strategic == 'yes' ? '<span class="badge badge-success">' . __('msg.flag_sub_strategic_yes') . '</span>' : '<span class="badge badge-danger">' . __('msg.flag_sub_strategic_no') . '</span>';
             })
             ->addColumn('action', function ($q) {
-                $action = '<button class="btn btn-warning btn-sm waves-effect waves-light" data-toggle="modal" data-target="#modal-default"onclick="edit_data(\'' . $q->id . '\')"> <i class="fas fa-edit"></i> ' . __('msg.btn_edit') . '</button> ';
-                $action .= '<button class="btn btn-danger btn-sm waves-effect waves-light" data-toggle="modal"  onclick="destroy(\'' . $q->id . '\')"> <i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</button> ';
+                // $action = '<button class="btn btn-warning btn-sm waves-effect waves-light" data-toggle="modal" data-target="#modal-default"onclick="edit_data(\'' . $q->id . '\')"> <i class="fas fa-edit"></i> ' . __('msg.btn_edit') . '</button> ';
+                // $action .= '<button class="btn btn-danger btn-sm waves-effect waves-light" data-toggle="modal"  onclick="destroy(\'' . $q->id . '\')"> <i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</button> ';
+                $action = '<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ' . __('msg.action') . '
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">';
+                if ($q->flag_sub_strategic == 'yes') {
+                    $action .= '<a class="dropdown-item text-info" href="'.route('setting.year.manage-sub-strategic', ['id' => $q->id]).'"><i class="fas fa-edit"></i> ' . __('msg.btn_manage_sub_strategic') . '</a>';
+                }
+
+                $action .= '<a class="dropdown-item text-warning" href="#" data-toggle="modal" data-target="#modal-default" onclick="edit_data(\'' . $q->id . '\')"><i class="fas fa-edit"></i> ' . __('msg.btn_edit') . '</a>';
+                $action .= '<a class="dropdown-item text-danger" href="#" data-toggle="modal"  onclick="destroy(\'' . $q->id . '\')"><i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</a>';
+                $action .= '</div>
+                </div>
+                </div>';
                 return $action;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'flag_sub_strategic'])
             ->make();
     }
 
@@ -313,9 +328,9 @@ class year_controller extends Controller
 
     public function manage_sub_strategic(Request $request)
     {
-        return view('year_manage_sub_strategic');
+        $year_strategic_detail = tbl_year_strategic_detail::find($request->id);
+        return view('year_manage_sub_strategic', compact('year_strategic_detail'));
     }
-
 
     public function manage_sub_strategic_lists(Request $request)
     {

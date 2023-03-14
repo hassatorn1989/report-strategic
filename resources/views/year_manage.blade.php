@@ -75,8 +75,9 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th width="5%">#</th>
-                                            <th width="35%">{{ __('msg.year_name') }}</th>
+                                            <th width="20%">{{ __('msg.year_name') }}</th>
                                             <th width="35%">{{ __('msg.sub_strategic') }}</th>
+                                            <th width="20%">{{ __('msg.flag_sub_strategic') }}</th>
                                             <th width="25%">{{ __('msg.action') }}</th>
                                         </tr>
                                     </thead>

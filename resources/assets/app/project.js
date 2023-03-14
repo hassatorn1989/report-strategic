@@ -1,3 +1,6 @@
+//Bootstrap Duallistbox
+$('.duallistbox').bootstrapDualListbox()
+
 var table = $("#example1").DataTable({
     processing: true,
     serverSide: true,
@@ -16,6 +19,7 @@ var table = $("#example1").DataTable({
     },
     columns: [
         { data: null, sortable: false, searchable: false, className: "text-center" },
+        { data: "project_code", name: "project_code" },
         { data: "project_name", name: "project_name" },
         { data: "project_status", name: "project_status" },
         { data: "project_percentage", name: "project_percentage" },
@@ -33,10 +37,16 @@ var table = $("#example1").DataTable({
 $('#form').validate({
     ignore: ".ignore",
     rules: {
+        project_code: {
+            required: true,
+        },
         project_name: {
             required: true,
         },
         faculty_id: {
+            required: true,
+        },
+        project_sub_type_id: {
             required: true,
         },
     },

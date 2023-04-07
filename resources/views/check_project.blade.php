@@ -18,7 +18,7 @@
 
     <!-- Bootstrap4 Duallistbox -->
     <script src="{{ url('resources/assets') }}/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
-    <script src="{{ url('resources/assets') }}/app/project.js?q={{ time() }}"></script>
+    <script src="{{ url('resources/assets') }}/app/check_project.js?q={{ time() }}"></script>
 @endpush
 
 @section('content')
@@ -72,12 +72,6 @@
                                                 <i class="fas fa-search"></i>
                                             </button>
                                         </div>
-                                        <div class="col-md-2 offset-md-6">
-                                            <button type="button" class="btn btn-primary btn-block" data-toggle="modal"
-                                                data-target="#modal-default" onclick="add_data()">
-                                                <i class="fas fa-plus-circle"></i> {{ __('msg.btn_add') }}
-                                            </button>
-                                        </div>
                                     </div>
                                 </form>
 
@@ -111,76 +105,32 @@
 @endsection
 
 @section('modal')
+
     <!-- Modal -->
-    <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-        aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal fade" id="modal-check" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form action="" method="post" id="form">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title">Modal title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="project_status"></label>
+                        <select class="form-control" name="project_status" id="project_status">
+                            <option value="">{{ __('msg.select') }}</option>
+                            <option value="publish">{{ __('msg.project_status_publish') }}</option>
+                            <option value="reject">{{ __('msg.project_status_reject') }}</option>
+                        </select>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="year_name">{{ __('msg.year_name') }}</label>
-                            <input type="hidden" name="id" id="id">
-                            <input type="hidden" name="year_id" id="year_id" value="{{ $year->id }}">
-                            <input type="hidden" name="project_main_id" id="project_main_id"
-                                value="{{ Request::segment(3) }}">
-                            <input type="text" class="form-control" name="year_name" id="year_name"
-                                placeholder="{{ __('msg.placeholder') }}" autocomplete="off"
-                                value="{{ $year->year_name }}" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="project_code">{{ __('msg.project_code') }}</label>
-                            <input type="text" class="form-control" name="project_code" id="project_code"
-                                placeholder="{{ __('msg.placeholder') }}" autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label for="project_name">{{ __('msg.project_name') }}</label>
-                            <input type="text" class="form-control" name="project_name" id="project_name"
-                                placeholder="{{ __('msg.placeholder') }}" autocomplete="off">
-                        </div>
-                        @if (auth()->user()->user_role == 'admin')
-                            <div class="form-group">
-                                <label for="faculty_id">{{ __('msg.faculty_name') }}</label>
-                                <select class="custom-select" name="faculty_id" id="faculty_id">
-                                    <option value="">{{ __('msg.select') }}</option>
-                                    @if (!empty($faculty))
-                                        @foreach ($faculty as $item)
-                                            <option value="{{ $item->id }}">{{ $item->faculty_name }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        @endif
-                        <div class="form-group">
-                            <label for="project_sub_type_id">{{ __('msg.project_sub_type_name') }}</label>
-                            <select class="duallistbox" multiple="multiple" name="project_sub_type_id[]" id="project_sub_type_id">
-                                @if (!empty($project_sub_type))
-                                    @foreach ($project_sub_type as $item)
-                                        <option value="{{ $item->id }}">{{ $item->project_sub_type_name }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                        {{-- <div class="form-group">
-                            <label for="project_tag">{{ __('msg.project_tag') }}</label>
-                            <input type="text" class="form-control" name="project_tag" id="project_tag"
-                                data-role="tagsinput" value="" autocomplete="off">
-                        </div> --}}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="btn_save"><i class="fas fa-save"></i>
-                            {{ __('msg.btn_save') }}</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal"> <i
-                                class="fas fa-times-circle"></i> {{ __('msg.btn_close') }}</button>
-                    </div>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
             </div>
         </div>
     </div>

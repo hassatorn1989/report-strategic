@@ -40,7 +40,7 @@
     <!-- Bootstrap4 Duallistbox -->
     <script src="{{ url('resources/assets') }}/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js">
     </script>
-    <script src="{{ url('resources/assets') }}/app/project_manage.js?q={{ time() }}"></script>
+    <script src="{{ url('resources/assets') }}/app/check_project_detail.js?q={{ time() }}"></script>
 @endpush
 
 
@@ -74,15 +74,10 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-md-3 offset-md-9">
-                        @if ($project->project_status == 'draff' || $project->project_status == 'reject')
-                            <form action="{{ route('project.manage.publish') }}" method="post" id="form_publish">
-                                @csrf
-                                <input type="hidden" id="id" name="id" value="{{ Request::segment(4) }}">
-                                <input type="hidden" id="project_status" name="project_status" value="pending">
-                                <button type="submit" name="btn_publish" id="btn_publish"
-                                    class="btn btn-primary btn-block"><i class="fas fa-paper-plane"></i>
-                                    {{ __('msg.btn_send_approve') }}</button>
-                            </form>
+                        @if ($project->project_status == 'pending')
+                                <button type="button" name="btn_check_project" id="btn_check_project" data-toggle="modal" data-target="#modal-approve-project"
+                                    class="btn btn-primary btn-block" onclick="approve_project()"><i class="fas fa-check "></i>
+                                    {{ __('msg.btn_check_project') }}</button>
                         @endif
 
                     </div>
@@ -94,7 +89,7 @@
                                 <h3 class="card-title"><i class="fas fa-tasks"></i>
                                     {{ $project->project_name }}</h3>
                                 <div class="card-tools">
-                                    @switch($project->project_status)
+                                     @switch($project->project_status)
                                         @case('draff')
                                             <small class="badge badge-warning">{{ __('msg.project_status_draff') }}</small>
                                         @break
@@ -121,15 +116,6 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                @if ($project->project_status == 'reject')
-                                    <div class="alert alert-danger alert-dismissible">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                        <u>รายละเอียดแก้ไขโครงการ</u> <br>
-                                        <small>
-                                            {!! $project->project_status_reject_detail !!}
-                                        </small>
-                                    </div>
-                                @endif
                                 <div class="progress progress-sm active">
                                     <div class="progress-bar bg-primary progress-bar-striped" role="progressbar"
                                         aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"
@@ -274,10 +260,9 @@
                                                                     name="project_code" id="project_code"
                                                                     placeholder="{{ __('msg.placeholder') }}"
                                                                     autocomplete="off"
-                                                                    @if ($project->project_status != 'draff' &&$project->project_status != 'reject')
-                                                                        disabled
-                                                                    @endif 
-                                                                    value="{{ $project->project_code }}">
+                                                                    value="{{ $project->project_code }}"
+                                                                    disabled
+                                                                    >
                                                             </div>
                                                         </div>
                                                     </div>
@@ -290,10 +275,9 @@
                                                                     name="project_name" id="project_name"
                                                                     placeholder="{{ __('msg.placeholder') }}"
                                                                     autocomplete="off"
-                                                                    @if ($project->project_status != 'draff' &&$project->project_status != 'reject')
-                                                                        disabled
-                                                                    @endif 
-                                                                    value="{{ $project->project_name }}">
+                                                                    value="{{ $project->project_name }}"
+                                                                    disabled
+                                                                    >
                                                             </div>
                                                         </div>
                                                     </div>
@@ -303,11 +287,7 @@
                                                                 <label
                                                                     for="project_type_id">{{ __('msg.project_type_name') }}</label>
                                                                 <select class="custom-select" name="project_type_id"
-                                                                    id="project_type_id"
-                                                                    @if ($project->project_status != 'draff' &&$project->project_status != 'reject')
-                                                                        disabled
-                                                                    @endif 
-                                                                    >
+                                                                    id="project_type_id" disabled>
                                                                     <option value="">{{ __('msg.select') }}</option>
                                                                     @if (!empty($project_type))
                                                                         @foreach ($project_type as $item)
@@ -324,11 +304,7 @@
                                                                 <label
                                                                     for="project_sub_type_id">{{ __('msg.project_sub_type_name') }}</label>
                                                                 <select class="duallistbox" multiple="multiple"
-                                                                    name="project_sub_type_id[]" id="project_sub_type_id"
-                                                                    @if ($project->project_status != 'draff' &&$project->project_status != 'reject')
-                                                                        disabled
-                                                                    @endif 
-                                                                    >
+                                                                    name="project_sub_type_id[]" id="project_sub_type_id" disabled>
                                                                     {{-- <option value="">{{ __('msg.select') }}</option> --}}
                                                                     @if (!empty($project_sub_type))
                                                                         @foreach ($project_sub_type as $item)
@@ -350,11 +326,7 @@
                                                                     name="project_budget" id="project_budget"
                                                                     placeholder="{{ __('msg.placeholder') }}"
                                                                     value="{{ $project->project_budget }}"
-                                                                    autocomplete="off"
-                                                                    @if ($project->project_status != 'draff' &&$project->project_status != 'reject')
-                                                                        disabled
-                                                                    @endif 
-                                                                    >
+                                                                    autocomplete="off" disabled>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
@@ -365,11 +337,7 @@
                                                                     name="project_period" id="project_period"
                                                                     placeholder="{{ __('msg.placeholder') }}"
                                                                     value="{{ $project->project_period }}"
-                                                                    autocomplete="off"
-                                                                    @if ($project->project_status != 'draff' &&$project->project_status != 'reject')
-                                                                        disabled
-                                                                    @endif 
-                                                                    >
+                                                                    autocomplete="off" disabled>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -412,21 +380,15 @@
                                                             </div>
                                                         </div>
                                                     </div> --}}
-                                                    @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                        <button type="submit" class="btn btn-primary"
+                                                    {{-- <button type="submit" class="btn btn-primary"
                                                         id="btn_save_project"><i class="fas fa-save"></i>
-                                                        {{ __('msg.btn_save') }}</button>
-                                                                    @endif  
-                                                    
+                                                        {{ __('msg.btn_save') }}</button> --}}
                                                 </form>
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-responsible-person"
                                                 role="tabpanel"
                                                 aria-labelledby="vert-tabs-project-responsible-person-tab">
-                                                  @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-
-                                                  
-                                                <form action="{{ route('project.manage.responsible-person-store') }}"
+                                                {{-- <form action="{{ route('project.manage.responsible-person-store') }}"
                                                     method="post" id="form-project-responsible-person">
                                                     @csrf
                                                     <div class="row">
@@ -465,8 +427,7 @@
                                                                         id="project_responsible_person_mode">เพิ่มข้อมูล</span></u></small>
                                                         </div>
                                                     </div>
-                                                </form>
-                                                @endif
+                                                </form> --}}
                                                 <table class="table table-hover table-sm table-striped">
                                                     <thead class="thead-light">
                                                         <tr>
@@ -474,14 +435,12 @@
                                                             <th>{{ __('msg.project_responsible_person_name') }}</th>
                                                             <th>{{ __('msg.project_responsible_person_tel') }}</th>
                                                             <th>
-                                                                 @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                <div style="text-align: center;">
+                                                                {{-- <div style="text-align: center;">
                                                                     <a href="#"
                                                                         onclick="add_data_project_responsible_person()"><i
                                                                             class="fa fa-plus-circle"></i>
                                                                         {{ __('msg.btn_add') }}</a>
-                                                                </div>
-                                                                @endif
+                                                                </div> --}}
                                                             </th>
                                                         </tr>
                                                     </thead>
@@ -493,8 +452,7 @@
                                                                     <td>{{ $item->project_responsible_person_name }}</td>
                                                                     <td>{{ $item->project_responsible_person_tel }}</td>
                                                                     <td width="20%" align="center">
-                                                                        @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                        <button
+                                                                        {{-- <button
                                                                             class="btn btn-warning btn-sm waves-effect waves-light"
                                                                             onclick="edit_data_project_responsible_person('{{ $item->id }}')">
                                                                             <i class="fas fa-edit"></i>
@@ -503,8 +461,7 @@
                                                                             class="btn btn-danger btn-sm waves-effect waves-light"
                                                                             onclick="destroy_project_responsible_person('{{ $item->id }}')">
                                                                             <i class="fas fa-trash-alt"></i>
-                                                                        </button>
-                                                                         @endif
+                                                                        </button> --}}
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -532,16 +489,13 @@
                                                             <th>{{ __('msg.aname') }}</th>
                                                             <th>{{ __('msg.pname') }}</th>
                                                             <th>
-                                                                 @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                <div style="text-align: center;">
+                                                                {{-- <div style="text-align: center;">
                                                                     <a href="#" data-toggle="modal"
                                                                         data-target="#modal-manage-project-location"
                                                                         onclick="add_data_project_location()"><i
                                                                             class="fa fa-plus-circle"></i>
                                                                         {{ __('msg.btn_add') }}</a>
-                                                                </div>
-                                                                 @endif
-
+                                                                </div> --}}
                                                             </th>
                                                         </tr>
                                                     </thead>
@@ -556,8 +510,7 @@
                                                                     <td>{{ $item->aname }}</td>
                                                                     <td>{{ $item->pname }}</td>
                                                                     <td width="20%" align="center">
-                                                                          @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                          <button
+                                                                        {{-- <button
                                                                             class="btn btn-warning btn-sm waves-effect waves-light"
                                                                             data-toggle="modal"
                                                                             data-target="#modal-manage-project-location"
@@ -568,9 +521,7 @@
                                                                             class="btn btn-danger btn-sm waves-effect waves-light"
                                                                             onclick="destroy_project_location('{{ $item->id }}')">
                                                                             <i class="fas fa-trash-alt"></i>
-                                                                        </button>
-                                                                        @endif
-                                                                        
+                                                                        </button> --}}
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -587,8 +538,7 @@
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-target-group"
                                                 role="tabpanel" aria-labelledby="vert-tabs-project-target-group-tab">
-                                                 @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                 <form action="{{ route('project.manage.target-group-store') }}"
+                                                {{-- <form action="{{ route('project.manage.target-group-store') }}"
                                                     method="post" id="form-project-target-group">
                                                     @csrf
                                                     <div class="row">
@@ -618,23 +568,19 @@
                                                                         id="project_target_group_mode">เพิ่มข้อมูล</span></u></small>
                                                         </div>
                                                     </div>
-                                                </form>
-                                                @endif
-                                                
+                                                </form> --}}
                                                 <table class="table table-hover table-sm table-striped">
                                                     <thead class="thead-light">
                                                         <tr>
                                                             <th>#</th>
                                                             <th>{{ __('msg.project_target_group_detail') }}</th>
                                                             <th>
-                                                                @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                <div style="text-align: center;">
+                                                                {{-- <div style="text-align: center;">
                                                                     <a href="#"
                                                                         onclick="add_data_project_target_group()"><i
                                                                             class="fa fa-plus-circle"></i>
                                                                         {{ __('msg.btn_short_add') }}</a>
-                                                                </div>
-                                                                 @endif
+                                                                </div> --}}
                                                             </th>
                                                         </tr>
                                                     </thead>
@@ -645,8 +591,7 @@
                                                                     <td scope="row">{{ $key + 1 }}</td>
                                                                     <td>{{ $item->project_target_group_detail }}</td>
                                                                     <td width="20%" align="center">
-                                                                         @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                        <button
+                                                                        {{-- <button
                                                                             class="btn btn-warning btn-sm waves-effect waves-light"
                                                                             onclick="edit_data_project_target_group('{{ $item->id }}')">
                                                                             <i class="fas fa-edit"></i>
@@ -655,8 +600,7 @@
                                                                             class="btn btn-danger btn-sm waves-effect waves-light"
                                                                             onclick="destroy_project_target_group('{{ $item->id }}')">
                                                                             <i class="fas fa-trash-alt"></i>
-                                                                        </button>
-                                                                        @endif
+                                                                        </button> --}}
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -673,8 +617,7 @@
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-problem" role="tabpanel"
                                                 aria-labelledby="vert-tabs-project-problem-tab">
-                                                 @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                <div class="row mb-2">
+                                                {{-- <div class="row mb-2">
                                                     <div class="col-md-4 offset-md-8">
                                                         <button type="button" class="btn btn-primary btn-block"
                                                             data-toggle="modal"
@@ -683,8 +626,7 @@
                                                             {{ __('msg.btn_problem_summary') }}
                                                         </button>
                                                     </div>
-                                                </div>
-                                                 @endif
+                                                </div> --}}
 
                                                 <table class="table table-hover table-sm table-striped">
                                                     <thead class="thead-light">
@@ -692,15 +634,13 @@
                                                             <th>#</th>
                                                             <th>{{ __('msg.project_problem_detail') }}</th>
                                                             <th>
-                                                                 @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                <div style="text-align: center;">
+                                                                {{-- <div style="text-align: center;">
                                                                     <a href="#" onclick="add_data_project_problem()"
                                                                         data-toggle="modal"
                                                                         data-target="#modal-problem"><i
                                                                             class="fa fa-plus-circle"></i>
                                                                         {{ __('msg.btn_short_add') }}</a>
-                                                                </div>
-                                                                  @endif
+                                                                </div> --}}
                                                             </th>
                                                         </tr>
                                                     </thead>
@@ -715,8 +655,7 @@
                                                                         </small>
                                                                     </td>
                                                                     <td width="20%" align="center">
-                                                                         @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                        <button
+                                                                        {{-- <button
                                                                             class="btn btn-warning btn-sm waves-effect waves-light"
                                                                             data-toggle="modal"
                                                                             data-target="#modal-problem"
@@ -727,8 +666,7 @@
                                                                             class="btn btn-danger btn-sm waves-effect waves-light"
                                                                             onclick="destroy_project_problem('{{ $item->id }}')">
                                                                             <i class="fas fa-trash-alt"></i>
-                                                                        </button>
-                                                                        @endif
+                                                                        </button> --}}
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -749,8 +687,7 @@
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-problem-solution"
                                                 role="tabpanel" aria-labelledby="vert-tabs-project-problem-solution-tab">
-                                                 @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                <div class="row mb-2">
+                                                {{-- <div class="row mb-2">
                                                     <div class="col-md-4 offset-md-8">
                                                         <button type="button" class="btn btn-primary btn-block"
                                                             data-toggle="modal"
@@ -759,8 +696,7 @@
                                                             {{ __('msg.btn_problem_solution_summary') }}
                                                         </button>
                                                     </div>
-                                                </div>
-                                                @endif
+                                                </div> --}}
                                                 <table class="table table-hover table-sm table-striped">
                                                     <thead class="thead-light">
                                                         <tr>
@@ -768,15 +704,13 @@
                                                             <th>{{ __('msg.project_problem_solution_detail') }}</th>
                                                             <th>{{ __('msg.project_problem_solution_budget') }}</th>
                                                             <th>
-                                                                @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                <div style="text-align: center;">
+                                                                {{-- <div style="text-align: center;">
                                                                     <a href="#" data-toggle="modal"
                                                                         data-target="#modal-problem-solution"
                                                                         onclick="add_data_project_problem_solution()"><i
                                                                             class="fa fa-plus-circle"></i>
                                                                         {{ __('msg.btn_short_add') }}</a>
-                                                                </div>
-                                                                @endif
+                                                                </div> --}}
                                                             </th>
                                                         </tr>
                                                     </thead>
@@ -793,8 +727,7 @@
                                                                     <td>{{ num1($item->project_problem_solution_budget) }}
                                                                     </td>
                                                                     <td width="20%" align="center">
-                                                                         @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                        <button
+                                                                        {{-- <button
                                                                             class="btn btn-warning btn-sm waves-effect waves-light"
                                                                             data-toggle="modal"
                                                                             data-target="#modal-problem-solution"
@@ -805,8 +738,7 @@
                                                                             class="btn btn-danger btn-sm waves-effect waves-light"
                                                                             onclick="destroy_project_problem_solution('{{ $item->id }}')">
                                                                             <i class="fas fa-trash-alt"></i>
-                                                                        </button>
-                                                                        @endif
+                                                                        </button> --}}
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -828,8 +760,7 @@
                                             <div class="tab-pane fade" id="vert-tabs-project-quantitative-indicators"
                                                 role="tabpanel"
                                                 aria-labelledby="vert-tabs-project-quantitative-indicators-tab">
-                                                 @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                <form
+                                                {{-- <form
                                                     action="{{ route('project.manage.quantitative-indicators-store') }}"
                                                     method="post" id="form-project-quantitative-indicators">
                                                     @csrf
@@ -869,8 +800,7 @@
                                                                         id="project_quantitative_indicators_mode">เพิ่มข้อมูล</span></u></small>
                                                         </div>
                                                     </div>
-                                                </form>
-                                                @endif
+                                                </form> --}}
                                                 <table class="table table-hover table-sm table-striped">
                                                     <thead class="thead-light">
                                                         <tr>
@@ -878,14 +808,12 @@
                                                             <th>{{ __('msg.project_quantitative_indicators_value') }}</th>
                                                             <th>{{ __('msg.project_quantitative_indicators_unit') }}</th>
                                                             <th>
-                                                                 @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                <div style="text-align: center;">
+                                                                {{-- <div style="text-align: center;">
                                                                     <a href="#"
                                                                         onclick="add_data_project_quantitative_indicators()"><i
                                                                             class="fa fa-plus-circle"></i>
                                                                         {{ __('msg.btn_short_add') }}</a>
-                                                                </div>
-                                                                 @endif
+                                                                </div> --}}
                                                             </th>
                                                         </tr>
                                                     </thead>
@@ -899,8 +827,7 @@
                                                                     <td>{{ $item->project_quantitative_indicators_unit }}
                                                                     </td>
                                                                     <td width="20%" align="center">
-                                                                        @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                        <button
+                                                                        {{-- <button
                                                                             class="btn btn-warning btn-sm waves-effect waves-light"
                                                                             onclick="edit_data_project_quantitative_indicators('{{ $item->id }}')">
                                                                             <i class="fas fa-edit"></i>
@@ -909,8 +836,7 @@
                                                                             class="btn btn-danger btn-sm waves-effect waves-light"
                                                                             onclick="destroy_project_quantitative_indicators('{{ $item->id }}')">
                                                                             <i class="fas fa-trash-alt"></i>
-                                                                        </button>
-                                                                        @endif
+                                                                        </button> --}}
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -928,8 +854,7 @@
                                             <div class="tab-pane fade" id="vert-tabs-project-qualitative-indicators"
                                                 role="tabpanel"
                                                 aria-labelledby="vert-tabs-project-qualitative-indicators-tab">
-                                                @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                <form action="{{ route('project.manage.qualitative-indicators-store') }}"
+                                                {{-- <form action="{{ route('project.manage.qualitative-indicators-store') }}"
                                                     method="post" id="form-project-qualitative-indicators">
                                                     @csrf
                                                     <div class="row">
@@ -968,8 +893,7 @@
                                                                         id="project_qualitative_indicators_mode">เพิ่มข้อมูล</span></u></small>
                                                         </div>
                                                     </div>
-                                                </form>
-                                                @endif
+                                                </form> --}}
                                                 <table class="table table-hover table-sm table-striped">
                                                     <thead class="thead-light">
                                                         <tr>
@@ -977,14 +901,12 @@
                                                             <th>{{ __('msg.project_qualitative_indicators_value') }}</th>
                                                             <th>{{ __('msg.project_qualitative_indicators_unit') }}</th>
                                                             <th>
-                                                                 @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                <div style="text-align: center;">
+                                                                {{-- <div style="text-align: center;">
                                                                     <a href="#"
                                                                         onclick="add_data_project_qualitative_indicators()"><i
                                                                             class="fa fa-plus-circle"></i>
                                                                         {{ __('msg.btn_short_add') }}</a>
-                                                                </div>
-                                                                @endif
+                                                                </div> --}}
                                                             </th>
                                                         </tr>
                                                     </thead>
@@ -998,8 +920,7 @@
                                                                     <td>{{ $item->project_qualitative_indicators_unit }}
                                                                     </td>
                                                                     <td width="20%" align="center">
-                                                                         @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                        <button
+                                                                        {{-- <button
                                                                             class="btn btn-warning btn-sm waves-effect waves-light"
                                                                             onclick="edit_data_project_qualitative_indicators('{{ $item->id }}')">
                                                                             <i class="fas fa-edit"></i>
@@ -1008,8 +929,7 @@
                                                                             class="btn btn-danger btn-sm waves-effect waves-light"
                                                                             onclick="destroy_project_qualitative_indicators('{{ $item->id }}')">
                                                                             <i class="fas fa-trash-alt"></i>
-                                                                        </button>
-                                                                        @endif
+                                                                        </button> --}}
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -1033,15 +953,13 @@
                                                             <th>{{ __('msg.project_output_detail') }}</th>
                                                             <th>{{ __('msg.project_output_detail_gallery') }}</th>
                                                             <th>
-                                                                @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                <div style="text-align: center;">
+                                                                {{-- <div style="text-align: center;">
                                                                     <a href="#" data-toggle="modal"
                                                                         data-target="#modal-project-output"
                                                                         onclick="add_data_project_output()"><i
                                                                             class="fa fa-plus-circle"></i>
                                                                         {{ __('msg.btn_add') }}</a>
-                                                                </div>
-                                                                @endif
+                                                                </div> --}}
                                                             </th>
                                                         </tr>
                                                     </thead>
@@ -1072,8 +990,7 @@
                                                                         </span>
                                                                     </td>
                                                                     <td width="20%" align="center">
-                                                                         @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                        <button
+                                                                        {{-- <button
                                                                             class="btn btn-primary btn-sm waves-effect waves-light"
                                                                             data-toggle="modal"
                                                                             data-target="#modal-project-output-detail"
@@ -1097,8 +1014,7 @@
                                                                             class="btn btn-danger btn-sm waves-effect waves-light"
                                                                             onclick="destroy_project_output('{{ $item->id }}')">
                                                                             <i class="fas fa-trash-alt"></i>
-                                                                        </button>
-                                                                        @endif
+                                                                        </button> --}}
                                                                     </td>
                                                                 </tr>
                                                                 @if (count($item->get_project_output_detail) > 0)
@@ -1169,15 +1085,13 @@
                                                             <th>#</th>
                                                             <th>{{ __('msg.project_outcome_detail') }}</th>
                                                             <th>
-                                                                @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                <div style="text-align: center;">
+                                                                {{-- <div style="text-align: center;">
                                                                     <a href="#" data-toggle="modal"
                                                                         data-target="#modal-project-outcome"
                                                                         onclick="add_data_project_outcome()"><i
                                                                             class="fa fa-plus-circle"></i>
                                                                         {{ __('msg.btn_add') }}</a>
-                                                                </div>
-                                                                 @endif
+                                                                </div> --}}
                                                             </th>
                                                         </tr>
                                                     </thead>
@@ -1194,8 +1108,7 @@
                                                                         </small>
                                                                     </td>
                                                                     <td width="20%" align="center">
-                                                                        @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                        <button
+                                                                        {{-- <button
                                                                             class="btn btn-warning btn-sm waves-effect waves-light"
                                                                             data-toggle="modal"
                                                                             data-target="#modal-project-outcome"
@@ -1206,8 +1119,7 @@
                                                                             class="btn btn-danger btn-sm waves-effect waves-light"
                                                                             onclick="destroy_project_outcome('{{ $item->id }}')">
                                                                             <i class="fas fa-trash-alt"></i>
-                                                                        </button>
-                                                                        @endif
+                                                                        </button> --}}
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -1224,8 +1136,7 @@
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-impact" role="tabpanel"
                                                 aria-labelledby="vert-tabs-project-impact-tab">
-                                                 @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                <form action="{{ route('project.manage.impact-store') }}" method="post"
+                                                {{-- <form action="{{ route('project.manage.impact-store') }}" method="post"
                                                     id="form-project-impact">
                                                     @csrf
                                                     <div class="row">
@@ -1254,22 +1165,19 @@
                                                                         id="project_impact_mode">เพิ่มข้อมูล</span></u></small>
                                                         </div>
                                                     </div>
-                                                </form>
-                                                @endif
+                                                </form> --}}
                                                 <table class="table table-hover table-sm table-striped">
                                                     <thead class="thead-light">
                                                         <tr>
                                                             <th>#</th>
                                                             <th>{{ __('msg.project_impact_detail') }}</th>
                                                             <th>
-                                                                <div style="text-align: center;">
-                                                                     @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
+                                                                {{-- <div style="text-align: center;">
                                                                     <a href="#"
                                                                         onclick="add_data_project_impact()"><i
                                                                             class="fa fa-plus-circle"></i>
                                                                         {{ __('msg.btn_short_add') }}</a>
-                                                                        @endif
-                                                                </div>
+                                                                </div> --}}
                                                             </th>
                                                         </tr>
                                                     </thead>
@@ -1280,8 +1188,7 @@
                                                                     <td scope="row">{{ $key + 1 }}</td>
                                                                     <td>{{ $item->project_impact_detail }}</td>
                                                                     <td width="20%" align="center">
-                                                                         @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                        <button
+                                                                        {{-- <button
                                                                             class="btn btn-warning btn-sm waves-effect waves-light"
                                                                             onclick="edit_data_project_impact('{{ $item->id }}')">
                                                                             <i class="fas fa-edit"></i>
@@ -1290,8 +1197,7 @@
                                                                             class="btn btn-danger btn-sm waves-effect waves-light"
                                                                             onclick="destroy_project_impact('{{ $item->id }}')">
                                                                             <i class="fas fa-trash-alt"></i>
-                                                                        </button>
-                                                                        @endif
+                                                                        </button> --}}
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -1308,15 +1214,15 @@
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-file" role="tabpanel"
                                                 aria-labelledby="vert-tabs-project-file-tab">
-                                                 @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                <div class="row mb-3">
+
+                                                {{-- <div class="row mb-3">
                                                     <div class="col-md-4 offset-md-8">
                                                         <button type="button" class="btn btn-primary btn-block"
                                                             data-toggle="modal"
                                                             data-target="#modal-file" onclick="add_project_file()">{{ __('msg.btn_add') }}</button>
                                                     </div>
-                                                </div>
-                                                     @endif
+                                                </div> --}}
+
                                                     <table class="table table-striped table-inverse table-sm" style="width:100%">
                                                         <thead class="thead-inverse">
                                                             <tr>
@@ -1332,13 +1238,11 @@
                                                                     <td scope="row">{{ $key +1 }}</td>
                                                                     <td><a href="{{ url('storage/app/'. $item->project_file_path) }}" target="_blank">{{ $item->project_file_name }}</a></td>
                                                                     <td>
-                                                                         @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
-                                                                        <button
+                                                                        {{-- <button
                                                                             class="btn btn-danger btn-sm waves-effect waves-light"
                                                                             onclick="manage_project_file_destroy('{{ $item->id }}')">
                                                                             <i class="fas fa-trash-alt"></i>
-                                                                        </button>
-                                                                        @endif
+                                                                        </button> --}}
                                                                     </td>
                                                                     @endforeach
                                                                 </tr>
@@ -1750,26 +1654,6 @@
     </div>
 
 
-    {{--
-                                                    <div class="row">
-                                                        <div class="col-md-10">
-                                                            
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <button type="submit" class="btn btn-primary btn-block"
-                                                                id="btn_save_project_problem"><i class="fas fa-save"></i>
-                                                                {{ __('msg.btn_save') }}</button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <small class="text-danger">{{ __('msg.msg_mode') }} :
-                                                                <u><span
-                                                                        id="project_problem_mode">เพิ่มข้อมูล</span></u></small>
-                                                        </div>
-                                                    </div>
-                                                </form> --}}
-
     <!-- Modal -->
     <div class="modal fade" id="modal-problem" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
         aria-hidden="true" data-keyboard="false" data-backdrop="static">
@@ -1922,6 +1806,46 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="btn_save_project_file"><i
+                            class="fas fa-save"></i>
+                        {{ __('msg.btn_save') }}</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"> <i
+                            class="fas fa-times-circle"></i>
+                        {{ __('msg.btn_close') }}</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="modal-approve-project" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{{ route('check-project.update') }}" method="post" id="form-check-project">
+                    @csrf
+                    <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="id" value="{{ Request::segment(3) }}">
+                    <div class="form-group">
+                        <label for="project_status">{{ __('msg.project_status') }}</label>
+                        <select class="custom-select" name="project_status" id="project_status">
+                            <option value="">{{ __('msg.select') }}</option>
+                            <option value="publish">{{ __('msg.project_status_publish') }}</option>
+                            <option value="reject">{{ __('msg.project_status_reject') }}</option>
+                        </select> 
+                    </div>
+                    <div class="form-group project_status_reject_detail_show" style="display: none;">
+                      <label for="project_status_reject_detail">{{ __('msg.project_status_reject_detail') }}</label>
+                      <textarea class="form-control" name="project_status_reject_detail" id="project_status_reject_detail" rows="3" placeholder="{{ __('msg.placeholder') }}"></textarea>
+                    </div>
+                </div>
+                 <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="btn_save_check_project"><i
                             class="fas fa-save"></i>
                         {{ __('msg.btn_save') }}</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal"> <i

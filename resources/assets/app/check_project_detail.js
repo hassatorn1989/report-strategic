@@ -44,8 +44,7 @@ $('#form_publish').validate({
             },
             success: function (response) {
                 if (response == 'true') {
-                    // var title = ($('#form_publish input[name="project_status"]').val() == 'reject' || $('#form_publish input[name="project_status"]').val() == 'draff') ? 'ต้องการส่งโครงการตรวจสอบใช่หรือไม่' : 'ต้องการยกเลิกเผยแพร่โครงการนี้ใช่หรือไม่';
-                    var title = 'ต้องการส่งโครงการตรวจสอบใช่หรือไม่';
+                    var title = ($('#form_publish input[name="project_status"]').val() == 'publish') ? 'ต้องการเผยแพร่โครงการนี้ใช่หรือไม่' : 'ต้องการยกเลิกเผยแพร่โครงการนี้ใช่หรือไม่';
                     Swal.fire({
                         title: title,
                         icon: 'question',
@@ -1498,10 +1497,10 @@ $("div#myDropzoneFile").dropzone({
     uploadMultiple: true,
     parallelUploads: 5,
     maxFilesize: 5,
-    acceptedFiles: 'image/*,application/pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx',
+    acceptedFiles: 'image/*',
     addRemoveLinks: true,
     dictDefaultMessage: "เลือกหรือลากไฟล์วางที่นี่เพื่ออัปโหลด",
-    dictRemoveFile: 'ลบไฟล์',
+    dictRemoveFile: 'ลบรูปภาพ',
     dictFileTooBig: 'ไฟล์มีขนาดใหญ่เกินไป',
     dictInvalidFileType: 'ไม่สามารถอัปโหลดไฟล์นี้ได้',
     // aut
@@ -1551,5 +1550,44 @@ function manage_project_file_destroy(id) {
                 }
             });
         }
-    });
+    }); 
 }
+
+function approve_project() {
+    $('#modal-approve-project #form-check-project select[name="project_status"]').val('');
+    $('#modal-approve-project #form-check-project input[name="project_file_name"]').val('');
+    $('#modal-approve-project #form-check-project .modal-title').text('ตรวจสอบข้อมูลโครงการ');
+}
+
+$('select[name="project_status"]').on('change', function () {
+    // console.log($(this).val());
+    if ($(this).val() == 'reject') {
+        $('.project_status_reject_detail_show').show();
+    } else {
+        $('.project_status_reject_detail_show').hide();
+    }
+});
+
+$('#form-check-project').validate({
+    ignore: ".ignore",
+    rules: {
+        project_status: {
+            required: true,
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function (form) {
+        $('#btn_save_check_project').empty().html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> กำลังบันทึก...').attr('disabled', true);
+        form.submit();
+    }
+});

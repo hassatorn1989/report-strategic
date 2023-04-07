@@ -38,9 +38,24 @@ class project_main_controller extends Controller
             ->addColumn('project_main_budget', function ($q) {
                 return num1($q->project_main_budget);
             })
+            ->addColumn('project_main_name', function ($q) {
+                $data = '';
+                $data .= $q->project_main_name . '<br>';
+                $data .= '<small class="text-primary">'.__('msg.project_status_all'). ' '. $q->project_count_all. ' โครงการ </small> | ';
+                $data .= '<small class="text-warning">'.__('msg.project_status_draff'). ' '. $q->project_count_draff.' โครงการ </small> | ';
+                $data .= '<small class="text-danger">'.__('msg.project_status_reject'). ' '. $q->project_count_reject. ' โครงการ</small>  | ';
+                $data .= '<small class="text-success">'.__('msg.project_status_publish'). ' '. $q->project_count_publish.' โครงการ</small>';
+                return $data;
+            })
             ->addColumn('strategic_name', function ($q) {
-                $data = $q->strategic_name;
-                $data .= ($q->year_strategic_detail_id != '') ? '<br><small><strong>' . __('msg.sub_strategic') . ' : </strong>' . $q->year_strategic_detail_detail . '</small>' : '';
+                $data = '';
+                if ($q->strategic_name) {
+                    $data = $q->strategic_name;
+                    $data .= ($q->year_strategic_detail_id != '') ? '<br><small><strong>' . __('msg.sub_strategic') . ' : </strong>' . $q->year_strategic_detail_detail . '</small>' : '';
+                } else {
+                    $data .= 'ไม่ระบุยุทธศาสตร์';
+                }
+
                 return $data;
             })
             ->addColumn('action', function ($q) {
@@ -65,7 +80,7 @@ class project_main_controller extends Controller
                 </div>';
                 return $action;
             })
-            ->rawColumns(['strategic_name', 'action'])
+            ->rawColumns(['strategic_name', 'action', 'project_main_name'])
             ->make();
     }
 

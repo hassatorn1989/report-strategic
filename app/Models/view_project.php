@@ -70,4 +70,9 @@ class view_project extends Model
     {
         return $this->hasMany(tbl_project_tag::class, 'project_id', 'id');
     }
+
+    function get_project_file()
+    {
+        return $this->hasMany(tbl_project_file::class, 'project_id', 'id');
+    }
 }

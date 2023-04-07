@@ -137,17 +137,16 @@
                         </li>
                     </ul>
                 </li>
-
-                {{-- <li class="nav-item">
-                    <a href="{{ route('project.index') }}"
-                        class="nav-link {{ Request::segment(1) == 'project' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-folder-open"></i>
-                        <p>
-                            {{ __('msg.menu_project') }}
-                        </p>
-                    </a>
-                </li> --}}
                 @if (auth()->user()->user_role == 'admin')
+                    <li class="nav-item">
+                        <a href="{{ route('check-project.index') }}"
+                            class="nav-link {{ Request::segment(1) == 'check-project' ? 'active' : '' }}">
+                            <i class="nav-icon fa fa-check-circle"></i>
+                            <p>
+                                {{ __('msg.menu_check_project') }}
+                            </p>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="{{ route('result-analysis.index') }}"
                             class="nav-link {{ Request::segment(1) == 'result-analysis' ? 'active' : '' }}">

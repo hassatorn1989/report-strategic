@@ -6,6 +6,7 @@ use App\Models\tbl_budget;
 use App\Models\tbl_faculty;
 use App\Models\tbl_location;
 use App\Models\tbl_project;
+use App\Models\tbl_project_file;
 use App\Models\tbl_project_impact;
 use App\Models\tbl_project_location;
 use App\Models\tbl_project_outcome;
@@ -60,6 +61,7 @@ class project_controller extends Controller
                 'get_project_outcome',
                 'get_project_location',
                 'get_project_impact',
+                'get_project_file',
                 'get_year_strategic_detail',
             ]
         )
@@ -80,15 +82,21 @@ class project_controller extends Controller
             ->addColumn('project_status', function ($q) {
                 $data = '';
                 switch ($q->project_status) {
-                    case 'draff':
-                        $data = '<span class="badge badge-warning">' . __('msg.project_status_draff') . '</span>';
-                        break;
-                    case 'publish':
-                        $data = '<span class="badge badge-success">' . __('msg.project_status_publish') . '</span>';
-                        break;
-                    case 'unpublish':
-                        $data = '<span class="badge badge-danger">' . __('msg.project_status_unpublish') . '</span>';
-                        break;
+                case 'draff':
+                    $data = '<span class="badge badge-warning">' . __('msg.project_status_draff') . '</span>';
+                    break;
+                case 'pending':
+                    $data = '<span class="badge badge-info">' . __('msg.project_status_pending') . '</span>';
+                    break;
+                case 'publish':
+                    $data = '<span class="badge badge-success">' . __('msg.project_status_publish') . '</span>';
+                    break;
+                case 'unpublish':
+                    $data = '<span class="badge badge-danger">' . __('msg.project_status_unpublish') . '</span>';
+                    break;
+                case 'reject':
+                    $data = '<span class="badge badge-danger">' . __('msg.project_status_reject') . '</span>';
+                    break;
                 }
                 return $data;
             })
@@ -118,9 +126,6 @@ class project_controller extends Controller
                 </div><small>' . __('msg.project_percentage') . ' : ' . $cal . '%</small>';
             })
             ->addColumn('action', function ($q) {
-                // $action = '<a class="btn btn-info btn-sm waves-effect waves-light" href="' . route('project.manage', ['id' => $q->id]) . '"> <i class="fas fa-sliders-h"></i> ' . __('msg.btn_manage_project') . '</a> ';
-                // $action .= '<button class="btn btn-danger btn-sm waves-effect waves-light" onclick="destroy(\'' . $q->id . '\')"> <i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</button> ';
-
                 $action = '<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
                     <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -129,10 +134,6 @@ class project_controller extends Controller
                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">';
                 $action .= '<a class="dropdown-item text-info" href="' . route('project.manage', ['id' => $q->id]) . '"><i class="fas fa-sliders-h"></i> ' . __('msg.btn_manage_project') . '</a>';
                 $action .= '<a class="dropdown-item text-danger" href="#" onclick="destroy(\'' . $q->id . '\')"><i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</a>';
-                // if (auth()->user()->user_role == 'admin') {
-                //     $action .= '<a class="dropdown-item text-warning" href="#" data-toggle="modal" data-target="#modal-default" onclick="edit_data(\'' . $q->id . '\')"><i class="fas fa-edit"></i> ' . __('msg.btn_edit') . '</a>';
-                //     $action .= '<a class="dropdown-item text-danger" href="#" data-toggle="modal"  onclick="destroy(\'' . $q->id . '\')"><i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</a>';
-                // }
                 $action .= '</div>
                 </div>
                 </div>';
@@ -166,8 +167,10 @@ class project_controller extends Controller
             // $q->project_sub_type_id = $request->project_sub_type_id;
             $q->user_created = auth()->user()->id;
             $q->save();
+            
 
             if (!empty($request->project_sub_type_id)) {
+                
                 foreach ($request->project_sub_type_id as $key => $value) {
                     $qtag = new tbl_project_project_sub_type();
                     $qtag->project_id = $q->id;
@@ -334,6 +337,9 @@ class project_controller extends Controller
                 'get_project_qualitative_indicators' => function ($q) {
                     $q->orderBy('project_qualitative_indicators_value', 'ASC');
                 },
+                'get_project_file' => function ($q) {
+                    $q->orderBy('created_at', 'ASC');
+                },
                 'get_project_output' => function ($q) {
                     $q->selectRaw("*,
                     IF (
@@ -463,7 +469,6 @@ class project_controller extends Controller
         return view('project_manage', compact('project', 'year_strategic', 'budget', 'project_type', 'province', 'cal', 'project_main', 'project_sub_type'));
     }
 
-
     public function manage_location_store(Request $request)
     {
         $request->validate([
@@ -508,10 +513,8 @@ class project_controller extends Controller
             'acode' => 'required',
             'tcode' => 'required',
             'mcode' => 'required',
-            // 'address' => 'required',
         ]);
 
-        // dd($request->all());
         DB::beginTransaction();
         try {
             $q = tbl_project_location::find($request->id);
@@ -806,6 +809,7 @@ class project_controller extends Controller
         $request->validate([
             'project_id' => 'required',
             'project_problem_solution_detail' => 'required',
+            'project_problem_solution_budget' => 'required',
             'project_problem_solution_sub_detail' => 'required',
         ]);
 
@@ -813,6 +817,7 @@ class project_controller extends Controller
         try {
             $q = new tbl_project_problem_solution();
             $q->project_problem_solution_detail = $request->project_problem_solution_detail;
+            $q->project_problem_solution_budget = $request->project_problem_solution_budget;
             $q->project_problem_solution_sub_detail = nl2br($request->project_problem_solution_sub_detail);
             $q->project_id = $request->project_id;
             $q->save();
@@ -837,6 +842,7 @@ class project_controller extends Controller
             'project_id' => 'required',
             'project_problem_solution_detail' => 'required',
             'project_problem_solution_sub_detail' => 'required',
+            'project_problem_solution_budget' => 'required',
         ]);
 
 
@@ -844,6 +850,7 @@ class project_controller extends Controller
         try {
             $q = tbl_project_problem_solution::find($request->id);
             $q->project_problem_solution_detail = $request->project_problem_solution_detail;
+            $q->project_problem_solution_budget = $request->project_problem_solution_budget;
             $q->project_problem_solution_sub_detail =   nl2br($request->project_problem_solution_sub_detail);
             $q->project_id = $request->project_id;
             $q->save();
@@ -1416,5 +1423,51 @@ class project_controller extends Controller
             $q = tbl_project_qualitative_indicators::selectRaw("id, project_qualitative_indicators_value as indicators_value, project_qualitative_indicators_unit as indicators_unit")->where('project_id', $request->project_id)->get();
         }
         return response()->json($q);
+    }
+
+
+    public function manage_file_store(Request $request)
+    {
+
+        $request->validate([
+            'file' => 'required',
+            'file_project_id' => 'required',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            if ($request->has('file')) {
+                foreach ($request->file as $key => $value) {
+                    $path = $value->store('file-project-fileupload');
+                    $q = new tbl_project_file();
+                    $q->project_file_path = $path;
+                    $q->project_file_name = $value->getClientOriginalName();
+                    $q->project_id = $request->file_project_id;
+                    $q->save();
+                }
+            }
+            DB::commit();
+            return response()->json(['status' => 'success']);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return response()->json(['status' => 'error']);
+        }
+    }
+
+    public function manage_file_destroy(Request $request)
+    {
+        $request->validate([
+            'id' => 'required'
+        ]);
+        DB::beginTransaction();
+        try {
+            $q = tbl_project_file::find($request->id);
+            $q->delete();
+            DB::commit();
+            return response()->json(['status' => 'success']);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return response()->json(['status' => 'error']);
+        }
     }
 }

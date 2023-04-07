@@ -20,6 +20,7 @@ use App\Http\Controllers\test_controller;
 use App\Http\Controllers\user_controller;
 use App\Http\Controllers\work_controller;
 use App\Http\Controllers\year_controller;
+use App\Http\Controllers\check_project_controller;
 use App\Http\Middleware\AuthCheck;
 use Illuminate\Support\Facades\Route;
 
@@ -220,6 +221,18 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/setting-project/project/manage/get-location-district', [project_controller::class, 'get_location_district'])->name('project.manage.get-location-district');
         Route::post('/setting-project/project/manage/get-location-subdistrict', [project_controller::class, 'get_location_subdistrict'])->name('project.manage.get-location-subdistrict');
         Route::post('/setting-project/project/manage/get-location-village', [project_controller::class, 'get_location_village'])->name('project.manage.get-location-village');
+
+
+        Route::post('/setting-project/project/manage/file-store', [project_controller::class, 'manage_file_store'])->name('project.manage.file-store');
+        Route::post('/setting-project/project/manage/file-destroy', [project_controller::class, 'manage_file_destroy'])->name('project.manage.file-destroy');
+
+
+
+        Route::get('/check-project', [check_project_controller::class, 'index'])->name('check-project.index');
+        Route::post('/check-project/lists', [check_project_controller::class, 'lists'])->name('check-project.lists');
+        Route::post('/check-project/update', [check_project_controller::class, 'update'])->name('check-project.update');
+        Route::get('/check-project/detail/{id}', [check_project_controller::class, 'detail'])->name('check-project.detail');
+        
 
         Route::get('/result-analysis', [result_analysis_controller::class, 'index'])->name('result-analysis.index');
         Route::post('/result-analysis/store', [result_analysis_controller::class, 'store'])->name('result-analysis.store');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\tbl_budget;
 use App\Models\tbl_faculty;
 use App\Models\tbl_location;
+use App\Models\tbl_plan_type;
 use App\Models\tbl_project;
 use App\Models\tbl_project_file;
 use App\Models\tbl_project_impact;
@@ -43,7 +44,8 @@ class project_controller extends Controller
         $year = tbl_year::where('year_status', 'active')->first();
         $faculty = tbl_faculty::all();
         $project_sub_type = tbl_project_sub_type::all();
-        return view('project', compact('year', 'faculty', 'project_sub_type'));
+        $plan_type = tbl_plan_type::all();
+        return view('project', compact('year', 'faculty', 'project_sub_type', 'plan_type'));
     }
 
     public function lists(Request $request)
@@ -100,6 +102,9 @@ class project_controller extends Controller
                 }
                 return $data;
             })
+            ->addColumn('plan_type_name', function ($q) {
+                return ($q->plan_type_name != '') ? $q->plan_type_name : '<small class="text-danger">ไม่ระบุ</small>';
+            })
             ->addColumn('project_name', function ($q) {
                 $data = $q->project_name;
                 $data .= ($q->project_sub_type_name != '') ? '<br><small><strong>ประเภท : </strong>' . $q->project_sub_type_name . '</small>' : '';
@@ -141,7 +146,7 @@ class project_controller extends Controller
 
                 return $action;
             })
-            ->rawColumns(['project_status', 'project_percentage', 'action', 'project_name', 'project_code'])
+            ->rawColumns(['project_status', 'project_percentage', 'action', 'project_name', 'project_code', 'plan_type_name'])
             ->make();
     }
 
@@ -152,6 +157,7 @@ class project_controller extends Controller
             'project_name' => 'required',
             'year_id' => 'required',
             'project_main_id' => 'required',
+            'plan_type_id' => 'required',
             // 'project_sub_type_id' => 'required',
         ]);
 
@@ -164,13 +170,14 @@ class project_controller extends Controller
             $q->faculty_id = (auth()->user()->user_role == 'admin') ? $request->faculty_id : auth()->user()->faculty_id;
             $q->project_status = 'draff';
             $q->project_main_id = $request->project_main_id;
+            $q->plan_type_id = $request->plan_type_id;
             // $q->project_sub_type_id = $request->project_sub_type_id;
             $q->user_created = auth()->user()->id;
             $q->save();
-            
+
 
             if (!empty($request->project_sub_type_id)) {
-                
+
                 foreach ($request->project_sub_type_id as $key => $value) {
                     $qtag = new tbl_project_project_sub_type();
                     $qtag->project_id = $q->id;
@@ -203,6 +210,7 @@ class project_controller extends Controller
             // 'project_sub_type_id' => 'required',
             'project_budget' => 'required',
             'project_period' => 'required',
+            'plan_type_id' => 'required',
             // 'project_main_id' => 'required'
         ]);
 
@@ -220,6 +228,7 @@ class project_controller extends Controller
             $q->project_budget = $request->project_budget;
             $q->project_period_start = $project_period_start;
             $q->project_period_end = $project_period_end;
+            $q->plan_type_id = $request->plan_type_id;
             // $q->project_sub_type_id = $request->project_sub_type_id;
             $q->user_updated = auth()->user()->id;
             $q->save();
@@ -457,7 +466,7 @@ class project_controller extends Controller
         $budget = tbl_budget::all();
         $project_type = tbl_project_type::all();
         // $project_sub_type = tbl_project_sub_type::all();
-        $project_sub_type = tbl_project_sub_type::selectRaw("*, 
+        $project_sub_type = tbl_project_sub_type::selectRaw("*,
         (select count(id) from tbl_project_project_sub_type where tbl_project_project_sub_type.project_sub_type_id = tbl_project_sub_type.id  and tbl_project_project_sub_type.project_id = '{$request->id}') as project_count")->get();
         $province = view_location::selectRaw("DISTINCT(pcode), pname")->whereIn('pcode', ['67', '66'])->orderBy('pcode', 'ASC')->get();
         if (auth()->user()->faculty_id == 'other') {
@@ -573,6 +582,7 @@ class project_controller extends Controller
             'project_id' => 'required',
             'project_responsible_person_name' => 'required',
             'project_responsible_person_tel' => 'required',
+            'project_responsible_person_position' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -580,6 +590,7 @@ class project_controller extends Controller
             $q = new tbl_project_responsible_person();
             $q->project_responsible_person_name = $request->project_responsible_person_name;
             $q->project_responsible_person_tel = $request->project_responsible_person_tel;
+            $q->project_responsible_person_position = $request->project_responsible_person_position;
             $q->project_id = $request->project_id;
             $q->save();
             DB::commit();
@@ -603,6 +614,7 @@ class project_controller extends Controller
             'project_id' => 'required',
             'project_responsible_person_name' => 'required',
             'project_responsible_person_tel' => 'required',
+            'project_responsible_person_position' => 'required',
         ]);
 
 
@@ -611,6 +623,7 @@ class project_controller extends Controller
             $q = tbl_project_responsible_person::find($request->id);
             $q->project_responsible_person_name = $request->project_responsible_person_name;
             $q->project_responsible_person_tel = $request->project_responsible_person_tel;
+            $q->project_responsible_person_position = $request->project_responsible_person_position;
             $q->project_id = $request->project_id;
             $q->save();
             DB::commit();

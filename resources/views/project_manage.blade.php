@@ -276,7 +276,7 @@
                                                                     autocomplete="off"
                                                                     @if ($project->project_status != 'draff' &&$project->project_status != 'reject')
                                                                         disabled
-                                                                    @endif 
+                                                                    @endif
                                                                     value="{{ $project->project_code }}">
                                                             </div>
                                                         </div>
@@ -292,7 +292,7 @@
                                                                     autocomplete="off"
                                                                     @if ($project->project_status != 'draff' &&$project->project_status != 'reject')
                                                                         disabled
-                                                                    @endif 
+                                                                    @endif
                                                                     value="{{ $project->project_name }}">
                                                             </div>
                                                         </div>
@@ -306,7 +306,7 @@
                                                                     id="project_type_id"
                                                                     @if ($project->project_status != 'draff' &&$project->project_status != 'reject')
                                                                         disabled
-                                                                    @endif 
+                                                                    @endif
                                                                     >
                                                                     <option value="">{{ __('msg.select') }}</option>
                                                                     @if (!empty($project_type))
@@ -327,7 +327,7 @@
                                                                     name="project_sub_type_id[]" id="project_sub_type_id"
                                                                     @if ($project->project_status != 'draff' &&$project->project_status != 'reject')
                                                                         disabled
-                                                                    @endif 
+                                                                    @endif
                                                                     >
                                                                     {{-- <option value="">{{ __('msg.select') }}</option> --}}
                                                                     @if (!empty($project_sub_type))
@@ -353,7 +353,7 @@
                                                                     autocomplete="off"
                                                                     @if ($project->project_status != 'draff' &&$project->project_status != 'reject')
                                                                         disabled
-                                                                    @endif 
+                                                                    @endif
                                                                     >
                                                             </div>
                                                         </div>
@@ -368,7 +368,7 @@
                                                                     autocomplete="off"
                                                                     @if ($project->project_status != 'draff' &&$project->project_status != 'reject')
                                                                         disabled
-                                                                    @endif 
+                                                                    @endif
                                                                     >
                                                             </div>
                                                         </div>
@@ -416,8 +416,8 @@
                                                                         <button type="submit" class="btn btn-primary"
                                                         id="btn_save_project"><i class="fas fa-save"></i>
                                                         {{ __('msg.btn_save') }}</button>
-                                                                    @endif  
-                                                    
+                                                                    @endif
+
                                                 </form>
                                             </div>
                                             <div class="tab-pane fade" id="vert-tabs-project-responsible-person"
@@ -425,12 +425,12 @@
                                                 aria-labelledby="vert-tabs-project-responsible-person-tab">
                                                   @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
 
-                                                  
+
                                                 <form action="{{ route('project.manage.responsible-person-store') }}"
                                                     method="post" id="form-project-responsible-person">
                                                     @csrf
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <input type="hidden" name="id" id="id">
                                                                 <input type="hidden" name="project_id" id="project_id"
@@ -442,7 +442,7 @@
                                                                     autocomplete="off" value="">
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <input type="text" class="form-control"
                                                                     name="project_responsible_person_tel"
@@ -450,6 +450,15 @@
                                                                     placeholder="{{ __('msg.placeholder') . __('msg.project_responsible_person_tel') }}"
                                                                     autocomplete="off" value=""
                                                                     onkeypress="validate_number(event)">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                              <select class="custom-select" name="project_responsible_person_position" id="project_responsible_person_position">
+                                                                <option value="">{{ __('msg.select_project_responsible_person_position') }}</option>
+                                                                <option value="responsible">{{ __('msg.project_responsible_person_position_responsible') }}</option>
+                                                                 <option value="participant">{{ __('msg.project_responsible_person_position_participant') }}</option>
+                                                              </select>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">
@@ -473,6 +482,7 @@
                                                             <th>#</th>
                                                             <th>{{ __('msg.project_responsible_person_name') }}</th>
                                                             <th>{{ __('msg.project_responsible_person_tel') }}</th>
+                                                            <th>{{ __('msg.project_responsible_person_position') }}</th>
                                                             <th>
                                                                  @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
                                                                 <div style="text-align: center;">
@@ -492,6 +502,15 @@
                                                                     <td scope="row">{{ $key + 1 }}</td>
                                                                     <td>{{ $item->project_responsible_person_name }}</td>
                                                                     <td>{{ $item->project_responsible_person_tel }}</td>
+                                                                    <td>
+                                                                        @if ($item->project_responsible_person_position == 'responsible')
+                                                                            {{ __('msg.project_responsible_person_position_responsible') }}
+                                                                        @elseif($item->project_responsible_person_position == 'participant')
+                                                                            {{ __('msg.project_responsible_person_position_participant') }}
+                                                                        @else
+                                                                            -
+                                                                        @endif
+                                                                    </td>
                                                                     <td width="20%" align="center">
                                                                         @if ($project->project_status == 'draff' ||$project->project_status == 'reject')
                                                                         <button
@@ -570,7 +589,7 @@
                                                                             <i class="fas fa-trash-alt"></i>
                                                                         </button>
                                                                         @endif
-                                                                        
+
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -620,7 +639,7 @@
                                                     </div>
                                                 </form>
                                                 @endif
-                                                
+
                                                 <table class="table table-hover table-sm table-striped">
                                                     <thead class="thead-light">
                                                         <tr>
@@ -782,7 +801,13 @@
                                                     </thead>
                                                     <tbody>
                                                         @if (count($project->get_project_problem_solution) > 0)
+                                                        @php
+                                                            $sum_project_problem_solution_budget = 0;
+                                                        @endphp
                                                             @foreach ($project->get_project_problem_solution as $key => $item)
+                                                            @php
+                                                                $sum_project_problem_solution_budget += $item->project_problem_solution_budget;
+                                                            @endphp
                                                                 <tr>
                                                                     <td scope="row">{{ $key + 1 }}</td>
                                                                     <td>{{ $item->project_problem_solution_detail }}<br>
@@ -810,6 +835,13 @@
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
+                                                            <tr>
+                                                                    <td colspan="2"><strong>รวม</strong></td>
+                                                                    <td colspan="2"><strong>
+                                                                    <u>{{ num1($sum_project_problem_solution_budget) }}</u>
+                                                                    </strong></td>
+                                                            </tr>
+
                                                         @else
                                                             <tr>
                                                                 <td colspan="4" align="center">
@@ -1753,7 +1785,7 @@
     {{--
                                                     <div class="row">
                                                         <div class="col-md-10">
-                                                            
+
                                                         </div>
                                                         <div class="col-md-2">
                                                             <button type="submit" class="btn btn-primary btn-block"

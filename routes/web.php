@@ -8,6 +8,7 @@ use App\Http\Controllers\driven_controller;
 use App\Http\Controllers\faculty_controller;
 use App\Http\Controllers\home_controller;
 use App\Http\Controllers\project_type_controller;
+use App\Http\Controllers\plan_type_controller;
 use App\Http\Controllers\project_sub_type_controller;
 use App\Http\Controllers\project_controller;
 use App\Http\Controllers\project_main_controller;
@@ -114,6 +115,13 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/setting/project-type/edit', [project_type_controller::class, 'edit'])->name('setting.project-type.edit');
         Route::post('/setting/project-type/update', [project_type_controller::class, 'update'])->name('setting.project-type.update');
         Route::post('/setting/project-type/destroy', [project_type_controller::class, 'destroy'])->name('setting.project-type.destroy');
+
+        Route::get('/setting/plan-type', [plan_type_controller::class, 'index'])->name('setting.plan-type.index');
+        Route::post('/setting/plan-type/lists', [plan_type_controller::class, 'lists'])->name('setting.plan-type.lists');
+        Route::post('/setting/plan-type/store', [plan_type_controller::class, 'store'])->name('setting.plan-type.store');
+        Route::post('/setting/plan-type/edit', [plan_type_controller::class, 'edit'])->name('setting.plan-type.edit');
+        Route::post('/setting/plan-type/update', [plan_type_controller::class, 'update'])->name('setting.plan-type.update');
+        Route::post('/setting/plan-type/destroy', [plan_type_controller::class, 'destroy'])->name('setting.plan-type.destroy');
 
         Route::get('/setting/project-sub-type', [project_sub_type_controller::class, 'index'])->name('setting.project-sub-type.index');
         Route::post('/setting/project-sub-type/lists', [project_sub_type_controller::class, 'lists'])->name('setting.project-sub-type.lists');
@@ -232,7 +240,7 @@ Route::middleware(AuthCheck::class)->group(
         Route::post('/check-project/lists', [check_project_controller::class, 'lists'])->name('check-project.lists');
         Route::post('/check-project/update', [check_project_controller::class, 'update'])->name('check-project.update');
         Route::get('/check-project/detail/{id}', [check_project_controller::class, 'detail'])->name('check-project.detail');
-        
+
 
         Route::get('/result-analysis', [result_analysis_controller::class, 'index'])->name('result-analysis.index');
         Route::post('/result-analysis/store', [result_analysis_controller::class, 'store'])->name('result-analysis.store');

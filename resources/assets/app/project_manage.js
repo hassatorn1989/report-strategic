@@ -88,6 +88,7 @@ $('#form_update').validate({
         },
         project_budget: {
             required: true,
+            min: 1
         },
         project_period: {
             required: true,
@@ -109,6 +110,11 @@ $('#form_update').validate({
         },
         project_sub_type_id: {
             required: true,
+        },
+    },
+    messages: {
+        project_budget: {
+            min: "กรุณากรอกจำนวนเงินงบประมาณที่มากกว่า 0",
         },
     },
     errorElement: 'span',
@@ -427,6 +433,9 @@ $('#form-project-responsible-person').validate({
         project_responsible_person_tel: {
             required: true,
         },
+        project_responsible_person_position: {
+            required: true,
+        },
     },
     errorElement: 'span',
     errorPlacement: function (error, element) {
@@ -447,7 +456,7 @@ $('#form-project-responsible-person').validate({
 
 function add_data_project_responsible_person() {
     $('#form-project-responsible-person').attr('action', myurl + '/setting-project/project/manage/responsible-person-store');
-    $('#form-project-responsible-person input[type="text"]').removeClass('is-invalid').val('');
+    $('#form-project-responsible-person input[type="text"], #form-project-responsible-person select').removeClass('is-invalid').val('');
     $('#project_responsible_person_mode').text('เพิ่มข้อมูล');
 }
 
@@ -463,10 +472,10 @@ function edit_data_project_responsible_person(id) {
         },
         dataType: "json",
         success: function (response) {
-            console.log(response);
             $('#form-project-responsible-person input[name="id"]').val(response.id);
             $('#form-project-responsible-person input[name="project_responsible_person_name"]').val(response.project_responsible_person_name);
             $('#form-project-responsible-person input[name="project_responsible_person_tel"]').val(response.project_responsible_person_tel);
+            $('#form-project-responsible-person select[name="project_responsible_person_position"]').val(response.project_responsible_person_position);
         }
     });
 }
@@ -1426,7 +1435,7 @@ $('#form-project-problem-summary').validate({
     }
 });
 
-function get_problem_summary(id) {  
+function get_problem_summary(id) {
     $.ajax({
         type: "POST",
         url: myurl + "/setting-project/project/manage/get-problem-summary",
@@ -1464,7 +1473,7 @@ $('#form-project-problem-solution-summary').validate({
     }
 });
 
-function add_project_file() { 
+function add_project_file() {
     console.log('add_project_file');
     // $('#form-project-file').attr('action', myurl + '/setting-project/project/manage/file-store');
     // $('#form-project-file input[name="id"]').val('');
@@ -1475,7 +1484,7 @@ function add_project_file() {
     $('#modal-file .modal-title').text('เพิ่มไฟล์');
  }
 
-function get_problem_solution_summary(id) {  
+function get_problem_solution_summary(id) {
     $.ajax({
         type: "POST",
         url: myurl + "/setting-project/project/manage/get-problem-solution-summary",

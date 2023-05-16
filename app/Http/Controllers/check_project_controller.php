@@ -289,7 +289,7 @@ class check_project_controller extends Controller
         $budget = tbl_budget::all();
         $project_type = tbl_project_type::all();
         // $project_sub_type = tbl_project_sub_type::all();
-        $project_sub_type = tbl_project_sub_type::selectRaw("*, 
+        $project_sub_type = tbl_project_sub_type::selectRaw("*,
         (select count(id) from tbl_project_project_sub_type where tbl_project_project_sub_type.project_sub_type_id = tbl_project_sub_type.id  and tbl_project_project_sub_type.project_id = '{$request->id}') as project_count")->get();
         $province = view_location::selectRaw("DISTINCT(pcode), pname")->whereIn('pcode', ['67', '66'])->orderBy('pcode', 'ASC')->get();
         if (auth()->user()->faculty_id == 'other') {
@@ -304,9 +304,9 @@ class check_project_controller extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'id' => 'required', 
-            'project_status' => 'required', 
-        ]); 
+            'id' => 'required',
+            'project_status' => 'required',
+        ]);
         DB::beginTransaction();
         try {
             $q = tbl_project::find($request->id);

@@ -1,6 +1,3 @@
-//Bootstrap Duallistbox
-$('.duallistbox').bootstrapDualListbox()
-
 var table = $("#example1").DataTable({
     processing: true,
     serverSide: true,
@@ -10,20 +7,15 @@ var table = $("#example1").DataTable({
     ],
     dom: '<"float-left"><"float-right"f>rt<"row"<"col-sm-4"l><"col-sm-4"i><"col-sm-4"p>>',
     ajax: {
-        url: myurl + "/setting-project/project/lists",
+        url: myurl + "/setting/plan-type/lists",
         type: "POST",
         data: function (d) {
-            d.filter_project_name = $('input[name="filter_project_name"]').val();
-            d.project_main_id = project_main_id;
+            d.filter_plan_type_name = $('input[name="filter_plan_type_name"]').val();
         }
     },
     columns: [
         { data: null, sortable: false, searchable: false, className: "text-center" },
-        { data: "project_code", name: "project_code" },
-        { data: "project_name", name: "project_name" },
-        { data: "project_status", name: "project_status" },
         { data: "plan_type_name", name: "plan_type_name" },
-        { data: "project_percentage", name: "project_percentage" },
         { data: "action", name: "action", orderable: false, searchable: false, className: "text-center" }
     ],
     fnRowCallback: function (nRow, aData, iDisplayIndex) {
@@ -38,19 +30,7 @@ var table = $("#example1").DataTable({
 $('#form').validate({
     ignore: ".ignore",
     rules: {
-        project_code: {
-            required: true,
-        },
-        project_name: {
-            required: true,
-        },
-        faculty_id: {
-            required: true,
-        },
-        project_sub_type_id: {
-            required: true,
-        },
-        plan_type_id: {
+        plan_type_name: {
             required: true,
         },
     },
@@ -74,15 +54,35 @@ $('#form').validate({
 
 function add_data() {
     $("#modal-default .modal-title").text(lang.title_add);
-    $('#modal-default #form').attr('action', myurl + '/setting-project/project/store');
-    $('#modal-default #form input[type="text"], #modal-default #form select').removeClass('is-invalid');
-    $('#modal-default #form input[type="text"]:input[type="year_name"]').val('');
+    $('#modal-default #form').attr('action', myurl + '/setting/plan-type/store');
+    $('#modal-default #form input[type="text"]').removeClass('is-invalid');
+    $('#modal-default #form input[type="text"]').val('');
+}
+
+function edit_data(id) {
+    $('#modal-default .modal-title').text(lang.title_edit);
+    $('#modal-default #form').attr('action', myurl + '/setting/plan-type/update');
+    $('#modal-default #form input[type="text"]').removeClass('is-invalid');
+    $.ajax({
+        type: "POST",
+        url: myurl + '/setting/plan-type/edit',
+        data: {
+            id: id
+        },
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+            $('input[name="id"]').val(response.id);
+            $('input[name="plan_type_name"]').val(response.plan_type_name);
+        }
+    });
 }
 
 $('#search-form').on('submit', function (e) {
     table.ajax.reload();
     e.preventDefault();
 });
+
 
 function destroy(id) {
     Swal.fire({
@@ -96,7 +96,7 @@ function destroy(id) {
         if (result.value) {
             $.ajax({
                 type: "POST",
-                url: myurl + "/setting-project/project/destroy",
+                url: myurl + "/setting/plan-type/destroy",
                 data: {
                     id: id
                 },
@@ -107,4 +107,3 @@ function destroy(id) {
         }
     });
 }
-

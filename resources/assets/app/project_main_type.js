@@ -46,12 +46,18 @@ $('#form').validate({
         },
         project_main_type_budget: {
             required: true,
+            min: 1,
         },
         budget_id: {
             required: true,
         },
         budget_specify_other: {
             required: true,
+        },
+    },
+    messages: {
+        project_main_type_budget: {
+            min: 'กรุณากรอกจำนวนเงินงบประมาณที่มากกว่า 0'
         },
     },
     errorElement: 'span',

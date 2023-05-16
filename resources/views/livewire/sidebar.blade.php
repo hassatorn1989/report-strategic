@@ -90,6 +90,15 @@
                             </li>
                             <li class="nav-item">
                                 <small>
+                                    <a href="{{ route('setting.plan-type.index') }}"
+                                        class="nav-link {{ Request::segment(1) == 'setting' && Request::segment(2) == 'plan-type' ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>{{ __('msg.menu_setting_plan_type') }}</p>
+                                    </a>
+                                </small>
+                            </li>
+                            <li class="nav-item">
+                                <small>
                                     <a href="{{ route('setting.project-sub-type.index') }}"
                                         class="nav-link {{ Request::segment(1) == 'setting' && Request::segment(2) == 'project-sub-type' ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>

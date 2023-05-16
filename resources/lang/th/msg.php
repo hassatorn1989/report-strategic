@@ -18,6 +18,7 @@ return [
     'menu_setting_budget' => 'งบประมาณ',
     'menu_setting_user' => 'ผู้ใช้งาน',
     'menu_setting_project_type' => 'ประเภทโครงการ',
+    'menu_setting_plan_type' => 'ประเภทแผน',
     'menu_setting_project_sub_type' => 'ประเภทย่อยโครงการ',
     'menu_result_analysis' => 'บันทึกผลการวิเคราะห์',
     'menu_project' => 'บันทึกผลโครงการ',
@@ -107,6 +108,11 @@ return [
     'filter_project_type_name' =>  'ค้นหาประเภทโครงการ',
     'project_type_name' => 'ประเภทโครงการ',
 
+    'title_add_plan_type' => 'เพิ่มประเภทแผน',
+    'title_edit_plan_type' => 'แก้ไขประเภทแผน',
+    'filter_plan_type_name' =>  'ค้นหาประเภทแผน',
+    'plan_type_name' => 'ประเภทแผน',
+
     'title_add_project_sub_type' => 'เพิ่มประเภทย่อยโครงการ',
     'title_edit_project_sub_type' => 'แก้ไขประเภทย่อยโครงการ',
     'filter_project_sub_type_name' =>  'ค้นหาประเภทย่อยโครงการ',
@@ -184,11 +190,15 @@ return [
 
     'project_responsible_person_name'  => 'ผู้รับผิดชอบโครงการ',
     'project_responsible_person_tel'  => 'เบอร์โทร',
+    'project_responsible_person_position'  => 'สถานะ',
+    'select_project_responsible_person_position'  => '--เลือกสถานะ--',
+    'project_responsible_person_position_responsible'  => 'ผู้รับผิดชอบโครงการ',
+    'project_responsible_person_position_participant'  => 'ผู้ร่วมโครงการ',
 
     'project_target_group_detail' => 'รายละเอียดกลุ่มเป้าหมาย',
     'project_problem_detail' => 'รายละเอียดปัญหา',
     'project_problem_sub_detail' =>  'รายละเอียดปัญหาย่อย',
-    'project_problem_solution_sub_detail' => 'รายละเอียดวิธีการแก้ปัญหาย่อย', 
+    'project_problem_solution_sub_detail' => 'รายละเอียดวิธีการแก้ปัญหาย่อย',
     'project_problem_solution_detail' => 'รายละเอียดวิธีการแก้ปัญหา',
     'project_problem_solution_budget' => 'ค่าใช้จ่าย',
     'project_quantitative_indicators_value' => 'ค่าตัวชี้วัดเชิงปริมาณ',

@@ -41,6 +41,7 @@ $('#form').validate({
         },
         project_main_budget: {
             required: true,
+            min: 1,
         },
         project_main_guidelines: {
             required: true,
@@ -61,6 +62,11 @@ $('#form').validate({
             required: true,
         },
     },
+    messages: {
+        project_main_budget: {
+            min: "กรุณากรอกจำนวนเงินงบประมาณที่มากกว่า 0",
+        },
+    },
     errorElement: 'span',
     errorPlacement: function (error, element) {
         error.addClass('invalid-feedback');
@@ -75,7 +81,7 @@ $('#form').validate({
     submitHandler: function (form) {
         if ($('#faculty_join_id :selected').length > 0) {
             if ($('input[name="mode"]').val() == 'add') {
-                $.ajax({ 
+                $.ajax({
                     type: "POST",
                     url: myurl + "/setting-project/project-main/check-budget",
                     data: {

@@ -88,6 +88,7 @@
                                             <th width="15%">{{ __('msg.project_code') }}</th>
                                             <th width="30%">{{ __('msg.project_name') }}</th>
                                             <th width="10%">{{ __('msg.project_status') }}</th>
+                                            <th width="10%">{{ __('msg.plan_type_name') }}</th>
                                             <th width="20%">{{ __('msg.project_percentage') }}</th>
                                             <th width="25%">{{ __('msg.action') }}</th>
                                         </tr>
@@ -159,8 +160,20 @@
                             </div>
                         @endif
                         <div class="form-group">
+                            <label for="plan_type_id">{{ __('msg.plan_type_name') }}</label>
+                            <select class="custom-select" name="plan_type_id" id="plan_type_id">
+                                <option value="">{{ __('msg.select') }}</option>
+                                @if (!empty($plan_type))
+                                    @foreach ($plan_type as $item)
+                                        <option value="{{ $item->id }}">{{ $item->plan_type_name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="project_sub_type_id">{{ __('msg.project_sub_type_name') }}</label>
-                            <select class="duallistbox" multiple="multiple" name="project_sub_type_id[]" id="project_sub_type_id">
+                            <select class="duallistbox" multiple="multiple" name="project_sub_type_id[]"
+                                id="project_sub_type_id">
                                 @if (!empty($project_sub_type))
                                     @foreach ($project_sub_type as $item)
                                         <option value="{{ $item->id }}">{{ $item->project_sub_type_name }}</option>
@@ -168,11 +181,6 @@
                                 @endif
                             </select>
                         </div>
-                        {{-- <div class="form-group">
-                            <label for="project_tag">{{ __('msg.project_tag') }}</label>
-                            <input type="text" class="form-control" name="project_tag" id="project_tag"
-                                data-role="tagsinput" value="" autocomplete="off">
-                        </div> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="btn_save"><i class="fas fa-save"></i>

@@ -33,7 +33,7 @@ class project_main_controller extends Controller
             $cond = "
             AND (SELECT COUNT(tbl_project_main_faculty.id) FROM `tbl_project_main_faculty` WHERE tbl_project_main_faculty.faculty_id = '" . auth()->user()->faculty_id . "' and tbl_project_main_faculty.project_main_id = view_project_main.id)";
         }
-        $q = view_project_main::whereRaw("year_id = '{$year->id}' {$cond}" );
+        $q = view_project_main::with(['get_project_main_faculty'])->whereRaw("year_id = '{$year->id}' {$cond}");
         return DataTables::eloquent($q)
             ->filter(function ($q) use ($request) {
                 if ($request->filter_project_main_name != '') {
@@ -46,10 +46,24 @@ class project_main_controller extends Controller
             ->addColumn('project_main_name', function ($q) {
                 $data = '';
                 $data .= $q->project_main_name . '<br>';
-                $data .= '<small class="text-primary">'.__('msg.project_status_all'). ' '. $q->project_count_all. ' โครงการ </small> | ';
-                $data .= '<small class="text-warning">'.__('msg.project_status_draff'). ' '. $q->project_count_draff.' โครงการ </small> | ';
-                $data .= '<small class="text-danger">'.__('msg.project_status_reject'). ' '. $q->project_count_reject. ' โครงการ</small>  | ';
-                $data .= '<small class="text-success">'.__('msg.project_status_publish'). ' '. $q->project_count_publish.' โครงการ</small>';
+                $data .= '<small class="text-primary">' . __('msg.project_status_all') . ' ' . $q->project_count_all . ' โครงการ </small> | ';
+                $data .= '<small class="text-warning">' . __('msg.project_status_draff') . ' ' . $q->project_count_draff . ' โครงการ </small> | ';
+                $data .= '<small class="text-danger">' . __('msg.project_status_reject') . ' ' . $q->project_count_reject . ' โครงการ</small>  | ';
+                $data .= '<small class="text-success">' . __('msg.project_status_publish') . ' ' . $q->project_count_publish . ' โครงการ</small>';
+                return $data;
+            })
+            ->addColumn('project_main_faculty', function ($q) {
+                $data = '';
+                if (count($q->get_project_main_faculty) > 0) {
+                    $data .= '<small>';
+                    foreach ($q->get_project_main_faculty as $key => $value) {
+                        $data .= $value->faculty_name;
+                        $data .= ($key < count($q->get_project_main_faculty) - 1) ? ', ' : '';
+                    }
+                    $data .= '</small>';
+                } else {
+                    $data .= '<small>ไม่ระบุหน่วยงาน</small>';
+                }
                 return $data;
             })
             ->addColumn('strategic_name', function ($q) {
@@ -64,11 +78,6 @@ class project_main_controller extends Controller
                 return $data;
             })
             ->addColumn('action', function ($q) {
-                // $action = '<a class="btn btn-info btn-sm waves-effect waves-light"  href="' . route('project.index', ['id' => $q->id]) . '"> <i class="fas fa-tasks"></i> ' . __('msg.btn_manage_project') . '</a> ';
-                // if (auth()->user()->user_role == 'admin') {
-                //     $action .= '<button class="btn btn-warning btn-sm waves-effect waves-light" data-toggle="modal" data-target="#modal-default" onclick="edit_data(\'' . $q->id . '\')"> <i class="fas fa-edit"></i> ' . __('msg.btn_edit') . '</button> ';
-                //     $action .= '<button class="btn btn-danger btn-sm waves-effect waves-light" data-toggle="modal"  onclick="destroy(\'' . $q->id . '\')"> <i class="fas fa-trash-alt"></i> ' . __('msg.btn_delete') . '</button> ';
-                // }
                 $action = '<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
                     <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -85,7 +94,7 @@ class project_main_controller extends Controller
                 </div>';
                 return $action;
             })
-            ->rawColumns(['strategic_name', 'action', 'project_main_name'])
+            ->rawColumns(['strategic_name', 'action', 'project_main_name', 'project_main_faculty'])
             ->make();
     }
 

@@ -77,13 +77,14 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th width="5%">#</th>
-                                            <th width="35%">{{ __('msg.project_main_name') }}</th>
+                                            <th width="25%">{{ __('msg.project_main_name') }}</th>
                                             <th width="10%">{{ __('msg.project_main_budget') }}</th>
-                                            <th width="15%">{{ __('msg.year_name') }}</th>
+                                            <th width="10%">{{ __('msg.year_name') }}</th>
                                             <th width="20%">{{ __('msg.strategic_name') }}</th>
+                                            <th width="20%">{{ __('msg.msg_faculty_join') }}</th>
                                             <th width="15%">{{ __('msg.action') }}</th>
                                         </tr>
-                                    </thead> 
+                                    </thead>
                                     <tbody>
                                     </tbody>
                                 </table>
@@ -117,7 +118,7 @@
                             <h5 class="modal-title">Modal title</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
-                            </button> 
+                            </button>
                         </div>
                         <div class="modal-body">
                             <div class="row">

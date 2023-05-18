@@ -22,6 +22,7 @@ var table = $("#example1").DataTable({
         { data: "project_main_budget", name: "project_main_budget" },
         { data: "year_name", name: "year_name" },
         { data: "strategic_name", name: "strategic_name" },
+        { data: "project_main_faculty", name: "project_main_faculty" },
         { data: "action", name: "action", orderable: false, searchable: false, className: "text-center" }
     ],
     fnRowCallback: function (nRow, aData, iDisplayIndex) {

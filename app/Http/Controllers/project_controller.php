@@ -474,8 +474,9 @@ class project_controller extends Controller
         } else {
             $project_main = view_project_main::where('faculty_id', auth()->user()->faculty_id)->get();
         }
+        $plan_type = tbl_plan_type::all();
 
-        return view('project_manage', compact('project', 'year_strategic', 'budget', 'project_type', 'province', 'cal', 'project_main', 'project_sub_type'));
+        return view('project_manage', compact('project', 'year_strategic', 'budget', 'project_type', 'province', 'cal', 'project_main', 'project_sub_type', 'plan_type'));
     }
 
     public function manage_location_store(Request $request)

@@ -314,7 +314,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-md-12">
+                                                        <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label
                                                                     for="project_type_id">{{ __('msg.project_type_name') }}</label>
@@ -327,6 +327,24 @@
                                                                             <option value="{{ $item->id }}"
                                                                                 {{ $item->id == $project->project_type_id ? 'selected' : '' }}>
                                                                                 {{ $item->project_type_name }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="plan_type_id">{{ __('msg.plan_type_name') }}</label>
+                                                                <select class="custom-select" name="plan_type_id"
+                                                                    id="plan_type_id"
+                                                                    @if ($project->project_status != 'draff' && $project->project_status != 'reject') disabled @endif>
+                                                                    <option value="">{{ __('msg.select') }}</option>
+                                                                    @if (!empty($plan_type))
+                                                                        @foreach ($plan_type as $item)
+                                                                            <option value="{{ $item->id }}"
+                                                                                {{ $item->id == $project->plan_type_id ? 'selected' : '' }}>
+                                                                                {{ $item->plan_type_name }}</option>
                                                                         @endforeach
                                                                     @endif
                                                                 </select>

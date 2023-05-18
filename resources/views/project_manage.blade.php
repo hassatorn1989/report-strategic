@@ -140,8 +140,8 @@
                                 </div>
                                 <small>{{ __('msg.project_percentage') . ' : ' . $cal }}%</small>
                                 <div class="row mt-3">
-                                    <div class="col-7 col-sm-12">
-                                        <ul class="nav nav-tabs mb-3" id="custom-content-below-tab" role="tablist">
+                                    <div class="col-7 col-md-12">
+                                        <ul class="nav nav-tabs mb-3" id="vert-tabs-tab" role="tablist">
                                             @php
                                                 $flag_update_data = false;
                                             @endphp

@@ -157,7 +157,7 @@ return [
     'project_budget' => 'งบประมาณที่ได้รับ',
     'project_period' =>  'ระยะเวลาดำเนินโครงการ',
     'project_target_group' => 'กลุ่มเป้าหมาย',
-    'project_problem' => 'ปัญหา',
+    'project_problem' => 'ที่มาของปัญหา',
     'project_solotion_problem' => 'วิธีการแก้ปัญหา',
     'project_status_draff' => 'ร่าง',
     'project_status_pending' => 'รออนุมัติ',

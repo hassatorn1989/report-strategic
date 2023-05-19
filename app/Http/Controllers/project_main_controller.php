@@ -29,7 +29,7 @@ class project_main_controller extends Controller
     {
         $year = tbl_year::where('year_status', 'active')->first();
         $cond = '';
-        if (auth()->user()->user_role != 'admin' || auth()->user()->faculty_id != 'other') {
+        if (auth()->user()->user_role != 'admin' || auth()->user()->faculty_id == 'other') {
             $cond = "
             AND (SELECT COUNT(tbl_project_main_faculty.id) FROM `tbl_project_main_faculty` WHERE tbl_project_main_faculty.faculty_id = '" . auth()->user()->faculty_id . "' and tbl_project_main_faculty.project_main_id = view_project_main.id)";
         }

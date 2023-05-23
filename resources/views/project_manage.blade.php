@@ -314,7 +314,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label
                                                                     for="project_type_id">{{ __('msg.project_type_name') }}</label>
@@ -332,25 +332,46 @@
                                                                 </select>
                                                             </div>
                                                         </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="project_budget">{{ __('msg.project_budget') }}</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="project_budget" id="project_budget"
+                                                                    placeholder="{{ __('msg.placeholder') }}"
+                                                                    value="{{ $project->project_budget }}"
+                                                                    autocomplete="off"
+                                                                    @if ($project->project_status != 'draff' && $project->project_status != 'reject') disabled @endif>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    for="project_period">{{ __('msg.project_period') }}</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="project_period" id="project_period"
+                                                                    placeholder="{{ __('msg.placeholder') }}"
+                                                                    value="{{ $project->project_period }}"
+                                                                    autocomplete="off"
+                                                                    @if ($project->project_status != 'draff' && $project->project_status != 'reject') disabled @endif>
+                                                            </div>
+                                                        </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label
                                                                     for="plan_type_id">{{ __('msg.plan_type_name') }}</label>
-                                                                <select class="custom-select" name="plan_type_id"
-                                                                    id="plan_type_id"
-                                                                    @if ($project->project_status != 'draff' && $project->project_status != 'reject') disabled @endif>
-                                                                    <option value="">{{ __('msg.select') }}</option>
+                                                                <select class="duallistbox" multiple="multiple"
+                                                                    name="plan_type_id[]" id="plan_type_id[]">
                                                                     @if (!empty($plan_type))
                                                                         @foreach ($plan_type as $item)
-                                                                            <option value="{{ $item->id }}"
-                                                                                {{ $item->id == $project->plan_type_id ? 'selected' : '' }}>
+                                                                            <option value="{{ $item->id }}" {{ $item->project_count > 0 ? 'selected' : '' }}>
                                                                                 {{ $item->plan_type_name }}</option>
                                                                         @endforeach
                                                                     @endif
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-12">
+                                                        <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label
                                                                     for="project_sub_type_id">{{ __('msg.project_sub_type_name') }}</label>
@@ -366,32 +387,6 @@
                                                                         @endforeach
                                                                     @endif
                                                                 </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label
-                                                                    for="project_budget">{{ __('msg.project_budget') }}</label>
-                                                                <input type="number" class="form-control"
-                                                                    name="project_budget" id="project_budget"
-                                                                    placeholder="{{ __('msg.placeholder') }}"
-                                                                    value="{{ $project->project_budget }}"
-                                                                    autocomplete="off"
-                                                                    @if ($project->project_status != 'draff' && $project->project_status != 'reject') disabled @endif>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label
-                                                                    for="project_period">{{ __('msg.project_period') }}</label>
-                                                                <input type="text" class="form-control"
-                                                                    name="project_period" id="project_period"
-                                                                    placeholder="{{ __('msg.placeholder') }}"
-                                                                    value="{{ $project->project_period }}"
-                                                                    autocomplete="off"
-                                                                    @if ($project->project_status != 'draff' && $project->project_status != 'reject') disabled @endif>
                                                             </div>
                                                         </div>
                                                     </div>

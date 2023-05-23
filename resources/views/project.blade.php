@@ -161,8 +161,7 @@
                         @endif
                         <div class="form-group">
                             <label for="plan_type_id">{{ __('msg.plan_type_name') }}</label>
-                            <select class="custom-select" name="plan_type_id" id="plan_type_id">
-                                <option value="">{{ __('msg.select') }}</option>
+                            <select class="duallistbox" multiple="multiple" name="plan_type_id[]" id="plan_type_id[]">
                                 @if (!empty($plan_type))
                                     @foreach ($plan_type as $item)
                                         <option value="{{ $item->id }}">{{ $item->plan_type_name }}</option>

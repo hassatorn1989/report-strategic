@@ -75,4 +75,9 @@ class view_project extends Model
     {
         return $this->hasMany(tbl_project_file::class, 'project_id', 'id');
     }
+
+    public function get_project_plan()
+    {
+        return $this->hasMany(view_project_plan_type::class, 'project_id', 'id');
+    }
 }

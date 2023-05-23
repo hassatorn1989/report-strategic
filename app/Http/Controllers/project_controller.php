@@ -27,6 +27,7 @@ use App\Models\view_project_location;
 use App\Models\view_project_main;
 use App\Models\view_project_output_gallery;
 use App\Models\tbl_project_output_detail;
+use App\Models\tbl_project_plan_type;
 use App\Models\tbl_project_sub_type;
 use App\Models\tbl_project_tag;
 use App\Models\tbl_project_project_sub_type;
@@ -103,7 +104,16 @@ class project_controller extends Controller
                 return $data;
             })
             ->addColumn('plan_type_name', function ($q) {
-                return ($q->plan_type_name != '') ? $q->plan_type_name : '<small class="text-danger">ไม่ระบุ</small>';
+                $data = '';
+                if (count($q->get_project_plan) > 0) {
+                    foreach ($q->get_project_plan as $key => $value) {
+                        $data .= ($key > 0) ? '<br>' : '';
+                        $data .= $value->plan_type_name;
+                    }
+                }else{
+                    $data = '<span class="text-danger">ไม่ระบุ</span>';
+                }
+                return $data;
             })
             ->addColumn('project_name', function ($q) {
                 $data = $q->project_name;
@@ -157,7 +167,7 @@ class project_controller extends Controller
             'project_name' => 'required',
             'year_id' => 'required',
             'project_main_id' => 'required',
-            'plan_type_id' => 'required',
+            // 'plan_type_id' => 'required',
             // 'project_sub_type_id' => 'required',
         ]);
 
@@ -170,19 +180,25 @@ class project_controller extends Controller
             $q->faculty_id = (auth()->user()->user_role == 'admin') ? $request->faculty_id : auth()->user()->faculty_id;
             $q->project_status = 'draff';
             $q->project_main_id = $request->project_main_id;
-            $q->plan_type_id = $request->plan_type_id;
-            // $q->project_sub_type_id = $request->project_sub_type_id;
             $q->user_created = auth()->user()->id;
             $q->save();
 
 
             if (!empty($request->project_sub_type_id)) {
-
                 foreach ($request->project_sub_type_id as $key => $value) {
                     $qtag = new tbl_project_project_sub_type();
                     $qtag->project_id = $q->id;
                     $qtag->project_sub_type_id = $value;
                     $qtag->save();
+                }
+            }
+
+            if (!empty($request->plan_type_id)) {
+                foreach ($request->plan_type_id as $key => $value) {
+                    $q1 = new tbl_project_plan_type();
+                    $q1->project_id = $q->id;
+                    $q1->plan_type_id = $value;
+                    $q1->save();
                 }
             }
 
@@ -210,7 +226,7 @@ class project_controller extends Controller
             // 'project_sub_type_id' => 'required',
             'project_budget' => 'required',
             'project_period' => 'required',
-            'plan_type_id' => 'required',
+            // 'plan_type_id' => 'required',
             // 'project_main_id' => 'required'
         ]);
 
@@ -228,7 +244,7 @@ class project_controller extends Controller
             $q->project_budget = $request->project_budget;
             $q->project_period_start = $project_period_start;
             $q->project_period_end = $project_period_end;
-            $q->plan_type_id = $request->plan_type_id;
+            // $q->plan_type_id = $request->plan_type_id;
             // $q->project_sub_type_id = $request->project_sub_type_id;
             $q->user_updated = auth()->user()->id;
             $q->save();
@@ -240,6 +256,15 @@ class project_controller extends Controller
                     $qtag->project_id = $q->id;
                     $qtag->project_sub_type_id = $value;
                     $qtag->save();
+                }
+            }
+            tbl_project_plan_type::where('project_id', $q->id)->delete();
+            if (!empty($request->plan_type_id)) {
+                foreach ($request->plan_type_id as $key => $value) {
+                    $q1 = new tbl_project_plan_type();
+                    $q1->project_id = $q->id;
+                    $q1->plan_type_id = $value;
+                    $q1->save();
                 }
             }
 
@@ -445,7 +470,7 @@ class project_controller extends Controller
                     $q->orderBy('id', 'DESC');
                 },
                 'get_year_strategic_detail',
-                'get_project_tag',
+                'get_project_tag'
             ]
         )->find($request->id);
         $i = 0;
@@ -474,8 +499,7 @@ class project_controller extends Controller
         } else {
             $project_main = view_project_main::where('faculty_id', auth()->user()->faculty_id)->get();
         }
-        $plan_type = tbl_plan_type::all();
-
+        $plan_type = tbl_plan_type::selectRaw('*, (select count(id) from tbl_project_plan_type where tbl_project_plan_type.plan_type_id = tbl_plan_type.id and tbl_project_plan_type.project_id = "' . $request->id . '") as project_count')->get();
         return view('project_manage', compact('project', 'year_strategic', 'budget', 'project_type', 'province', 'cal', 'project_main', 'project_sub_type', 'plan_type'));
     }
 

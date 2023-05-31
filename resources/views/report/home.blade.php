@@ -65,7 +65,8 @@
 
                             return `${pointName} : ${pointY} บาท<br><span style="color: red;">คิดเป็น ${pointPercentage} %</span>`
                         }
-                    }
+                    },
+                    showInLegend: true
                 }
             },
             credits: {
@@ -120,7 +121,8 @@
 
                             return `${pointName} : ${pointY} บาท<br><span style="color: red;">คิดเป็น ${pointPercentage} %</span>`
                         }
-                    }
+                    },
+                    showInLegend: true
                 }
             },
             credits: {
@@ -182,7 +184,8 @@
 
                             return `${pointName} : ${pointY} บาท<br><span style="color: red;">คิดเป็น ${pointPercentage} %</span>`
                         }
-                    }
+                    },
+                    showInLegend: true
                 }
             },
             // plotOptions: {
@@ -343,14 +346,14 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <div id="container1" style="height: 500px;"></div>
+                                <div id="container1" style="height: 700px;"></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <div id="container2" style="height: 500px;"></div>
+                                <div id="container2" style="height: 700px;"></div>
                             </div>
                         </div>
                     </div>

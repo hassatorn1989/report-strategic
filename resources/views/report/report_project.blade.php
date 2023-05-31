@@ -37,7 +37,7 @@
                                 <h5 class="card-title m-0">{{ __('msg.msg_list').__('msg.menu2_report_project') }}</h5>
                             </div>
                             <div class="card-body">
-                                <form action="" method="post">
+                                {{-- <form action="" method="post">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
@@ -73,7 +73,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>
+                                </form> --}}
                                <table id="example1" class="table table-hover table-sm table-striped">
                                     <thead class="thead-light">
                                         <tr>

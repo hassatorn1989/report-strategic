@@ -267,7 +267,8 @@
                                                 style="width: {{ $item->budget_project_percentage }}%"></div>
                                         </div>
                                         <span class="progress-description">
-                                            ร่างโครงการ {{ $item->count_project_draft }} โครงการ |
+                                            ร่าง {{ $item->count_project_draft }} โครงการ |
+                                            รออนุมัติ {{ $item->count_project_pending }} โครงการ |
                                             เผยแพร่ {{ $item->count_project_publish }} โครงการ
                                         </span>
                                     </div>

@@ -61,10 +61,22 @@ class home_controller extends Controller
                         `view_project`
                     WHERE
                         view_project.year_strategic_id = view_year_strategic.id
-                    AND view_project.project_status = 'draft'
+                    AND view_project.project_status = 'draff'
                 ),
                 0
             ) count_project_draft,
+            IFNULL(
+                (
+                    SELECT
+                        COUNT(view_project.id)
+                    FROM
+                        `view_project`
+                    WHERE
+                        view_project.year_strategic_id = view_year_strategic.id
+                    AND view_project.project_status = 'pending'
+                ),
+                0
+            ) count_project_pending,
             IFNULL(
                 (
                     SELECT

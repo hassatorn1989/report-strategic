@@ -255,7 +255,7 @@
                                     <span class="info-box-icon"><i class="{{ $icon_arr[$key] }}"></i></span>
                                     <div class="info-box-content">
                                         <span class="info-box-text">{{ $item->strategic_name }}</span>
-                                        <span class="info-box-number">เบิกจ่าย {{ num1($item->sum_budget_project) }} /
+                                        <span class="info-box-number">ใช้ไป {{ num1($item->sum_budget_project) }} /
                                             ทั้งหมด {{ num1($item->sum_budget_project_main) }} (คิดเป็น
                                             {{ $item->budget_project_percentage }}% )</span>
                                         <div class="progress">

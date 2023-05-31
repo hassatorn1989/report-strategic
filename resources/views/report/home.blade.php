@@ -184,8 +184,15 @@
 
                             // all
                             let pointA = parseFloat(this.point.a).toLocaleString()
+                            let pointD = parseFloat(this.point.d).toLocaleString()
+                            let pointP = parseFloat(this.point.p).toLocaleString()
+                            let pointPB = parseFloat(this.point.pb).toLocaleString()
 
-                            return `${pointName} : ${pointY} บาท<br><span style="color: red;">จำนวนโครงการ ${pointA} โครงการ</span>`
+                            return `${pointName} : ${pointY} บาท<br>
+                            <span style="color:#FFC300">ร่าง ${pointD} โครงการ</span><br>
+                            <span style="color:#06C2D5">รออนุมัติ ${pointP} โครงการ</span><br>
+                            <span style="color:#00CB2B">เผยแพร่ ${pointPB} โครงการ</span><br>
+                            `;
                         }
                     },
                     showInLegend: true
@@ -212,7 +219,10 @@
                         {
                             name: '{{ $item->strategic_name }}',
                             y: {{ $item->sum_budget_project_main }},
-                            a : {{ $item->count_project_all }}
+                            a : {{ $item->count_project_all }},
+                            d : {{ $item->count_project_draft }},
+                            p : {{ $item->count_project_pending }},
+                            pb : {{ $item->count_project_publish }},
                         },
                     @endforeach
                 ]

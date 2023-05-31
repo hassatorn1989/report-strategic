@@ -61,9 +61,9 @@
                             let pointName = this.point.name
                             let pointPercentage = parseFloat(this.point.percentage).toFixed(2).toLocaleString()
                             // number format
-                            let pointY = parseFloat(this.point.y).toFixed(2).toLocaleString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+                            let pointY = parseFloat(this.point.y).toLocaleString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 
-                            return `${pointName} : ${pointY} บาท<br><span style="color: red;">คิดเป็น ${pointPercentage} %</span>`
+                            return `${pointName} : ${pointY} โครงการ<br><span style="color: red;">คิดเป็น ${pointPercentage} %</span>`
                         }
                     },
                     showInLegend: true

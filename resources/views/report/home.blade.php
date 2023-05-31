@@ -180,9 +180,12 @@
                             let pointName = this.point.name
                             let pointPercentage = parseFloat(this.point.percentage).toFixed(2).toLocaleString()
                             // number format
-                            let pointY = parseFloat(this.point.y).toFixed(2).toLocaleString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+                            let pointY = parseFloat(this.point.y).toFixed(2).toLocaleString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 
-                            return `${pointName} : ${pointY} บาท<br><span style="color: red;">คิดเป็น ${pointPercentage} %</span>`
+                            // all
+                            let pointA = parseFloat(this.point.a).toLocaleString()
+
+                            return `${pointName} : ${pointY} บาท<br><span style="color: red;">จำนวนโครงการ ${pointA} โครงการ</span>`
                         }
                     },
                     showInLegend: true
@@ -208,7 +211,8 @@
                     @foreach ($summary as $item)
                         {
                             name: '{{ $item->strategic_name }}',
-                            y: {{ $item->sum_budget_project }},
+                            y: {{ $item->sum_budget_project_main }},
+                            a : {{ $item->count_project_all }}
                         },
                     @endforeach
                 ]

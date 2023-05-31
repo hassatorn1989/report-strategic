@@ -179,9 +179,8 @@
                         <!-- small box -->
                         <div class="small-box bg-danger">
                             <div class="inner">
-                                <h3>65 </h3>
-
-                                <p>Unique Visitors</p>
+                                <h3>{{ count($year_strategic) }} </h3>
+                                <p>ประเด็นยุทธศาสตร์</p>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-pie-graph"></i>

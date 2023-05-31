@@ -38,7 +38,82 @@ class home_controller extends Controller
                 ]);
             }
         ])->where('year_id', $year->id)->get();
-        return view('report.home', compact('data1', 'data2', 'year', 'year_strategic'));
+
+        $sql_summary = "SELECT
+            view_year_strategic.id,
+            strategic_name,
+            IFNULL(
+                (
+                    SELECT
+                        COUNT(view_project.id)
+                    FROM
+                        `view_project`
+                    WHERE
+                        view_project.year_strategic_id = view_year_strategic.id
+                ),
+                0
+            ) count_project_all,
+            IFNULL(
+                (
+                    SELECT
+                        COUNT(view_project.id)
+                    FROM
+                        `view_project`
+                    WHERE
+                        view_project.year_strategic_id = view_year_strategic.id
+                    AND view_project.project_status = 'draft'
+                ),
+                0
+            ) count_project_draft,
+            IFNULL(
+                (
+                    SELECT
+                        COUNT(view_project.id)
+                    FROM
+                        `view_project`
+                    WHERE
+                        view_project.year_strategic_id = view_year_strategic.id
+                    AND view_project.project_status = 'publish'
+                ),
+                0
+            ) count_project_publish,
+            @sum_budget_project_main := IFNULL(
+                (
+                    SELECT
+                        SUM(
+                            tbl_project_main.project_main_budget
+                        )
+                    FROM
+                        `tbl_project_main`
+                    WHERE
+                        tbl_project_main.year_strategic_id = view_year_strategic.id
+                ),
+                0
+            ) sum_budget_project_main,
+            @sum_budget_project := IFNULL(
+                (
+                    SELECT
+                        SUM(
+                            view_project.project_budget
+                        )
+                    FROM
+                        `view_project`
+                    WHERE
+                        view_project.year_strategic_id = view_year_strategic.id
+                ),
+                0
+            ) AS sum_budget_project,
+            ROUND((
+                (
+                    @sum_budget_project / @sum_budget_project_main
+                ) * 100
+            ), 2) AS budget_project_percentage
+        FROM
+            `view_year_strategic`
+        WHERE
+            view_year_strategic.year_id = '{$year->id}'";
+        $summary = DB::select($sql_summary);
+        return view('report.home', compact('data1', 'data2', 'year', 'year_strategic', 'summary'));
     }
 
     public function get_project(Request $request)

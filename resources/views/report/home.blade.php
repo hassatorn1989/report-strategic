@@ -55,9 +55,17 @@
                     allowPointSelect: true,
                     cursor: 'pointer',
                     dataLabels: {
-                        enabled: false
-                    },
-                    showInLegend: true
+                        enabled: true,
+                        //format: '<b>{point.name}</b>: {parseFloat(point.percentage)} %'
+                        formatter: function() {
+                            let pointName = this.point.name
+                            let pointPercentage = parseFloat(this.point.percentage).toFixed(2).toLocaleString()
+                            // number format
+                            let pointY = parseFloat(this.point.y).toFixed(2).toLocaleString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+
+                            return `${pointName} : ${pointY} บาท<br><span style="color: red;">คิดเป็น ${pointPercentage} %</span>`
+                        }
+                    }
                 }
             },
             credits: {
@@ -102,9 +110,17 @@
                     allowPointSelect: true,
                     cursor: 'pointer',
                     dataLabels: {
-                        enabled: false
-                    },
-                    showInLegend: true
+                        enabled: true,
+                        //format: '<b>{point.name}</b>: {parseFloat(point.percentage)} %'
+                        formatter: function() {
+                            let pointName = this.point.name
+                            let pointPercentage = parseFloat(this.point.percentage).toFixed(2).toLocaleString()
+                            // number format
+                            let pointY = parseFloat(this.point.y).toFixed(2).toLocaleString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+
+                            return `${pointName} : ${pointY} บาท<br><span style="color: red;">คิดเป็น ${pointPercentage} %</span>`
+                        }
+                    }
                 }
             },
             credits: {
